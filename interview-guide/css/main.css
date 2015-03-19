@@ -1,0 +1,48 @@
+body {
+  min-width: 1024px;
+}
+
+/* Reset the container */
+.container {
+  width: 1000px !important;
+  max-width: none !important;
+}
+
+.container .half {
+  width: 500px !important;
+  max-width: none !important;
+}
+
+#header {
+    position: relative;
+    background-color: #10487A;
+    font-size: 24px;
+    color: #fff;
+    height: 50px;
+    padding: 5px;
+}
+
+#title {
+    text-align: center;
+}
+
+#back-button {
+    background: none;
+    border: 1px solid white;
+    border-radius: 10px;
+}
+
+#submit-button {
+    background-color: #00BD7E;
+    border-radius: 10px;
+    border: 0px;
+}
+
+#interview-guide h3 {
+    font-weight: 600;
+    margin-bottom: 60px;
+}
+
+.side-by-side-window {
+    overflow-y: scroll;
+}
