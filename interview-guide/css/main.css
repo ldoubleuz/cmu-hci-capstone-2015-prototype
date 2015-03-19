@@ -42,6 +42,11 @@ html, body {
   font-family: "OpenSans","Segoe UI",Frutiger,"Frutiger Linotype","Dejavu Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
+* {
+  /* i think we have to include this on every style that needs to be ie compatible, yikes */
+  behavior: url("css/PIE.htc");
+}
+
 body {
   min-width: 1024px;
 }
