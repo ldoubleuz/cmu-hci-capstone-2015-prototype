@@ -20,23 +20,25 @@
     width: 15px; 
     height: 3px;
 }
-::-webkit-scrollbar-button {
-    background-color: #666;
-}
+
 ::-webkit-scrollbar-track {
     background-color: #898586;
 }
+
 ::-webkit-scrollbar-track-piece {
     background-color: #D1D1D1;
 }
+
 ::-webkit-scrollbar-thumb {
     height: 50px;
     background-color: #666;
     border-radius: 10px;
     border: 4px solid rgba(0, 0, 0, 0);
 }
-::-webkit-scrollbar-corner { background-color: #999;}}
-::-webkit-resizer { background-color: #666;}
+
+::-webkit-scrollbar-corner {
+    background-color: #999;
+}
 
 html, body {
   font-family: "OpenSans","Segoe UI",Frutiger,"Frutiger Linotype","Dejavu Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -88,13 +90,19 @@ body {
     padding-right: 15px;
 }
 
+#intake-information {
+    left: 0;
+    right: 50%;
+}
+
+#intake-information .scroll-button {
+    right: 50%;
+    margin-right: 25px;
+}
+
 #interview-guide {
-    position: fixed;
     right: 0;
-    top: 60px;
     left: 50%;
-    bottom: 0;
-    overflow-y: scroll;
 }
 
 #interview-guide h3 {
@@ -102,13 +110,45 @@ body {
 }
 
 #interview-guide textarea {
-    width: 90%;
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
     min-height: 120px;
     background-color: #E7F2ED;
     padding: 10px;
     border: 2px solid #000;
 }
 
+#interview-guide .scroll-button {
+    right: 25px;
+}
+
+.scroll-button {
+    height: 50px;
+    width: 50px;
+    background: none;
+    border: 2px solid #29618F;
+    border-radius: 10px;
+    font-size: 34px;
+    line-height: 50px;
+    color: #29618F;
+}
+
+.scroll-button.up {
+    position: fixed;
+    top: 70px;
+}
+
+.scroll-button.down {
+    position: fixed;
+    bottom: 10px;
+}
+
 .side-by-side-window {
+    position: fixed;
+    top: 60px;
+    bottom: 0;
     overflow-y: scroll;
+    padding-left: 15px;
+    padding-right: 70px;
 }
