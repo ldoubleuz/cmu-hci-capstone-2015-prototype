@@ -14,13 +14,6 @@ html, body {
   behavior: url("css/PIE.htc");
 }
 
-#pie-test {
-  border-radius: 50%; 
-  background: pink; 
-  width: 100px; 
-  height: 100px;
-}
-
 body {
   min-width: 1000px;
 }
@@ -29,14 +22,25 @@ body {
   text-align: center;
 }
 
+#title {
+  font-size: 28px;
+  color: #00477B;
+}
+
 #logo {
-  width: 100px;
-  height: 100px;
+  width: 67px;
+  height: 67px;
 }
 
 #dog {
   width: 85px;
   height: 67px;
+}
+
+#breadcrumbs {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 
 #form-info {
@@ -58,10 +62,28 @@ body {
   padding: 0px !important;
 }
 
+.crumb {
+  display: inline-block;
+  width: 42px;
+  height: 42px;
+  z-index: 1;
+  background-color: #ffffff;
+  color: #32b27c;
+  font-size: 20px;
+  text-align: center;
+  line-height: 42px;
+  border-radius: 50%; 
+  border-style: solid;
+  border-width: 1px;
+  border-color: #32b27c;
+}
+
 .prev-button {
   width: 200px;
   height: 40px;
   background-color: #ffffff;
+  line-height: 40px;
+  font-size: 30px;
   color: #32b27c;
   border-style: solid;
   border-width: 1px;
@@ -72,6 +94,8 @@ body {
   width: 200px;
   height: 40px;
   background-color: #32b27c;
+  line-height: 40px;
+  font-size: 30px;
   color: #ffffff;
   text: right;
   border-style: solid;
