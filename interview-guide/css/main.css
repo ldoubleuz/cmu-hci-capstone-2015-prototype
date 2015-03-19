@@ -40,17 +40,38 @@ body {
     background: none;
     border: 1px solid white;
     border-radius: 10px;
+    position: absolute;
+    top: 5px;
+    left: 5px;
 }
 
 #submit-button {
     background-color: #00BD7E;
     border-radius: 10px;
     border: 0px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+#interview-guide {
+    position: fixed;
+    right: 0;
+    top: 50px;
+    left: 50%;
+    bottom: 0;
+    overflow-y: scroll;
 }
 
 #interview-guide h3 {
     font-weight: 600;
-    margin-bottom: 60px;
+}
+
+#interview-guide textarea {
+    width: 90%;
+    min-height: 120px;
+    background-color: #E7F2ED;
+    padding: 10px;
 }
 
 .side-by-side-window {
