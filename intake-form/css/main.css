@@ -1,3 +1,13 @@
+@font-face {
+  font-family: "OpenSans";
+  font-style: normal;
+  src: url("../fonts/OpenSans-Regular.ttf") format("truetype"); 
+}
+
+html, body {
+  font-family: "OpenSans","Segoe UI",Frutiger,"Frutiger Linotype","Dejavu Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
 body {
   min-width: 1000px;
 }
