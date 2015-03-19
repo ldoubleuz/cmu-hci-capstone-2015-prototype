@@ -1,7 +1,19 @@
 @font-face {
   font-family: "OpenSans";
-  font-style: normal;
+  font-weight: normal;
   src: url("../fonts/OpenSans-Regular.ttf") format("truetype"); 
+}
+
+@font-face {
+  font-family: "OpenSans";
+  font-weight: bold;
+  src: url("../fonts/OpenSans-Bold.ttf") format("truetype"); 
+}
+
+@font-face {
+  font-family: "OpenSans";
+  font-weight: lighter;
+  src: url("../fonts/OpenSans-Light.ttf") format("truetype"); 
 }
 
 html, body {
@@ -12,59 +24,54 @@ body {
   min-width: 1024px;
 }
 
-/* Reset the container */
-.container {
-  width: 1000px !important;
-  max-width: none !important;
-}
-
-.container .half {
-  width: 500px !important;
-  max-width: none !important;
-}
-
 #header {
     position: relative;
     background-color: #10487A;
-    font-size: 24px;
+    font-size: 22px;
     color: #fff;
-    height: 50px;
+    height: 60px;
     padding: 5px;
 }
 
-#title {
+ #header #title {
     text-align: center;
+    margin-top: 7px;
+    font-style: lighter;
 }
 
-#back-button {
+#header #back-button {
     background: none;
     border: 1px solid white;
     border-radius: 10px;
     position: absolute;
-    top: 5px;
-    left: 5px;
+    top: 10px;
+    left: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
-#submit-button {
+#header #submit-button {
     background-color: #00BD7E;
     border-radius: 10px;
     border: 0px;
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 10px;
+    right: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 #interview-guide {
     position: fixed;
     right: 0;
-    top: 50px;
+    top: 60px;
     left: 50%;
     bottom: 0;
     overflow-y: scroll;
 }
 
 #interview-guide h3 {
-    font-weight: 600;
+    font-weight: bold;
 }
 
 #interview-guide textarea {
@@ -72,6 +79,7 @@ body {
     min-height: 120px;
     background-color: #E7F2ED;
     padding: 10px;
+    border: 2px solid #000;
 }
 
 .side-by-side-window {
