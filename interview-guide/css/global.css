@@ -1,5 +1,5 @@
 html, body {
-  font-family: "OpenSans","Segoe UI",Frutiger,"Frutiger Linotype","Dejavu Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-family: "OpenSans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 /* IE 8 pollyfills */
@@ -15,17 +15,17 @@ body {
 @font-face {
   font-family: "OpenSans";
   font-weight: normal;
-  src: url("../fonts/OpenSans-Regular.ttf") format("truetype"); 
+  src: url("../fonts/OpenSans-Regular.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "OpenSans";
   font-weight: bold;
-  src: url("../fonts/OpenSans-Bold.ttf") format("truetype"); 
+  src: url("../fonts/OpenSans-Bold.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "OpenSans";
   font-weight: lighter;
-  src: url("../fonts/OpenSans-Light.ttf") format("truetype"); 
+  src: url("../fonts/OpenSans-Light.ttf") format("truetype");
 }

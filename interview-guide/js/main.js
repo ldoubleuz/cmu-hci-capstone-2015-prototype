@@ -1,5 +1,17 @@
-$(document).ready(function() {
+(function() {
     'use strict';
+
+    $(document).ready(function() {
+        $('.scroll-button.up').click(function() {
+            $(this).parent()[0].scrollTop -= 190;
+        });
+
+        $('.scroll-button.down').click(function() {
+            $(this).parent()[0].scrollTop += 190;
+        });
+
+        loadIntakeInfo();
+    });
 
     function buildField(field) {
         var title = field.title || '';
@@ -54,14 +66,4 @@ $(document).ready(function() {
             }
         });
     }
-
-    $('.scroll-button.up').click(function() {
-        $(this).parent()[0].scrollTop -= 187;
-    });
-
-    $('.scroll-button.down').click(function() {
-        $(this).parent()[0].scrollTop += 187;
-    });
-
-    loadIntakeInfo();
-});
+})();
