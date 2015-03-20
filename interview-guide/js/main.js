@@ -21,7 +21,7 @@ $(document).ready(function() {
 
         var $section = $('<div>').addClass('intake-section');
         $section.append(
-            $('<header>').addClass('title').text(title)
+            $('<h3>').addClass('section-title').text(title)
         );
 
         for (var i=0; i < fields.length; i++) {

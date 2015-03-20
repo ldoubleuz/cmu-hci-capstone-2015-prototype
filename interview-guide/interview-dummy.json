@@ -1,1 +1,67 @@
-{"sections": [{"fields": [{"value": "friendly", "title": "Vet"}, {"value": "friendly", "title": "Cats"}, {"value": "friendly", "title": "Children"}, {"value": "friendly", "title": "Other dogs"}], "title": "Behavior with Others"}, {"fields": [{"value": "Yes", "title": "Crate trained"}, {"value": "Yes", "title": "House trained"}, {"value": "Sits close to me", "title": "How pet indicates desire to go outside"}, {"value": "Outdoors", "title": "Where pet goes to bathroom"}, {"value": "No", "title": "Training classes"}, {"value": "Yes", "title": "Walked on leash"}, {"value": "Sit, stay, down", "title": "Commands"}], "title": "Training information"}, {"fields": [{"value": "Ball, frisbee, squeaky toy", "title": "Favorite toy"}], "title": "Dog's Preferences"}]}
+{
+    "sections":[
+        {
+            "fields":[
+                {
+                    "value":"friendly",
+                    "title":"Vet"
+                },
+                {
+                    "value":"friendly",
+                    "title":"Cats"
+                },
+                {
+                    "value":"friendly",
+                    "title":"Children"
+                },
+                {
+                    "value":"friendly",
+                    "title":"Other dogs"
+                }
+            ],
+            "title":"Behavior with others"
+        },
+        {
+            "fields":[
+                {
+                    "value":"Yes",
+                    "title":"Crate trained"
+                },
+                {
+                    "value":"Yes",
+                    "title":"House trained"
+                },
+                {
+                    "value":"Sits close to me",
+                    "title":"How pet indicates desire to go outside"
+                },
+                {
+                    "value":"Outdoors",
+                    "title":"Where pet goes to bathroom"
+                },
+                {
+                    "value":"No",
+                    "title":"Training classes"
+                },
+                {
+                    "value":"Yes",
+                    "title":"Walked on leash"
+                },
+                {
+                    "value":"Sit, stay, down",
+                    "title":"Commands"
+                }
+            ],
+            "title":"Training information"
+        },
+        {
+            "fields":[
+                {
+                    "value":"Ball, frisbee, squeaky toy",
+                    "title":"Favorite toy"
+                }
+            ],
+            "title":"Dog's preferences"
+        }
+    ]
+}
