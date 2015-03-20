@@ -100,6 +100,27 @@ body {
     margin-right: 25px;
 }
 
+#intake-information .intake-section {
+  border-bottom: 2px solid grey;
+}
+
+#intake-information .intake-title {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+#intake-information .intake-field {
+  display: block;
+}
+
+#intake-information .field-title {
+  font-weight: bold;
+}
+
+#intake-information .field-value {
+  margin-left: 4px;
+}
+
 #interview-guide {
     right: 0;
     left: 50%;
