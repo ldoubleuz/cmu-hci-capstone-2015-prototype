@@ -20,6 +20,8 @@ body {
 
 #header {
   text-align: center;
+  position: relative;
+  margin-top: 25px;
 }
 
 #title {
@@ -30,17 +32,31 @@ body {
 #logo {
   width: 67px;
   height: 67px;
+  position: absolute;
+  left: 0;
 }
 
 #dog {
   width: 85px;
   height: 67px;
+  position: absolute;
+  right: 0;
+}
+
+#content {
+  position: relative;
 }
 
 #breadcrumbs {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
+  height: 42px;
+  width: 750px;
+  text-align: justify;
+  -ms-text-justify: distribute-all-lines;
+  text-justify: distribute-all-lines;
+  position: relative;
+  top: 21px; 
+  margin: auto;
+  z-index: 1;
 }
 
 #form-info {
@@ -64,6 +80,7 @@ body {
 
 .crumb {
   display: inline-block;
+  *display: inline;
   width: 42px;
   height: 42px;
   z-index: 1;
@@ -76,6 +93,15 @@ body {
   border-style: solid;
   border-width: 1px;
   border-color: #32b27c;
+  vertical-align: top;
+  zoom: 1;
+}
+
+.crumb-stretch {
+  width: 100%;
+  display: inline-block;
+  font-size: 0;
+  line-height: 0
 }
 
 .prev-button {
