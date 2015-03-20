@@ -1,21 +1,4 @@
-@font-face {
-  font-family: "OpenSans";
-  font-weight: normal;
-  src: url("../fonts/OpenSans-Regular.ttf") format("truetype"); 
-}
-
-@font-face {
-  font-family: "OpenSans";
-  font-weight: bold;
-  src: url("../fonts/OpenSans-Bold.ttf") format("truetype"); 
-}
-
-@font-face {
-  font-family: "OpenSans";
-  font-weight: lighter;
-  src: url("../fonts/OpenSans-Light.ttf") format("truetype"); 
-}
-
+/* Scrollbar styles */
 ::-webkit-scrollbar { 
     width: 15px; 
     height: 3px;
@@ -40,19 +23,7 @@
     background-color: #999;
 }
 
-html, body {
-  font-family: "OpenSans","Segoe UI",Frutiger,"Frutiger Linotype","Dejavu Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
-}
-
-* {
-  /* i think we have to include this on every style that needs to be ie compatible, yikes */
-  behavior: url("css/PIE.htc");
-}
-
-body {
-  min-width: 1024px;
-}
-
+/* Header */
 #header {
     position: relative;
     background-color: #10487A;
@@ -62,7 +33,7 @@ body {
     padding: 5px;
 }
 
- #header #title {
+#header #title {
     text-align: center;
     margin-top: 7px;
     font-style: lighter;
@@ -90,6 +61,8 @@ body {
     padding-right: 15px;
 }
 
+
+/* Intake Information */
 #intake-information {
     left: 0;
     right: 50%;
@@ -104,7 +77,7 @@ body {
   border-bottom: 2px solid grey;
 }
 
-#intake-information .intake-title {
+#intake-information .intake-section .title {
   font-weight: bold;
   font-size: 1.2em;
 }
@@ -113,14 +86,16 @@ body {
   display: block;
 }
 
-#intake-information .field-title {
+#intake-information .intake-field .name {
   font-weight: bold;
 }
 
-#intake-information .field-value {
+#intake-information .intake-field .value {
   margin-left: 4px;
 }
 
+
+/* Interview Guide */
 #interview-guide {
     right: 0;
     left: 50%;
@@ -144,6 +119,7 @@ body {
     right: 25px;
 }
 
+/* Scroll buttons */
 .scroll-button {
     height: 50px;
     width: 50px;
@@ -165,6 +141,7 @@ body {
     bottom: 10px;
 }
 
+/* Common side by side window styles */
 .side-by-side-window {
     position: fixed;
     top: 60px;
