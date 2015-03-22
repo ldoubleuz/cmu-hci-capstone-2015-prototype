@@ -61,21 +61,18 @@ body {
 
 #form-info {
   width: 1000px;
-  height: 485px;
   border-style: solid;
   border-width: 1px;
   border-color: #32b27c;
+  padding-top: 15px;
+  padding-left: 75px;
+  padding-right: 75px;
 }
 
 #buttons {
   margin-top: 20px;
+  margin-bottom: 20px;
   position: relative;
-}
-
-.container {
-  width: 1000px !important;
-  max-width: none !important;
-  padding: 0px !important;
 }
 
 .crumb {
@@ -84,8 +81,6 @@ body {
   width: 42px;
   height: 42px;
   z-index: 1;
-  background-color: #ffffff;
-  color: #32b27c;
   font-size: 20px;
   text-align: center;
   line-height: 42px;
@@ -96,6 +91,22 @@ body {
   vertical-align: top;
   zoom: 1;
 }
+
+.crumb-prev {
+  background-color: #00477B;
+  color: #32b27c;
+}
+
+.crumb-next {
+  background-color: #ffffff;
+  color: #32b27c;
+}
+
+.crumb-cur {
+  background-color: #32b27c;
+  color: #ffffff;
+}
+
 
 .crumb-stretch {
   width: 100%;
@@ -129,4 +140,65 @@ body {
   border-color: #32b27c;
   position: absolute;
   right: 0;
+}
+
+.form-title {
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.multitext-box {
+  width: 50px;
+  height: 30px;
+  margin-left: 34px;
+  margin-right: 34px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.multitext-col {
+  text-align: center;
+}
+
+.multitext-row {
+  width: 150px;
+}
+
+.checkbox-box {
+  width: 50px;
+  height: 30px;
+}
+
+/*Overwriting Bootstrap's rediculousness*/
+
+.container {
+  width: 1000px !important;
+  max-width: none !important;
+  padding: 0px !important;
+}
+
+.form-horizontal {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.form-group {
+  margin-right: 0;
+  margin-left: 0;
+  margin-bottom: 30px;
+}
+
+.control-label {
+  text-align: left !important;
+}
+
+.form-control {
+  border-radius: 0;
+}
+
+.col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, 
+.col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
 }

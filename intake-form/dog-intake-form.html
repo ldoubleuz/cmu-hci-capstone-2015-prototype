@@ -22,18 +22,120 @@
         </div>
         <div id="content" class="container">
             <div id="breadcrumbs">
-                <div class="crumb">1</div>
-                <div class="crumb">2</div>
-                <div class="crumb">3</div>
-                <div class="crumb">4</div>
-                <div class="crumb">5</div>
-                <div class="crumb">6</div>
-                <div class="crumb">7</div>
-                <div class="crumb">8</div>
+                <div class="crumb crumb-prev">1</div>
+                <div class="crumb crumb-cur">2</div>
+                <div class="crumb crumb-next">3</div>
+                <div class="crumb crumb-next">4</div>
+                <div class="crumb crumb-next">5</div>
+                <div class="crumb crumb-next">6</div>
+                <div class="crumb crumb-next">7</div>
+                <div class="crumb crumb-next">8</div>
                 <span class="crumb-stretch"></span>
             </div>
             <div id="form-info">
+                <form class="form-horizontal">
+                    <!-- Page 1 of the form -->
+                    <div id="form-pg1">
+                        <h2 class="form-title">Your Information</h2>
+                        <div class="form-group">
+                            <label for="full-name" class="col-xs-5 control-label">Full Name</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" id="full-name" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone-number" class="col-xs-5 control-label">Phone Number</label>
+                            <div class="col-xs-4">
+                                <input type="tel" class="form-control" id="phone-number" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="home-address" class="col-xs-5 control-label">Home Address</label>
+                            <div class="col-xs-4">
+                                <textarea class="form-control" id="home-address" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email-address" class="col-xs-5 control-label">Email Address</label>
+                            <div class="col-xs-4">
+                                <input type="email" class="form-control" id="phone-number" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <p>How does your dog act when someone enters the house? (select all that apply)</p>
+                            <table>
+                                <tr>
+                                    <td><label class="checkbox checkbox-box">
+                                        <input type="checkbox" id="house-friendly" class="form-control" value="house-friendly"> Friendly
+                                    </label></td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" id="house-afraid" class="form-control checkbox-box" value="house-afraid"> Afraid
+                                    </label></td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" id="house-barks" class="form-control checkbox-box" value="house-barks"> Barks
+                                    </label></td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" id="house-growls" class="form-control checkbox-box" value="house-growls"> Growls
+                                    </label></td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" id="inlineCheckbox1" value="option1"> 1
+                                    </label></td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" id="inlineCheckbox1" value="option1"> 1
+                                    </label></td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" id="inlineCheckbox1" value="option1"> 1
+                                    </label></td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" id="inlineCheckbox1" value="option1"> 1
+                                    </label></td>
+                                </tr>
+                            <label class="checkbox">
+                                <input type="checkbox" id="inlineCheckbox1" value="option5"> 5
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" id="inlineCheckbox1" value="option6"> 6
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <p>Including yourself, how many people of the following ages live in your house?</p>
+                            <table>
+                                <tr>
+                                    <td> </td>
+                                    <td class="multitext-col">0-3 yrs</td>
+                                    <td class="multitext-col">4-9 yrs</td>
+                                    <td class="multitext-col">10-17 yrs</td>
+                                    <td class="multitext-col">18-29 yrs</td>
+                                    <td class="multitext-col">30-59 yrs</td>
+                                    <td class="multitext-col">60+ yrs</td>
+                                </tr>
+                                <tr>
+                                    <td class="male multitext-row">Male</td>
+                                    <td><input type="number" class="form-control multitext-box" id="m-0-3-yrs" /></td>
+                                    <td><input type="number" class="form-control multitext-box" id="m-4-9-yrs" /></td>
+                                    <td><input type="number" class="form-control multitext-box" id="m-10-17-yrs" /></td>
+                                    <td><input type="number" class="form-control multitext-box" id="m-18-29-yrs" /></td>
+                                    <td><input type="number" class="form-control multitext-box" id="m-30-59-yrs" /></td>
+                                    <td><input type="number" class="form-control multitext-box" id="m-60-yrs" /></td>
+                                </tr>
+                                <tr>
+                                    <td class="female multitext-row">Female</td>
+                                    <td><input type="number" class="form-control multitext-box" id="f-0-3-yrs" /></td>
+                                    <td><input type="number" class="form-control multitext-box" id="f-4-9-yrs" /></td>
+                                    <td><input type="number" class="form-control multitext-box" id="f-10-17-yrs" /></td>
+                                    <td><input type="number" class="form-control multitext-box" id="f-18-29-yrs" /></td>
+                                    <td><input type="number" class="form-control multitext-box" id="f-30-59-yrs" /></td>
+                                    <td><input type="number" class="form-control multitext-box" id="f-60-yrs" /></td>
+                            </table>
+                        </div>
+                    </div>
 
+                    <!-- Page 2 of the form -->
+                    <div id="form-pg2">
+                    </div>
+                </form>
             </div>
         </div>
         <div id="buttons" class="container">
