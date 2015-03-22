@@ -1,23 +1,6 @@
-@font-face {
-  font-family: "OpenSans";
-  font-weight: normal;
-  src: url("../fonts/OpenSans-Regular.ttf") format("truetype"); 
-}
-
-@font-face {
-  font-family: "OpenSans";
-  font-weight: bold;
-  src: url("../fonts/OpenSans-Bold.ttf") format("truetype"); 
-}
-
-@font-face {
-  font-family: "OpenSans";
-  font-weight: lighter;
-  src: url("../fonts/OpenSans-Light.ttf") format("truetype"); 
-}
-
-::-webkit-scrollbar { 
-    width: 15px; 
+/* Scrollbar styles */
+::-webkit-scrollbar {
+    width: 15px;
     height: 3px;
 }
 
@@ -40,19 +23,7 @@
     background-color: #999;
 }
 
-html, body {
-  font-family: "OpenSans","Segoe UI",Frutiger,"Frutiger Linotype","Dejavu Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
-}
-
-* {
-  /* i think we have to include this on every style that needs to be ie compatible, yikes */
-  behavior: url("css/PIE.htc");
-}
-
-body {
-  min-width: 1024px;
-}
-
+/* Header */
 #header {
     position: relative;
     background-color: #10487A;
@@ -62,7 +33,7 @@ body {
     padding: 5px;
 }
 
- #header #title {
+#header #title {
     text-align: center;
     margin-top: 7px;
     font-style: lighter;
@@ -90,6 +61,8 @@ body {
     padding-right: 15px;
 }
 
+
+/* Intake Information */
 #intake-information {
     left: 0;
     right: 50%;
@@ -101,33 +74,37 @@ body {
 }
 
 #intake-information .intake-section {
-  border-bottom: 2px solid grey;
+    border-bottom: 2px solid grey;
 }
 
-#intake-information .intake-title {
-  font-weight: bold;
-  font-size: 1.2em;
+#intake-information .intake-section .title {
+    font-size: 1.2em;
 }
 
 #intake-information .intake-field {
-  display: block;
+    display: block;
+    position: relative;
+    margin-bottom: 10px;
 }
 
-#intake-information .field-title {
-  font-weight: bold;
+#intake-information .intake-field .name {
+    display: inline-block;
+    width: 60%;
+    font-weight: bold;
 }
 
-#intake-information .field-value {
-  margin-left: 4px;
+#intake-information .intake-field .value {
+    position: absolute;
+    display: inline-block;
+    top: 0;
+    width: 40%;
 }
 
+
+/* Interview Guide */
 #interview-guide {
     right: 0;
     left: 50%;
-}
-
-#interview-guide h3 {
-    font-weight: bold;
 }
 
 #interview-guide textarea {
@@ -144,6 +121,12 @@ body {
     right: 25px;
 }
 
+.section-title {
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Scroll buttons */
 .scroll-button {
     height: 50px;
     width: 50px;
@@ -165,6 +148,7 @@ body {
     bottom: 10px;
 }
 
+/* Common side by side window styles */
 .side-by-side-window {
     position: fixed;
     top: 60px;

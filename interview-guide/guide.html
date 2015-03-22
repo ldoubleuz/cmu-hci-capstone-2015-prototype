@@ -1,13 +1,15 @@
 <!doctype html>
-<html lang="">
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <title>Dog Interview Guide</title>
-        <meta name="description" content="Dog Interview Guide">        
+        <meta name="description" content="Dog Interview Guide">
+
         <!-- Stylesheets -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="css/main.css">
+        <link href="css/global.css" rel="stylesheet">
+        <link href="css/main.css" rel="stylesheet">
     </head>
     <body>
         <div id="header">
@@ -17,7 +19,9 @@
             </div>
             <button id="submit-button">Submit</button>
         </div>
+
         <div id="content">
+            <!--      Intake Information Window      -->
             <div id="intake-information" class="side-by-side-window">
                 <button class="scroll-button up">
                     <span class="glyphicon glyphicon-menu-up"></span>
@@ -26,6 +30,8 @@
                     <span class="glyphicon glyphicon-menu-down"></span>
                 </button>
             </div>
+
+            <!--      Interview Guide Window     -->
             <div id="interview-guide" class="side-by-side-window">
                 <button class="scroll-button up">
                     <span class="glyphicon glyphicon-menu-up"></span>
@@ -34,47 +40,47 @@
                     <span class="glyphicon glyphicon-menu-down"></span>
                 </button>
                 <section>
-                    <h3>Reason for surrender</h3>
+                    <h3 class="section-title">Reason for surrender</h3>
                     <textarea placeholder="Type notes here"></textarea>
                 </section>
                 <section>
-                    <h3>Medical history</h3>
+                    <h3 class="section-title">Medical history</h3>
                     <textarea placeholder="Type notes here"></textarea>
                 </section>
                 <section>
-                    <h3>Dog's personality</h3>
+                    <h3 class="section-title">Dog's personality</h3>
                     <textarea placeholder="Type notes here"></textarea>
                 </section>
                 <section>
-                    <h3>If you could change one thing about your dog</h3>
+                    <h3 class="section-title">If you could change one thing about your dog</h3>
                     <textarea placeholder="Type notes here"></textarea>
                 </section>
                 <section>
-                    <h3>Likes and dislikes</h3>
+                    <h3 class="section-title">Likes and dislikes</h3>
                     <textarea placeholder="Type notes here"></textarea>
                 </section>
                 <section>
-                    <h3>How often is the dog alone? Behavior when alone? Is it crated?</h3>
+                    <h3 class="section-title">How often is the dog alone? Behavior when alone? Is it crated?</h3>
                     <textarea placeholder="Type notes here"></textarea>
                 </section>
                 <section>
-                    <h3>Instances interacting with other animals</h3>
+                    <h3 class="section-title">Instances interacting with other animals</h3>
                     <textarea placeholder="Type notes here"></textarea>
                 </section>
                 <section>
-                    <h3>Instances interacting with children</h3>
+                    <h3 class="section-title">Instances interacting with children</h3>
                     <textarea placeholder="Type notes here"></textarea>
                 </section>
                 <section>
-                    <h3>Instances in the car</h3>
+                    <h3 class="section-title">Instances in the car</h3>
                     <textarea placeholder="Type notes here"></textarea>
                 </section>
                 <section>
-                    <h3>Instances of aggression towards others</h3>
+                    <h3 class="section-title">Instances of aggression towards others</h3>
                     <textarea placeholder="Type notes here"></textarea>
                 </section>
                 <section>
-                    <h3>Where do you envision your dog?</h3>
+                    <h3 class="section-title">Where do you envision your dog?</h3>
                     <textarea placeholder="Type notes here"></textarea>
                 </section>
             </div>
@@ -83,12 +89,5 @@
         <!-- Javascript -->
         <script src='js/jquery.min.js'></script>
         <script src='js/main.js'></script>
-        <script src='js/loadIntakeInfo.js'></script>
-        <script>
-            function main() {
-                loadIntakeInfo();
-            }       
-            window.onload = main;
-        </script>
     </body>
 </html>
