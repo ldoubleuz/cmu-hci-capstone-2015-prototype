@@ -53,7 +53,16 @@
     "id": "pet_nickname"
   }
   ],
-  [],
+  [{
+    "type": "radio",
+    "question": "butts????",
+    "id": "butt",
+    "options": [
+      {"id": "no", "value": "no butt stuff"},
+      {"id": "yes", "value": "ok, some butt stuff"},
+      {"id": "other", "value": "other butt stuff", "text_input": true, "text_input_id": "fart"}
+    ]
+  }],
   [],
   [],
   [],

@@ -3,20 +3,90 @@ var generateFormContent = (function(){
     var _QUESTION_TYPE_GEN_MAP = {
         'short-text': _makeShortTextInput,
         'multi-text': _makeMultiTextGrid,
+        'radio': _makeRadioInput
     };
 
     var QUESTION_TITLE_CLASS = 'question-title';
     var QUESTION_CONTENT_CLASS = 'question-content';
-    var QUESTION_FIELD_CLASS = 'question-field';
+    var QUESTION_INPUT_CLASS = 'question-input';
+    var PAGE_CLASS = 'page';
+
+    function _makeEmptyQuestion(type) {
+        return $('<div>')
+            .addClass('question form-group')
+            .addClass(type);
+    }
 
     function _makeQuestionTitleHeader(text) {
         return $('<header>').addClass(QUESTION_TITLE_CLASS).text(text);
     }
 
+    function _makeGridCellId(gridId, rowId, colId) {
+        return [gridId, rowId, colId].join(',');
+    } 
+
+    function _makeEmptyPage(pageIndex) {
+        return $('<div>').addClass(PAGE_CLASS).attr('index', pageIndex);
+    }
+
+    function _makeRadioInput(text, radioId, allData) {
+        var $title = _makeQuestionTitleHeader(text);
+
+        var $content = $('<div>').addClass(QUESTION_CONTENT_CLASS);
+
+        var options = allData.options || [];
+        for (var i=0; i < options.length; i++) {
+            var optionData = options[i];
+            // Compressed version that goes into the value attribute and is
+            // used for id generation
+            var optValueId = optionData.id || '';
+
+            // What is printed in the option's label
+            var optLabelText = optionData.value || '';
+
+            // What id to give the input so that we can have labels 
+            // with a 'for' attribute
+            var labelTargetId = ['__option', radioId, optValueId].join('__');
+
+            var $option = $('<div>').appendTo($content);
+
+            var $radioButton = $('<input>')
+                .addClass(QUESTION_INPUT_CLASS)
+                .attr({
+                    id: labelTargetId,
+                    type: 'radio',
+                    name: radioId,
+                    value: optValueId
+                })
+                .appendTo($option);
+
+            var $label = $('<label>')
+                .attr('for', labelTargetId)
+                .text(optLabelText)
+                .appendTo($option);
+
+            var hasTextField = !!optionData.text_input;
+            if (hasTextField) {
+                var textFieldId = optionData.text_input_id || '';
+                textFieldId = [radioId, textFieldId].join('__');
+
+                var $textField = $('<input>')
+                    .addClass(QUESTION_INPUT_CLASS)
+                    .attr({
+                        type: 'text',
+                        name: textFieldId
+                    })
+                    .appendTo($option);
+            }
+        }
+
+        return [$title, $content];
+    }
+
     function _makeShortTextInput(text, fieldId, allData) {
         var $title = _makeQuestionTitleHeader(text);
         var $input = $('<input>')
-            .addClass(QUESTION_FIELD_CLASS)
+            .addClass(QUESTION_INPUT_CLASS)
             .addClass(QUESTION_CONTENT_CLASS)
             .attr({
                 type: 'text',
@@ -25,10 +95,6 @@ var generateFormContent = (function(){
 
         return [$title, $input];
     }
-
-    function _makeGridCellId(gridId, rowId, colId) {
-        return [gridId, rowId, colId].join(',');
-    } 
 
     function _makeMultiTextGrid(text, gridId, allData) {
         var $title = _makeQuestionTitleHeader(text);
@@ -66,7 +132,7 @@ var generateFormContent = (function(){
 
                 var cellId = _makeGridCellId(gridId, rowId, colId);
                 var $gridCell = $('<td>').appendTo($gridRow);
-                var $cellInput = $('<input>').addClass(QUESTION_FIELD_CLASS).attr({
+                var $cellInput = $('<input>').addClass(QUESTION_INPUT_CLASS).attr({
                     type: 'text',
                     name: cellId
                 }).appendTo($gridCell);
@@ -74,12 +140,6 @@ var generateFormContent = (function(){
         }
 
         return [$title, $gridTable];
-    }
-
-    function _makeEmptyQuestion(type) {
-        return $('<div>')
-            .addClass('question form-group')
-            .addClass(type);
     }
 
     function _generateQuestionContent(questionData) {
@@ -100,10 +160,6 @@ var generateFormContent = (function(){
             );
         }
         return $question;
-    }
-
-    function _makeEmptyPage(pageIndex) {
-        return $('<div>').addClass('page').attr('index', pageIndex);
     }
 
     function _generatePageContent(questionDataList, pageIndex) {
