@@ -62,6 +62,16 @@
       {"id": "yes", "value": "ok, some butt stuff"},
       {"id": "other", "value": "other butt stuff", "text_input": true, "text_input_id": "fart"}
     ]
+  },
+  {
+    "type": "yes-no",
+    "id": "awesome",
+    "question": "Everything is awesome"
+  },
+  {
+    "type": "yes-no-other",
+    "id": "iunno",
+    "question": "I dunno, whatever"
   }],
   [],
   [],

@@ -3,7 +3,9 @@ var generateFormContent = (function(){
     var _QUESTION_TYPE_GEN_MAP = {
         'short-text': _makeShortTextInput,
         'multi-text': _makeMultiTextGrid,
-        'radio': _makeRadioInput
+        'radio': _makeRadioInput,
+        'yes-no': _makeYesNoGenerator(false),
+        'yes-no-other': _makeYesNoGenerator(true)
     };
 
     var QUESTION_TITLE_CLASS = 'question-title';
@@ -27,6 +29,28 @@ var generateFormContent = (function(){
 
     function _makeEmptyPage(pageIndex) {
         return $('<div>').addClass(PAGE_CLASS).attr('index', pageIndex);
+    }
+
+    function _makeYesNoGenerator(includeOther) {
+        return function(text, yesNoId, allData) {
+            var options = [
+                {id: 'yes', value: 'Yes'},
+                {id: 'no', value: 'No'}
+            ];
+            if (includeOther) {
+                options.push({
+                    id: 'other',
+                    value: 'Other',
+                    text_input: true,
+                    text_input_id: 'other'
+                });
+            }
+
+            var radioData = {
+                options: options
+            };
+            return _makeRadioInput(text, yesNoId, radioData);
+        };
     }
 
     function _makeRadioInput(text, radioId, allData) {
