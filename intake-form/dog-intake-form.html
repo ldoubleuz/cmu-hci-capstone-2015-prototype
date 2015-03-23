@@ -62,42 +62,91 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <p>How does your dog act when someone enters the house? (select all that apply)</p>
+                            <p>What is your dog's favorite toy? (select all that apply)</p>
                             <table>
                                 <tr>
-                                    <td><label class="checkbox checkbox-box">
-                                        <input type="checkbox" id="house-friendly" class="form-control" value="house-friendly"> Friendly
-                                    </label></td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" id="house-afraid" class="form-control checkbox-box" value="house-afraid"> Afraid
-                                    </label></td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" id="house-barks" class="form-control checkbox-box" value="house-barks"> Barks
-                                    </label></td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" id="house-growls" class="form-control checkbox-box" value="house-growls"> Growls
-                                    </label></td>
+                                    <td class="checkbox-box">
+                                        <input type="checkbox" id="toy-ball" value="toy-ball"> 
+                                        <label class="checkbox-label">Toy Ball</label>
+                                    </td>
+                                    <td class="checkbox-box">
+                                        <input type="checkbox" id="toy-frisbee" value="toy-none">
+                                        <label class="checkbox-label">Frisbee</label>
+                                    </td>
+                                    <td class="checkbox-box">
+                                        <input type="checkbox" id="toy-plush" value="toy-ball"> 
+                                        <label class="checkbox-label">Plush Toy</label>
+                                    </td>
+                                    <td class="checkbox-box">
+                                        <input type="checkbox" id="toy-squeeky" value="toy-none">
+                                        <label class="checkbox-label">Squeeky Toy</label>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" id="inlineCheckbox1" value="option1"> 1
-                                    </label></td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" id="inlineCheckbox1" value="option1"> 1
-                                    </label></td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" id="inlineCheckbox1" value="option1"> 1
-                                    </label></td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" id="inlineCheckbox1" value="option1"> 1
-                                    </label></td>
+                                    <td class="checkbox-box">
+                                        <input type="checkbox" id="toy-tug" value="toy-tug"> 
+                                        <label class="checkbox-label">Tug Toy</label>
+                                    </td>
+                                    <td class="checkbox-box">
+                                        <input type="checkbox" id="toy-none" value="toy-none">
+                                        <label class="checkbox-label">None</label>
+                                    </td>
+                                    <td class="checkbox-box">
+                                        <input type="checkbox" id="toy-other" value="toy-other">
+                                        <label class="checkbox-label">Other</label>
+                                        <input type="text" class="form-control checkbox-text" id="toy-other-text" />
+                                    </td>
                                 </tr>
-                            <label class="checkbox">
-                                <input type="checkbox" id="inlineCheckbox1" value="option5"> 5
-                            </label>
-                            <label class="checkbox-inline">
-                                <input type="checkbox" id="inlineCheckbox1" value="option6"> 6
-                            </label>
+                            </table>
+                        </div>
+                        <div class="form-group">
+                            <p>How did you get your dog?</p>
+                            <table>
+                                <tr>
+                                    <td class="radio-box">
+                                        <input type="radio" name="get-pet" id="get-arl" value="get-arl"> 
+                                        <label class="radio-label">Animal Rescue League</label>
+                                    </td>
+                                    <td class="radio-box">
+                                        <input type="radio" name="get-pet" id="get-relative" value="get-relative">
+                                        <label class="radio-label">Relative</label>
+                                    </label></td>
+                                    <td class="radio-box">
+                                        <input type="radio" name="get-pet" id="get-friend" value="get-friend"> 
+                                        <label class="radio-label">Friend</label>
+                                    </td>
+                                    <td class="radio-box">
+                                        <input type="radio" name="get-pet" id="get-ad" value="get-ad">
+                                        <label class="radio-label">Newspaper/Web Ad</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="radio-box">
+                                        <input type="radio" name="get-pet" id="get-stray" value="get-stray"> 
+                                        <label class="radio-label">Found/Stray</label>
+                                    </td>
+                                    <td class="radio-box">
+                                        <input type="radio" name="get-pet" id="get-breeder" value="get-breeder">
+                                        <label class="radio-label">Breeder</label>
+                                    </td>
+                                    <td class="radio-box">
+                                        <input type="radio" name="get-pet" id="get-store" value="get-store">
+                                        <label class="radio-label">Pet Store</label>
+                                    </td>
+                                    <td class="radio-box">
+                                        <input type="radio" name="get-pet" id="get-shelter" value="get-shelter">
+                                        <label class="radio-label">Shelter</label>
+                                        <input type="text" class="form-control radio-text" id="get-shelter-text" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="radio-box">
+                                        <input type="radio" name="get-pet" id="get-other" value="get-other">
+                                        <label class="radio-label">Other</label>
+                                        <input type="text" class="form-control radio-text" id="get-shelter-other" />
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
                         <div class="form-group">
                             <p>Including yourself, how many people of the following ages live in your house?</p>

@@ -165,9 +165,19 @@ body {
   width: 150px;
 }
 
-.checkbox-box {
-  width: 50px;
+.checkbox-box, .radio-box {
+  width: 220px;
   height: 30px;
+}
+
+.checkbox-text, .radio-text {
+  width: 100px;
+  display: inline-block;
+  margin-left: 20px;
+}
+
+.checkbox-label, .radio-label {
+  display: inline-block;
 }
 
 /*Overwriting Bootstrap's rediculousness*/
