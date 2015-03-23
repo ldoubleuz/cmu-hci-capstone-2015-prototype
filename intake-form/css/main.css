@@ -165,9 +165,36 @@ body {
   width: 150px;
 }
 
-.checkbox-box {
-  width: 50px;
+.checkbox-box, .radio-box {
+  width: 220px;
   height: 30px;
+}
+
+.checkbox-text, .radio-text {
+  width: 100px;
+  display: inline-block;
+  margin-left: 20px;
+  height: 25px;
+}
+
+.checkbox-label, .radio-label {
+  display: inline-block;
+}
+
+.multiselect-col {
+  text-align: center;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.multiselect-box {
+  text-align: center;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+.yes-no-question {
+  margin-top: 8px;
 }
 
 /*Overwriting Bootstrap's rediculousness*/
@@ -194,7 +221,7 @@ body {
 }
 
 .form-control {
-  border-radius: 0;
+  border-radius: 0 !important;
 }
 
 .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, 
