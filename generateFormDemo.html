@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+    <body>
+        <form id="demo-form">
+        </form>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+        <script src="generateFormContent.js"></script>
+        <script>
+        window.onload = function() {
+            var $container = $("#demo-form");
+
+            var json = {
+                pages: [
+                    [
+                        {
+                            type: 'short-text',
+                            question: 'Hello world?',
+                            id: 'hello',
+                            options: {
+                            }
+                        }
+                    ]
+                ]
+            };
+
+            console.log('data:', json);
+            var $formContent = generateFormContent(json);
+            console.log('content:', $formContent);
+            $container.append($formContent);
+        }
+        </script>
+    </body>
+</html>
