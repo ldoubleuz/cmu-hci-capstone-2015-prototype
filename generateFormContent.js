@@ -2,6 +2,7 @@ var generateFormContent = (function(){
 
     var _QUESTION_TYPE_GEN_MAP = {
         'short-text': _makeShortTextInput,
+        'long-text': _makeLongTextInput,
         'multi-text': _makeMultiTextGrid,
         'radio': _makeRadioInput,
         'yes-no': _makeYesNoGenerator(false),
@@ -118,6 +119,18 @@ var generateFormContent = (function(){
             });
 
         return [$title, $input];
+    }
+
+    function _makeLongTextInput(text, fieldId, allData) {
+        var $title = _makeQuestionTitleHeader(text);
+        var $textarea = $('<textarea>')
+            .addClass(QUESTION_INPUT_CLASS)
+            .addClass(QUESTION_CONTENT_CLASS)
+            .attr({
+                name: fieldId
+            });
+
+        return [$title, $textarea];
     }
 
     function _makeMultiTextGrid(text, gridId, allData) {
