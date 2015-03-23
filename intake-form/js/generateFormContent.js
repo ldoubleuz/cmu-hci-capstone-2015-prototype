@@ -129,15 +129,23 @@ var generateFormContent = (function(){
     }
 
     function _makeLongTextInput(text, fieldId, allData) {
-        var $title = _makeQuestionTitleHeader(text);
-        var $textarea = $('<textarea>')
+        var $title = _makeQuestionTitleHeader(text)
+            .addClass('control-label')
+            .addClass('col-xs-5');
+        var $inputWrapper = $('<div>')
+            .addClass('col-xs-4');
+        var $input = $('<textarea>')
             .addClass(QUESTION_INPUT_CLASS)
             .addClass(QUESTION_CONTENT_CLASS)
+            .addClass('form-control')
             .attr({
+                rows: 3,
                 name: fieldId
             });
 
-        return [$title, $textarea];
+        $inputWrapper.append($input);
+
+        return [$title, $inputWrapper];
     }
 
     function _makeMultiTextGrid(text, gridId, allData) {
