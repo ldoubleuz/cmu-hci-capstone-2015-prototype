@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+    <body>
+        <form id="demo-form">
+        </form>
+        <script src="intake-form/js/jquery.min.js"></script>
+        <script src="generateFormContent.js"></script>
+        <script>
+        function loadFormJson(callbackFn) {
+            var filePath = 'intake-form/js/dog_form_questions.json';
+            $.ajax({
+                url: filePath,
+                dataType: 'json',
+                method: 'GET',
+                success: callbackFn,
+                error: function() {
+                    console.log(arguments);
+                    console.log('error, not loaded');
+                }
+            });
+        }
+
+        window.onload = function() {
+            var $container = $("#demo-form");
+
+            loadFormJson(function(json) {
+                console.log('data:', json);
+                var $formContent = generateFormContent(json);
+                console.log('content:', $formContent);
+                $container.append($formContent);
+            });
+        }
+        </script>
+    </body>
+</html>
