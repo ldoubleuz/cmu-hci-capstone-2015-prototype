@@ -5,16 +5,23 @@ var generateFormContent = (function(){
         'multi-text': _makeMultiTextGrid,
     };
 
+    var QUESTION_TITLE_CLASS = 'question-title';
+    var QUESTION_CONTENT_CLASS = 'question-content';
+    var QUESTION_FIELD_CLASS = 'question-field';
+
     function _makeQuestionTitleHeader(text) {
-        return $('<header>').addClass('question-title').text(text);
+        return $('<header>').addClass(QUESTION_TITLE_CLASS).text(text);
     }
 
     function _makeShortTextInput(text, fieldId, allData) {
         var $title = _makeQuestionTitleHeader(text);
-        var $input = $('<input>').addClass('question-field short-text').attr({
-            type: 'text',
-            name: fieldId
-        });
+        var $input = $('<input>')
+            .addClass(QUESTION_FIELD_CLASS)
+            .addClass(QUESTION_CONTENT_CLASS)
+            .attr({
+                type: 'text',
+                name: fieldId
+            });
 
         return [$title, $input];
     }
@@ -28,14 +35,13 @@ var generateFormContent = (function(){
         var rows = allData.rows || [];
         var cols = allData.columns || [];
 
-        var $gridTable = $('<table>').addClass('grid');
+        var $gridTable = $('<table>').addClass(QUESTION_CONTENT_CLASS);
         var $gridBody = $('<tbody>').appendTo($gridTable);
 
         var $headerRow = $('<tr>').appendTo($gridBody);
         // first, add empty cell so that we have space for row labels
         $headerRow.append($('<th>'));
 
-        console.log(rows, cols);
         // create the remaining column labels
         for (var colIndex=0; colIndex < cols.length; colIndex++) {
             var colValue = cols[colIndex].value || '';
@@ -60,7 +66,7 @@ var generateFormContent = (function(){
 
                 var cellId = _makeGridCellId(gridId, rowId, colId);
                 var $gridCell = $('<td>').appendTo($gridRow);
-                var $cellInput = $('<input>').attr({
+                var $cellInput = $('<input>').addClass(QUESTION_FIELD_CLASS).attr({
                     type: 'text',
                     name: cellId
                 }).appendTo($gridCell);
@@ -70,14 +76,16 @@ var generateFormContent = (function(){
         return [$title, $gridTable];
     }
 
-    function _makeEmptyQuestion() {
-        return $('<div>').addClass('question form-group');
+    function _makeEmptyQuestion(type) {
+        return $('<div>')
+            .addClass('question form-group')
+            .addClass(type);
     }
 
     function _generateQuestionContent(questionData) {
-        var $question = _makeEmptyQuestion();
-
         var type = questionData.type || 'short-text';
+        var $question = _makeEmptyQuestion(type);
+
         if (type in _QUESTION_TYPE_GEN_MAP) {
             var generatorFn = _QUESTION_TYPE_GEN_MAP[type];
             var text = questionData.question || '';
