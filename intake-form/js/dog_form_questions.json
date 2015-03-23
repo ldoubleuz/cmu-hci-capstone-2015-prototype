@@ -60,26 +60,3 @@
   [],
   []
 ]}
-
-"value": "Unknown",
-      "id": "unknown"
-    }, {
-      "value": "Friendly",
-      "id": "friendly"
-    }, {
-      "value": "Afriad",
-      "id": "afraid"
-    }, {
-      "value": "Growls/Shows Teeth",
-      "id": "growls"
-    }, {
-      "value": "snaps",
-      "id": "snaps"
-    }, {
-      "value": "bites",
-      "id": "bites",
-    }, {
-      "value": "None",
-      "id": "none"
-    }
-    ]

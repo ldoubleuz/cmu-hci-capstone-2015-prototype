@@ -32,6 +32,12 @@ var generateFormContent = (function(){
             var options = questionData.options || {};
 
             $question.append(generatorFn(text, fieldName, options));
+        } else {
+            $question.append(
+                $('<p>')
+                    .text('error: ' + type + ' generator not implemented')
+                    .css('color', 'red')
+            );
         }
         return $question;
     }
