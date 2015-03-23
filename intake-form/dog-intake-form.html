@@ -61,8 +61,32 @@
                                 <input type="email" class="form-control" id="phone-number" />
                             </div>
                         </div>
+
                         <div class="form-group">
-                            <p>What is your dog's favorite toy? (select all that apply)</p>
+                            <label class="col-xs-5 yes-no-question">Is your dog allowed on furniture?</label>
+                            <div class="col-xs-2">
+                                <input type="radio" name="furniture" id="furniture-yes" value="furniture-yes">
+                                <label for="furniture-yes" class="control-label">Yes</label>
+                            </div>
+                            <div class="col-xs-2">
+                                <input type="radio" name="furniture" id="furniture-no" value="furniture-no">
+                                <label for="furniture-no" class="control-label">No</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="color-pattern" class="col-xs-5 control-label">Color Pattern</label>
+                            <div class="col-xs-4">
+                                <select id="color-pattern" class="form-control">
+                                  <option>Solid</option>
+                                  <option>Pattern</option>
+                                  <option>3</option>
+                                  <option>4</option>
+                                  <option>5</option>
+                                </select>
+                        </div>
+                        </div> 
+                        <div class="form-group">
+                            <label>What is your dog's favorite toy? (select all that apply)</label>
                             <table>
                                 <tr>
                                     <td class="checkbox-box">
@@ -100,7 +124,7 @@
                             </table>
                         </div>
                         <div class="form-group">
-                            <p>How did you get your dog?</p>
+                            <label>How did you get your dog?</label>
                             <table>
                                 <tr>
                                     <td class="radio-box">
@@ -149,7 +173,7 @@
                             </table>
                         </div>
                         <div class="form-group">
-                            <p>Including yourself, how many people of the following ages live in your house?</p>
+                            <label>Including yourself, how many people of the following ages live in your house?</label>
                             <table>
                                 <tr>
                                     <td> </td>
@@ -162,27 +186,27 @@
                                 </tr>
                                 <tr>
                                     <td class="male multitext-row">Male</td>
-                                    <td><input type="number" class="form-control multitext-box" id="m-0-3-yrs" /></td>
-                                    <td><input type="number" class="form-control multitext-box" id="m-4-9-yrs" /></td>
-                                    <td><input type="number" class="form-control multitext-box" id="m-10-17-yrs" /></td>
-                                    <td><input type="number" class="form-control multitext-box" id="m-18-29-yrs" /></td>
-                                    <td><input type="number" class="form-control multitext-box" id="m-30-59-yrs" /></td>
-                                    <td><input type="number" class="form-control multitext-box" id="m-60-yrs" /></td>
+                                    <td><input type="text" class="form-control multitext-box" id="m-0-3-yrs" /></td>
+                                    <td><input type="text" class="form-control multitext-box" id="m-4-9-yrs" /></td>
+                                    <td><input type="text" class="form-control multitext-box" id="m-10-17-yrs" /></td>
+                                    <td><input type="text" class="form-control multitext-box" id="m-18-29-yrs" /></td>
+                                    <td><input type="text" class="form-control multitext-box" id="m-30-59-yrs" /></td>
+                                    <td><input type="text" class="form-control multitext-box" id="m-60-yrs" /></td>
                                 </tr>
                                 <tr>
                                     <td class="female multitext-row">Female</td>
-                                    <td><input type="number" class="form-control multitext-box" id="f-0-3-yrs" /></td>
-                                    <td><input type="number" class="form-control multitext-box" id="f-4-9-yrs" /></td>
-                                    <td><input type="number" class="form-control multitext-box" id="f-10-17-yrs" /></td>
-                                    <td><input type="number" class="form-control multitext-box" id="f-18-29-yrs" /></td>
-                                    <td><input type="number" class="form-control multitext-box" id="f-30-59-yrs" /></td>
-                                    <td><input type="number" class="form-control multitext-box" id="f-60-yrs" /></td>
+                                    <td><input type="text" class="form-control multitext-box" id="f-0-3-yrs" /></td>
+                                    <td><input type="text" class="form-control multitext-box" id="f-4-9-yrs" /></td>
+                                    <td><input type="text" class="form-control multitext-box" id="f-10-17-yrs" /></td>
+                                    <td><input type="text" class="form-control multitext-box" id="f-18-29-yrs" /></td>
+                                    <td><input type="text" class="form-control multitext-box" id="f-30-59-yrs" /></td>
+                                    <td><input type="text" class="form-control multitext-box" id="f-60-yrs" /></td>
                             </table>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <p>How does your dog behave... (select all that apply)</p>
+                        <label>How does your dog behave... (select all that apply)</label>
                         <table>
                             <tr>
                                 <td> </td>
