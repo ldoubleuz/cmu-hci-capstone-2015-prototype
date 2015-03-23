@@ -21,12 +21,12 @@ var generateFormContent = (function(){
     }
 
     function _makeQuestionTitleHeader(text) {
-        return $('<header>').addClass(QUESTION_TITLE_CLASS).text(text);
+        return $('<label>').addClass(QUESTION_TITLE_CLASS).text(text);
     }
 
     function _makeGridCellId(gridId, rowId, colId) {
         return [gridId, rowId, colId].join(',');
-    } 
+    }
 
     function _makeEmptyPage(pageIndex) {
         return $('<div>').addClass(PAGE_CLASS).attr('index', pageIndex);
@@ -69,7 +69,7 @@ var generateFormContent = (function(){
             // What is printed in the option's label
             var optLabelText = optionData.value || '';
 
-            // What id to give the input so that we can have labels 
+            // What id to give the input so that we can have labels
             // with a 'for' attribute
             var labelTargetId = ['__option', radioId, optValueId].join('__');
 
@@ -109,16 +109,23 @@ var generateFormContent = (function(){
     }
 
     function _makeShortTextInput(text, fieldId, allData) {
-        var $title = _makeQuestionTitleHeader(text);
+        var $title = _makeQuestionTitleHeader(text)
+            .addClass('control-label')
+            .addClass('col-xs-5');
+        var $inputWrapper = $('<div>')
+            .addClass('col-xs-4');
         var $input = $('<input>')
             .addClass(QUESTION_INPUT_CLASS)
             .addClass(QUESTION_CONTENT_CLASS)
+            .addClass('form-control')
             .attr({
                 type: 'text',
                 name: fieldId
             });
 
-        return [$title, $input];
+        $inputWrapper.append($input);
+
+        return [$title, $inputWrapper];
     }
 
     function _makeLongTextInput(text, fieldId, allData) {
@@ -153,12 +160,12 @@ var generateFormContent = (function(){
             );
         }
 
-        // create each input row of the table 
+        // create each input row of the table
         for (var rowIndex=0; rowIndex < rows.length; rowIndex++) {
             var rowData = rows[rowIndex];
             var rowValue = rowData.value || '';
             var rowId = rowData.id || '';
-            var $gridRow = $('<tr>').appendTo($gridBody);  
+            var $gridRow = $('<tr>').appendTo($gridBody);
             // add row label as first cell in the row
             $gridRow.append($('<td>').text(rowValue));
 
@@ -218,6 +225,6 @@ var generateFormContent = (function(){
         }
         return $pages;
     }
-        
+
     return _generateFormContent;
 })();

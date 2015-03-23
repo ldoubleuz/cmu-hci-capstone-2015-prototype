@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Dog Surrender Form</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>-->
+
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <body>
+        <div id="form-info">
+            <form id="demo-form" class="form-horizontal">
+            </form>
+        </div>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/generateFormContent.js"></script>
+        <script>
+        function loadFormJson(callbackFn) {
+            var filePath = 'js/dog_form_questions.json';
+            $.ajax({
+                url: filePath,
+                dataType: 'json',
+                method: 'GET',
+                success: callbackFn,
+                error: function() {
+                    console.log(arguments);
+                    console.log('error, not loaded');
+                }
+            });
+        }
+
+        window.onload = function() {
+            var $container = $("#demo-form");
+
+            loadFormJson(function(json) {
+                console.log('data:', json);
+                var $formContent = generateFormContent(json);
+                console.log('content:', $formContent);
+                $container.append($formContent);
+            });
+        }
+        </script>
+    </body>
+</html>
