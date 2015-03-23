@@ -8,14 +8,14 @@
     "question": "Phone Number",
     "id": "owner_phone"
   }, {
-    "type": "short-text",
+    "type": "long-text",
     "question": "Home Address",
     "id": "owner_address"
   }, {
     "type": "multi-text",
     "question": "Including yourself, how many people of the following ages live in your home?",
     "id": "ages_in_household",
-    "rows": [{
+    "columns": [{
       "value": "0-3 yrs",
       "id": "0-3"
     }, {
@@ -34,7 +34,7 @@
       "value": "60+",
       "id": "60+"
     }],
-    "columns": [{
+    "rows": [{
       "value": "Male",
       "id": "male"
     }, {
@@ -46,25 +46,305 @@
     "type": "short-text",
     "question": "Name",
     "id": "pet_name"
-  },
-  {
+  }, {
     "type": "short-text",
     "question": "Nickname",
     "id": "pet_nickname"
-  }
+  }, {
+    "type": "short-text",
+    "question": "Breed",
+    "id": "breed"
+  }, {
+    "type": "short-text",
+    "question": "Age",
+    "id": "pet_age"
+  }, {
+    "type": "short-text",
+    "question": "Date of birth (if known)",
+    "id": "pet_date_of_birth"
+  }, {
+    "type": "radio",
+    "question": "Gender",
+    "id": "pet_gender",
+    "options": [{
+      "value": "Male",
+      "id": "male",
+      "text_input": false
+    }, {
+      "value": "Female",
+      "id": "female",
+      "text_input": false
+    }]
+  }, {
+    "type": "yes-no",
+    "question": "Spay/Neutered",
+    "id": "gender_altered",
+  }, {
+    "type": "short-text",
+    "question": "Primary Color",
+    "id": "primary_color"
+  }, {
+    "type": "short-text",
+    "question": "Secondary Color",
+    "id": "secondary_color"
+  }, {
+    "type": "dropdown",
+    "question": "Color Patter",
+    "id": "color_pattern",
+    "options": [{
+      "value": "solid",
+      "id": "solid"
+    }]
+  }, {
+    "type": "dropdown",
+    "question": "Coat",
+    "id": "coat",
+    "options": [{
+      "value": "medium",
+      "id": "medium"
+    }]
+  }, {
+    "type": "radio",
+    "question": "Eye Color",
+    "id": "eye_color",
+    "options": [{
+      "value": "Brown",
+      "id": "brown",
+      "text_input": false
+    }, {
+      "value": "Blue",
+      "id": "blue",
+      "text_input": false
+    }, {
+      "value": "Other",
+      "id": "other",
+      "text_input": true
+    }]
+  }],
+  [{
+    "type": "short-text",
+    "question": "Distinguishing Marks",
+    "id": "marks"
+  }, {
+    "type": "short-text",
+    "question": "How long have you had your dog?",
+    "id": "duration_of_ownership"
+  }, {
+    "type": "radio",
+    "question": "How did you get your dog?",
+    "id": "method_to_obtain_dog",
+    "options": [
+      {
+        "value": "From this Shelter",
+        "id": "ARL",
+        "text_input": false
+      },
+      {
+        "value": "Relative",
+        "id": "relative",
+        "text_input": false
+      },
+      {
+        "value": "Friend",
+        "id": "friend",
+        "text_input": false
+      },
+      {
+        "value": "Newspaper/Web Ad",
+        "id": "advertisment",
+        "text_input": false
+      },
+      {
+        "value": "Found/Stray",
+        "id": "stray",
+        "text_input": false
+      },
+      {
+        "value": "Breeder",
+        "id": "breeder",
+        "text_input": false
+      },
+      {
+        "value": "Pet Store",
+        "id": "pet_store",
+        "text_input": false
+      },
+      {
+        "value": "Another Shleter",
+        "id": "another_shelter",
+        "text_input": true
+      },
+      {
+        "value": "Other",
+        "id": "other",
+        "text_input": true
+      }
+    ]
+  }, {
+    "type": "short-text",
+    "question": "What other shelters have you tried to surrender your animal to?",
+    "id": "other_shelters_surrendered_to"
+  }, {
+    "type": "radio",
+    "question": "What type of food does your dog eat?",
+    "options": [
+      {
+        "value": "Dry",
+        "id": "dry",
+        "text_input": false
+      }, {
+        "value": "Wet/Canned",
+        "id": "wet",
+        "text_input": false
+      }, {
+        "value": "Other",
+        "id": "other",
+        "text_input": true
+      }
+    ]
+  }, {
+    "type": "short-text",
+    "question": "How often does your dog eat",
+    "id": "eating_frequency"
+  }],
+  [
+    {
+      "type": "radio",
+      "question": "Where does your dog spend most of its time?",
+      "options": [
+        {
+          "value": "Runs Free in House",
+          "id": "free_in_house",
+          "text_input": false
+        }, {
+          "value": "Cage",
+          "id": "cage",
+          "text_input": false
+        }, {
+          "value": "Tied",
+          "id": "tied",
+          "text_input": false
+        }, {
+          "value": "Runs in Yard",
+          "id": "yard",
+          "text_input": false
+        }
+      ]
+    }, {
+      "type": "radio",
+      "question": "Where does your dog spend sleep?",
+      "options": [
+        {
+          "value": "Cage",
+          "id": "cage",
+          "text_input": false
+        }, {
+          "value": "Floor",
+          "id": "floor",
+          "text_input": false
+        }, {
+          "value": "Dog Bed",
+          "id": "dog_bed",
+          "text_input": false
+        }, {
+          "value": "Couch",
+          "id": "couch",
+          "text_input": false
+        },
+        {
+          "value": "Owner's Bed",
+          "id": "owners_bed",
+          "text_input": false
+        }, {
+          "value": "Other",
+          "id": "other",
+          "text_input": true
+        }
+      ]
+    }, {
+      "type": "yes-no",
+      "question": "Is your dog allowed on furniture?",
+      "id": "allowed_on_furniture"
+    }
   ],
   [{
-    "type": "radio",
-    "question": "butts????",
-    "id": "butt",
+    "type": "multi-select",
+    "question": "How does your dog behave...",
+    "options": [{
+      "value": "Unknown",
+      "id": "unknown",
+      "text_input": false
+    }, {
+      "value": "Friendly",
+      "id": "friendly",
+      "text_input": false
+    }, {
+      "value": "Afriad",
+      "id": "afraid",
+      "text_input": false
+    }, {
+      "value": "Growls/Shows Teeth",
+      "id": "growls",
+      "text_input": false
+    }, {
+      "value": "snaps",
+      "id": "snaps",
+      "text_input": false
+    }, {
+      "value": "bites",
+      "id": "bites",
+      "text_input": false
+    }, {
+      "value": "None",
+      "id": "none"
+    }]
+  }, {
+    "type": "multi-select",
+    "question": "How does your dog act when someone enters the house?",
     "options": [
-      {"id": "no", "value": "no butt stuff"},
-      {"id": "yes", "value": "ok, some butt stuff"},
-      {"id": "other", "value": "other butt stuff", "text_input": true, "text_input_id": "fart"}
+      {
+        "value": "Friendly",
+        "id": "friendly",
+        "text_input": false
+      }, {
+        "value": "Afriad",
+        "id": "afraid",
+        "text_input": false
+      }, {
+        "value": "Barks",
+        "id": "barks",
+        "text_input": false
+      }, {
+        "value": "Growls",
+        "id": "growls",
+        "text_input": false
+      }, {
+        "value": "Shows Teeth",
+        "id": "shows_teeth",
+        "text_input": false
+      }, {
+        "value": "Snaps",
+        "id": "snaps",
+        "text_input": false
+      }, {
+        "value": "Bites",
+        "id": "bites",
+        "text_input": false
+      }, {
+        "value": "None",
+        "id": "none",
+        "text_input": false
+      }, {
+        "value": "Other",
+        "id": "other",
+        "text_input": true
+      }
     ]
+  }, {
+    "type": "long-text",
+    "question": "What is your dog afraid of?",
+    "id": "fears"
   }],
-  [],
-  [],
   [],
   [],
   []
