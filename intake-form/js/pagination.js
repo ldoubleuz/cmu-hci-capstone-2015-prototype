@@ -22,15 +22,21 @@ var Pagination = function($pages, $crumbs, $prevButton, $nextButton) {
     this._currIndex = 0;
     this.showPage(this._currIndex);
 
+    var scrollToTop = function() {
+        $('body').animate({
+            scrollTop: 0
+        });
+    };
+
     // add listeners to prev/next buttons
     $prevButton.click(function(){
         this.showPage(this._currIndex-1);
-        $('body').scrollTop(0);
+        scrollToTop();
     }.bind(this));
 
     $nextButton.click(function(){
         this.showPage(this._currIndex+1);
-        $('body').scrollTop(0);
+        scrollToTop();
     }.bind(this));
 
 };
