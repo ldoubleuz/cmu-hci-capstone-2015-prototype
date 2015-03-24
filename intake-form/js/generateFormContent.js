@@ -16,6 +16,8 @@ var generateFormContent = (function(){
     var PAGE_CLASS = 'page';
 
     function _makeEmptyQuestion(type) {
+        var type = '_type_'+type;
+
         return $('<div>')
             .addClass('question form-group')
             .addClass(type);
@@ -252,6 +254,7 @@ var generateFormContent = (function(){
 
     function _generateQuestionContent(questionData) {
         var type = questionData.type || 'short-text';
+
         var $question = _makeEmptyQuestion(type);
 
         if (type in _QUESTION_TYPE_GEN_MAP) {
