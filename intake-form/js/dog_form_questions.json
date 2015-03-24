@@ -206,7 +206,7 @@
                         "id":"pet_store"
                     },
                     {
-                        "value":"Another Shleter",
+                        "value":"Shleter",
                         "id":"another_shelter",
                         "text_input":true
                     },
