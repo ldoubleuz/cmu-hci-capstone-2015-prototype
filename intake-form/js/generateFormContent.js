@@ -1,14 +1,17 @@
 var generateFormContent = (function(){
 
+    var _makeCheckboxInput = _inputTableFactory('checkbox');
+    var _makeRadioInput = _inputTableFactory('radio');
+
     var _QUESTION_TYPE_GEN_MAP = {
         'short-text': _makeShortTextInput,
         'long-text': _makeLongTextInput,
         'multi-text': _makeMultiTextGrid,
+        'checkbox': _makeCheckboxInput,
         'radio': _makeRadioInput,
         'yes-no': _makeYesNoGenerator(false),
         'yes-no-other': _makeYesNoGenerator(true),
         'dropdown': _makeDropdown,
-        // 'checkbox': _makeCheckboxInput,
         'multi-select': _makeCheckboxGrid
     };
 
@@ -16,8 +19,7 @@ var generateFormContent = (function(){
     var QUESTION_CONTENT_CLASS = 'question-content';
     var QUESTION_INPUT_CLASS = 'question-input';
     var PAGE_CLASS = 'page';
-    var RADIO_OPTIONS_PER_ROW = 4;
-    var CHECKBOX_OPTIONS_PER_ROW = 4;
+    var INLINE_OPTIONS_PER_ROW = 4;
     var ID_SEPARATOR = '__';
 
     function addCheckboxSuffix(text) {
@@ -25,7 +27,7 @@ var generateFormContent = (function(){
     }
 
     function _makeEmptyQuestion(type) {
-        var type = '_type_'+type;
+        var type = 'questiontype_'+type;
 
         return $('<div>')
             .addClass('question form-group')
@@ -95,73 +97,83 @@ var generateFormContent = (function(){
         };
     }
 
-    function _makeRadioInput(text, radioId, allData) {
-        var $title = _makeQuestionTitleHeader(text);
-
-        var $content = $('<table>')
-            .addClass(QUESTION_CONTENT_CLASS);
-
-        var options = allData.options || [];
-        var tableRowCells = [];
-        for (var i=0; i < options.length; i++) {
-            // There are four radios to each row of the table
-            if (tableRowCells.length === RADIO_OPTIONS_PER_ROW) {
-                $('<tr>')
-                    .append(tableRowCells)
-                    .appendTo($content);
-                tableRowCells = [];
+    function _inputTableFactory(inputType) {
+        return function (text, questionId, allData) {
+            if (inputType === 'checkbox') {
+                text = addCheckboxSuffix(text);
             }
-            var optionData = options[i];
-            // Compressed version that goes into the value attribute and is
-            // used for id generation
-            var optValueId = optionData.id || '';
 
-            // What is printed in the option's label
-            var optLabelText = optionData.value || '';
+            var $title = _makeQuestionTitleHeader(text);
 
-            // What id to give the input so that we can have labels
-            // with a 'for' attribute
-            var labelTargetId = ['optionfor', radioId, optValueId].join(ID_SEPARATOR);
+            var $content = $('<table>').addClass(QUESTION_CONTENT_CLASS);
+            var $tbody = $('<tbody>');
 
-            var $option = $('<td>').addClass('radio-box');
+            var options = allData.options || [];
+            var tableRowCells = [];
+            for (var i=0; i < options.length; i++) {
+                // There are four radios to each row of the table
+                if (tableRowCells.length === INLINE_OPTIONS_PER_ROW) {
+                    $('<tr>')
+                        .append(tableRowCells)
+                        .appendTo($tbody);
+                    tableRowCells = [];
+                }
+                var optionData = options[i];
+                // Compressed version that goes into the value attribute and is
+                // used for id generation
+                var optValueId = optionData.id || '';
 
-            var $radioButton = $('<input>')
-                .addClass(QUESTION_INPUT_CLASS)
-                .attr({
-                    id: labelTargetId,
-                    type: 'radio',
-                    name: radioId,
-                    value: optValueId
-                })
-                .appendTo($option);
+                // What is printed in the option's label
+                var optLabelText = optionData.value || '';
 
-            var $label = $('<label>')
-                .attr('for', labelTargetId)
-                .text(optLabelText)
-                .addClass('radio-label')
-                .appendTo($option);
+                // What id to give the input so that we can have labels
+                // with a 'for' attribute
+                var labelTargetId = [
+                    'option', questionId, optValueId
+                ].join(ID_SEPARATOR);
 
-            var hasTextField = !!optionData.text_input;
-            if (hasTextField) {
-                var textFieldId = optionData.text_input_id || optValueId;
-                textFieldId = [radioId, textFieldId].join(ID_SEPARATOR);
+                var $option = $('<td>').addClass('radio-box');
 
-                var $textField = $('<input>')
+                var $radioButton = $('<input>')
                     .addClass(QUESTION_INPUT_CLASS)
                     .attr({
-                        type: 'text',
-                        name: textFieldId
+                        id: labelTargetId,
+                        type: inputType,
+                        name: questionId,
+                        value: optValueId
                     })
-                    .addClass('form-control')
-                    .addClass('radio-text')
                     .appendTo($option);
+
+                var $label = $('<label>')
+                    .attr('for', labelTargetId)
+                    .text(optLabelText)
+                    .addClass('table-label')
+                    .appendTo($option);
+
+                var hasTextField = !!optionData.text_input;
+                if (hasTextField) {
+                    var textFieldId = optionData.text_input_id || optValueId;
+                    textFieldId = [questionId, textFieldId].join(ID_SEPARATOR);
+
+                    var $textField = $('<input>')
+                        .addClass(QUESTION_INPUT_CLASS)
+                        .attr({
+                            type: 'text',
+                            name: textFieldId
+                        })
+                        .addClass('form-control')
+                        .addClass('table-text')
+                        .appendTo($option);
+                }
+                tableRowCells.push($option);
             }
-            tableRowCells.push($option);
+            // Append the remaining cells to the table
+            $('<tr>')
+                .append(tableRowCells)
+                .appendTo($tbody);
+            $content.append($tbody);
+            return [$title, $content];
         }
-        $('<tr>')
-            .append(tableRowCells)
-            .appendTo($content);
-        return [$title, $content];
     }
 
     function _makeShortTextInput(text, fieldId, allData) {
