@@ -7,7 +7,8 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">-->
+        <link rel="stylesheet" href="css/bootstrap.min.css">
 
         <!-- Latest compiled and minified JavaScript -->
         <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>-->
@@ -47,6 +48,7 @@
         </div>
         <script src="js/jquery.min.js"></script>
         <script src="js/generateFormContent.js"></script>
+        <script src="js/pagination.js"></script>
         <script>
         function loadFormJson(callbackFn) {
             var filePath = 'js/dog_form_questions.json';
@@ -62,6 +64,10 @@
             });
         }
 
+        function makeCrumb(index) {
+            return $('<div>').addClass('crumb').text(index);
+        }
+
         window.onload = function() {
             var $container = $("#demo-form");
 
@@ -70,6 +76,28 @@
                 var $formContent = generateFormContent(json);
                 console.log('content:', $formContent);
                 $container.append($formContent);
+
+                var $pages = $container.find('.page');
+
+                // generate appropriate number of breadcrumbs
+                // TODO: figure out why this obliterates the spacing CSS
+                /*var $crumbs = [];
+                for (var i=0; i < $pages.length; i++) {
+                    $crumbs.push(makeCrumb(i+1));
+                }
+
+                var $crumbWrapper = $('#breadcrumbs');
+                $crumbWrapper.find('.crumb').remove();
+                $crumbWrapper.prepend($crumbs);*/
+
+                var $crumbs = $('#breadcrumbs .crumb');
+
+                var $prevButton = $('#buttons .prev-button');
+                var $nextButton = $('#buttons .next-button');
+
+                var pagination = new Pagination(
+                    $pages, $crumbs, $prevButton, $nextButton
+                );
             });
         }
         </script>
