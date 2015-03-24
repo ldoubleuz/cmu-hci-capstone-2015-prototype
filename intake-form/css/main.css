@@ -170,14 +170,14 @@ body {
   height: 30px;
 }
 
-.checkbox-text, .radio-text {
+.tabel-text {
   width: 100px;
   display: inline-block;
   margin-left: 20px;
   height: 25px;
 }
 
-.checkbox-label, .radio-label {
+.tabel-label {
   display: inline-block;
 }
 
