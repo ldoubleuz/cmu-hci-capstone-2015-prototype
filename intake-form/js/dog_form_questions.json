@@ -2,8 +2,8 @@
     "pages":[
         {
             "title":"Your Information",
-            "questions":[
-                {
+            "questions": [
+                { 
                     "type":"short-text",
                     "question":"Full Name",
                     "id":"owner_name"
@@ -63,7 +63,7 @@
         },
         {
             "title":"Dog Information",
-            "questions":[
+            "questions": [
                 {
                     "type":"short-text",
                     "question":"Name",
@@ -129,8 +129,24 @@
                             "id":"solid"
                         },
                         {
-                            "value":"Two-tone",
-                            "id":"two-tone"
+                            "value": "Bicolor",
+                            "id": "bicolor"
+                        },
+                        {
+                            "value": "Tricolor",
+                            "id": "tricolor"
+                        },
+                        {
+                            "value": "Merle",
+                            "id": "merle"
+                        },
+                        {
+                            "value": "Spotted",
+                            "id": "spotted"
+                        },
+                        {
+                            "value": "Brindle",
+                            "id": "brindle"
                         }
                     ]
                 },
@@ -140,28 +156,24 @@
                     "id":"coat",
                     "options":[
                         {
-                            "value":"medium",
+                            "value":"Medium",
                             "id":"medium"
-                        }
-                    ]
-                },
-                {
-                    "type":"radio",
-                    "question":"Eye Color",
-                    "id":"eye_color",
-                    "options":[
-                        {
-                            "value":"Brown",
-                            "id":"brown"
                         },
                         {
-                            "value":"Blue",
-                            "id":"blue"
+                            "value":"Short",
+                            "id":"short"
                         },
                         {
-                            "value":"Other",
-                            "id":"other",
-                            "text_input":true
+                            "value":"Smooth",
+                            "id":"smooth"
+                        },
+                        {
+                            "value":"Wiry",
+                            "id":"wiry"
+                        },
+                        {
+                            "value":"Curly",
+                            "id":"curly"
                         }
                     ]
                 }
@@ -169,7 +181,7 @@
         },
         {
             "title":"Dog Info cont.",
-            "questions":[
+            "questions": [
                 {
                     "type":"short-text",
                     "question":"Distinguishing Marks",
@@ -182,11 +194,11 @@
                 },
                 {
                     "type":"radio",
-                    "question":"How did you get your dog?",
+                    "question":"Where did you get your dog?",
                     "id":"method_to_obtain_dog",
                     "options":[
                         {
-                            "value":"From this Shelter",
+                            "value":"This Shelter (ARL)",
                             "id":"ARL"
                         },
                         {
@@ -214,7 +226,7 @@
                             "id":"pet_store"
                         },
                         {
-                            "value":"Another Shleter",
+                            "value":"Shelter",
                             "id":"another_shelter",
                             "text_input":true
                         },
@@ -227,12 +239,12 @@
                 },
                 {
                     "type":"short-text",
-                    "question":"What other shelters have you tried to surrender your animal to?",
+                    "question":"What other shelters have you tried to surrender your pet to?",
                     "id":"other_shelters_surrendered_to"
                 },
                 {
-                    "type":"radio",
-                    "question":"What type of food does your dog eat?",
+                    "type":"checkbox",
+                    "question":"What types of food does your dog eat? (select all that apply)",
                     "options":[
                         {
                             "value":"Dry",
@@ -251,14 +263,14 @@
                 },
                 {
                     "type":"short-text",
-                    "question":"How often does your dog eat",
+                    "question":"How often does your dog eat?",
                     "id":"eating_frequency"
                 }
             ]
         },
         {
             "title":"Home Context",
-            "questions":[
+            "questions": [
                 {
                     "type":"radio",
                     "question":"Where does your dog spend most of its time?",
@@ -282,8 +294,8 @@
                     ]
                 },
                 {
-                    "type":"radio",
-                    "question":"Where does your dog spend sleep?",
+                    "type":"checkbox",
+                    "question":"Where does your dog sleep?",
                     "options":[
                         {
                             "value":"Cage",
@@ -320,8 +332,8 @@
             ]
         },
         {
-            "title":"Behavoir with Others",
-            "questions":[
+            "title":"Behavior with Others",
+            "questions": [
                 {
                     "type":"multi-select",
                     "question":"How does your dog behave...",
@@ -418,10 +430,10 @@
         },
         {
             "title":"Training Information",
-            "questions":[
+            "questions": [
                 {
                     "type":"yes-no",
-                    "question":"Is your dog create trained?",
+                    "question":"Is your dog crate trained?",
                     "id":"crate_trained"
                 },
                 {
@@ -431,7 +443,7 @@
                 },
                 {
                     "type":"short-text",
-                    "question":"How does your dog let you know he/she wants to go outside?",
+                    "question":"How does your dog ask to go outside?",
                     "id":"outside_indicator"
                 },
                 {
@@ -505,7 +517,7 @@
                             "id":"no"
                         },
                         {
-                            "value":"Fetech",
+                            "value":"Fetch",
                             "id":"fetch"
                         },
                         {
@@ -531,7 +543,7 @@
         },
         {
             "title":"Dog's Preferences",
-            "questions":[
+            "questions": [
                 {
                     "type":"checkbox",
                     "question":"What is/are your dog's favorite toy(s)?",
@@ -570,7 +582,7 @@
                 },
                 {
                     "type":"short-text",
-                    "question":"What is your dog's favorite food/treat",
+                    "question":"What is your dog's favorite food or treat?",
                     "id":"favorite_food"
                 },
                 {
@@ -607,7 +619,7 @@
                 },
                 {
                     "type":"checkbox",
-                    "question":"Are there areas on your dog's body that it does NOT like to be touched?",
+                    "question":"Are there any areas where your dog does NOT like to be touched?",
                     "id":"do_not_touch",
                     "options":[
                         {
@@ -681,7 +693,7 @@
         },
         {
             "title":"Additional Information",
-            "questions":[
+            "questions": [
                 {
                     "type":"long-text",
                     "question":"What are your dog's best qualities?",
@@ -694,7 +706,7 @@
                 },
                 {
                     "type":"long-text",
-                    "question":"Is there anything else you would want a potential adopter to know about the dog?",
+                    "question":"Is there anything else you would want a potential adopter to know about your dog?",
                     "id":"anything_else"
                 }
             ]
