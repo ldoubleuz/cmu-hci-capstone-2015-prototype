@@ -6,7 +6,8 @@ var generateFormContent = (function(){
         'multi-text': _makeMultiTextGrid,
         'radio': _makeRadioInput,
         'yes-no': _makeYesNoGenerator(false),
-        'yes-no-other': _makeYesNoGenerator(true)
+        'yes-no-other': _makeYesNoGenerator(true),
+        'dropdown': _makeDropdown
     };
 
     var QUESTION_TITLE_CLASS = 'question-title';
@@ -30,6 +31,35 @@ var generateFormContent = (function(){
 
     function _makeEmptyPage(pageIndex) {
         return $('<div>').addClass(PAGE_CLASS).attr('index', pageIndex);
+    }
+
+    function _makeDropdown(text, dropdownId, allData) {
+        var $title = _makeQuestionTitleHeader(text)
+            .addClass('control-label')
+            .addClass('col-xs-5');
+
+        var $optionWrapper = $('<div>').addClass('col-xs-4');
+        var $dropdownSelect = $('<select>')
+            .attr({
+                id: dropdownId,
+                name: dropdownId
+            })
+            .addClass('form-control')
+            .appendTo($optionWrapper);
+
+        var options = allData.options || [];
+        for (var i=0; i < options.length; i++) {
+            var optionData = options[i];
+            var optText = optionData.value || '';
+            var optId = optionData.id || '';
+
+            var $option = $('<option>')
+                .text(optText)
+                .attr('value', optId);
+            $dropdownSelect.append($option);
+        }
+
+        return [$title, $optionWrapper];
     }
 
     function _makeYesNoGenerator(includeOther) {
@@ -102,7 +132,7 @@ var generateFormContent = (function(){
 
             var hasTextField = !!optionData.text_input;
             if (hasTextField) {
-                var textFieldId = optionData.text_input_id || '';
+                var textFieldId = optionData.text_input_id || optValueId;
                 textFieldId = [radioId, textFieldId].join('__');
 
                 var $textField = $('<input>')

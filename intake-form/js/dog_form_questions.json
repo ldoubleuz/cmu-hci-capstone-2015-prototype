@@ -116,12 +116,16 @@
             },
             {
                 "type":"dropdown",
-                "question":"Color Patter",
+                "question":"Color Pattern",
                 "id":"color_pattern",
                 "options":[
                     {
-                        "value":"solid",
+                        "value":"Solid",
                         "id":"solid"
+                    },
+                    {
+                        "value": "Two-tone",
+                        "id": "two-tone"
                     }
                 ]
             },
