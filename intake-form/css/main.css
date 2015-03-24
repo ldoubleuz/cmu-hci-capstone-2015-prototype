@@ -170,15 +170,16 @@ body {
   height: 30px;
 }
 
-.checkbox-text, .radio-text {
+.table-text {
   width: 100px;
   display: inline-block;
   margin-left: 20px;
   height: 25px;
 }
 
-.checkbox-label, .radio-label {
+.table-label {
   display: inline-block;
+  margin-left: 5px;
 }
 
 .multiselect-col {
