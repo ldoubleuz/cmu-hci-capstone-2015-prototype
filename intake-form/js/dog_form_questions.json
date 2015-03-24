@@ -311,7 +311,7 @@
             {
                 "type":"multi-select",
                 "question":"How does your dog behave...",
-                "options":[
+                "columns":[
                     {
                         "value":"Unknown",
                         "id":"unknown"
@@ -321,29 +321,39 @@
                         "id":"friendly"
                     },
                     {
-                        "value":"Afriad",
-                        "id":"afraid"
+                        "value":"Growls/Shows teeth",
+                        "id":"growl"
                     },
                     {
-                        "value":"Growls/Shows Teeth",
-                        "id":"growls"
+                        "value":"Snaps",
+                        "id":"snap"
                     },
                     {
-                        "value":"snaps",
-                        "id":"snaps"
+                        "value":"Bites",
+                        "id":"bite"
                     },
                     {
-                        "value":"bites",
-                        "id":"bites"
-                    },
-                    {
-                        "value":"None",
+                        "value":"No reaction",
                         "id":"none"
+                    }
+                ],
+                "rows":[
+                    {
+                        "value":"At the vet",
+                        "id":"vet"
+                    },
+                    {
+                        "value":"With children",
+                        "id":"child"
+                    },
+                    {
+                        "value":"With cats",
+                        "id":"cat"
                     }
                 ]
             },
             {
-                "type":"multi-select",
+                "type":"checkbox",
                 "question":"How does your dog act when someone enters the house?",
                 "options":[
                     {
@@ -437,7 +447,7 @@
                 "id":"walked_on_leash"
             },
             {
-                "type":"multi-select",
+                "type":"checkbox",
                 "question":"What commands does your dog understand?",
                 "id":"commands",
                 "options":[
@@ -503,8 +513,8 @@
         ],
         [
             {
-                "type":"multi-select",
-                "question":"What is your dog's favorite toy?",
+                "type":"checkbox",
+                "question":"What is/are your dog's favorite toy(s)?",
                 "id":"favorite_toy",
                 "options":[
                     {
@@ -544,7 +554,7 @@
                 "id":"favorite_food"
             },
             {
-                "type":"multi-select",
+                "type":"checkbox",
                 "question":"What games does your dog like?",
                 "id":"favorite_games",
                 "options":[
@@ -576,7 +586,7 @@
                 ]
             },
             {
-                "type":"multi-select",
+                "type":"checkbox",
                 "question":"Are there areas on your dog's body that it does NOT like to be touched?",
                 "id":"do_not_touch",
                 "options":[
@@ -612,7 +622,7 @@
                 ]
             },
             {
-                "type":"multi-select",
+                "type":"checkbox",
                 "question":"If touched in the above places, how does your dog respond?",
                 "id":"do_not_touch_response",
                 "options":[

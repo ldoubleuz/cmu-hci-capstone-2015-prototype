@@ -7,13 +7,22 @@ var generateFormContent = (function(){
         'radio': _makeRadioInput,
         'yes-no': _makeYesNoGenerator(false),
         'yes-no-other': _makeYesNoGenerator(true),
-        'dropdown': _makeDropdown
+        'dropdown': _makeDropdown,
+        // 'checkbox': _makeCheckboxInput,
+        'multi-select': _makeCheckboxGrid
     };
 
     var QUESTION_TITLE_CLASS = 'question-title';
     var QUESTION_CONTENT_CLASS = 'question-content';
     var QUESTION_INPUT_CLASS = 'question-input';
     var PAGE_CLASS = 'page';
+    var RADIO_OPTIONS_PER_ROW = 4;
+    var CHECKBOX_OPTIONS_PER_ROW = 4;
+    var ID_SEPARATOR = '__';
+
+    function addCheckboxSuffix(text) {
+        return text + ' (Select all that apply)';
+    }
 
     function _makeEmptyQuestion(type) {
         var type = '_type_'+type;
@@ -28,7 +37,7 @@ var generateFormContent = (function(){
     }
 
     function _makeGridCellId(gridId, rowId, colId) {
-        return [gridId, rowId, colId].join(',');
+        return [gridId, rowId, colId].join(ID_SEPARATOR);
     }
 
     function _makeEmptyPage(pageIndex) {
@@ -96,7 +105,7 @@ var generateFormContent = (function(){
         var tableRowCells = [];
         for (var i=0; i < options.length; i++) {
             // There are four radios to each row of the table
-            if (tableRowCells.length === 4) {
+            if (tableRowCells.length === RADIO_OPTIONS_PER_ROW) {
                 $('<tr>')
                     .append(tableRowCells)
                     .appendTo($content);
@@ -112,7 +121,7 @@ var generateFormContent = (function(){
 
             // What id to give the input so that we can have labels
             // with a 'for' attribute
-            var labelTargetId = ['__option', radioId, optValueId].join('__');
+            var labelTargetId = ['optionfor', radioId, optValueId].join(ID_SEPARATOR);
 
             var $option = $('<td>').addClass('radio-box');
 
@@ -135,7 +144,7 @@ var generateFormContent = (function(){
             var hasTextField = !!optionData.text_input;
             if (hasTextField) {
                 var textFieldId = optionData.text_input_id || optValueId;
-                textFieldId = [radioId, textFieldId].join('__');
+                textFieldId = [radioId, textFieldId].join(ID_SEPARATOR);
 
                 var $textField = $('<input>')
                     .addClass(QUESTION_INPUT_CLASS)
@@ -195,7 +204,14 @@ var generateFormContent = (function(){
         return [$title, $inputWrapper];
     }
 
-    function _makeMultiTextGrid(text, gridId, allData) {
+
+    function _makeGenericGrid(text, gridId, allData, callbacks) {
+        var emptyFn = function(){};
+        var postProcessRowLabel = callbacks.postProcessRowLabel || emptyFn;
+        var postProcessColLabel = callbacks.postProcessColLabel || emptyFn;
+        var postProcessDataCell = callbacks.postProcessDataCell || emptyFn;
+        var makeCellContent = callbacks.makeCellContent || emptyFn;
+
         var $title = _makeQuestionTitleHeader(text);
         var rows = allData.rows || [];
         var cols = allData.columns || [];
@@ -205,17 +221,17 @@ var generateFormContent = (function(){
 
         var $headerRow = $('<tr>').appendTo($gridBody);
         // first, add empty cell so that we have space for row labels
-        $headerRow
-            .append($('<th>').addClass('multitext-row-header'));
+        var $emptyCell = $('<th>');
+        postProcessRowLabel($emptyCell);
+        $headerRow.append($emptyCell);
 
         // create the remaining column labels
         for (var colIndex=0; colIndex < cols.length; colIndex++) {
             var colValue = cols[colIndex].value || '';
-            $headerRow.append(
-                $('<th>')
-                    .text(colValue)
-                    .addClass('multitext-col')
-            );
+            var $colLabel = $('<th>').text(colValue);
+            postProcessColLabel($colLabel);
+
+            $headerRow.append($colLabel);
         }
 
         // create each input row of the table
@@ -224,32 +240,81 @@ var generateFormContent = (function(){
             var rowValue = rowData.value || '';
             var rowId = rowData.id || '';
             var $gridRow = $('<tr>').appendTo($gridBody);
-            var $rowHeader = $('<td>')
-                .text(rowValue)
-                .addClass('multitext-row-header');
+            var $rowHeader = $('<td>').text(rowValue);
+            postProcessRowLabel($rowHeader);
             // add row label as first cell in the row
-            $gridRow.append($rowHeader);
+            $rowHeader.appendTo($gridRow);
 
             // create a text input for each cell
             for (var colIndex=0; colIndex < cols.length; colIndex++) {
                 var colData = cols[colIndex];
                 var colId = colData.id || '';
+                var colValue = colData.value || '';
 
+                var $gridCell = $('<td>')
+                postProcessDataCell($gridCell);
+                $gridCell.appendTo($gridRow);
+
+                $gridCell.append(makeCellContent(
+                    gridId, rowId, colId, rowValue, colValue
+                ));
+            }
+        }
+
+        return [$title, $gridTable];
+    }
+
+    function _makeMultiTextGrid(text, gridId, allData) {
+        var callbacks = {
+            postProcessRowLabel: function($label) {
+                $label.addClass('multitext-row-header')
+            },
+            postProcessColLabel: function($label) {
+                $label.addClass('multitext-col');
+            },
+            makeCellContent: function(gridId, rowId, colId, rowValue, colValue){
                 var cellId = _makeGridCellId(gridId, rowId, colId);
-                var $gridCell = $('<td>').appendTo($gridRow);
                 var $cellInput = $('<input>')
                     .addClass(QUESTION_INPUT_CLASS)
                     .attr({
                         type: 'text',
                         name: cellId
-                        })
+                    })
                     .addClass('form-control')
-                    .addClass('multitext-box')
-                    .appendTo($gridCell);
+                    .addClass('multitext-box');
+                return $cellInput;
             }
-        }
+        };
+        return _makeGenericGrid(text, gridId, allData, callbacks);        
+    }
 
-        return [$title, $gridTable];
+    function _makeCheckboxGrid(text, gridId, allData) {
+        var text = addCheckboxSuffix(text);
+
+        var callbacks = {
+            postProcessRowLabel: function($label) {
+                $label.addClass('multiselect-row');
+            },
+            postProcessColLabel: function($label) {
+                $label.addClass('multiselect-col');
+            },
+            postProcessDataCell: function($cell) {
+                $cell.addClass('multiselect-box');
+            },
+            makeCellContent: function(gridId, rowId, colId, rowValue, colValue){
+                var cellId = _makeGridCellId(gridId, rowId, colId);
+                var $cellInput = $('<input>')
+                    .addClass(QUESTION_INPUT_CLASS)
+                    .attr({
+                        type: 'checkbox',
+                        name: gridId,
+                        id: cellId,
+                        value: cellId
+                    });
+                return $cellInput;
+            }
+        };
+        return _makeGenericGrid(text, gridId, allData, callbacks);         
     }
 
     function _generateQuestionContent(questionData) {
