@@ -158,13 +158,16 @@ var generateFormContent = (function(){
 
         var $headerRow = $('<tr>').appendTo($gridBody);
         // first, add empty cell so that we have space for row labels
-        $headerRow.append($('<th>'));
+        $headerRow
+            .append($('<th>').addClass('multitext-row-header'));
 
         // create the remaining column labels
         for (var colIndex=0; colIndex < cols.length; colIndex++) {
             var colValue = cols[colIndex].value || '';
             $headerRow.append(
-                $('<th>').text(colValue)
+                $('<th>')
+                    .text(colValue)
+                    .addClass('multitext-col')
             );
         }
 
@@ -174,8 +177,11 @@ var generateFormContent = (function(){
             var rowValue = rowData.value || '';
             var rowId = rowData.id || '';
             var $gridRow = $('<tr>').appendTo($gridBody);
+            var $rowHeader = $('<td>')
+                .text(rowValue)
+                .addClass('multitext-row-header');
             // add row label as first cell in the row
-            $gridRow.append($('<td>').text(rowValue));
+            $gridRow.append($rowHeader);
 
             // create a text input for each cell
             for (var colIndex=0; colIndex < cols.length; colIndex++) {
@@ -184,10 +190,15 @@ var generateFormContent = (function(){
 
                 var cellId = _makeGridCellId(gridId, rowId, colId);
                 var $gridCell = $('<td>').appendTo($gridRow);
-                var $cellInput = $('<input>').addClass(QUESTION_INPUT_CLASS).attr({
-                    type: 'text',
-                    name: cellId
-                }).appendTo($gridCell);
+                var $cellInput = $('<input>')
+                    .addClass(QUESTION_INPUT_CLASS)
+                    .attr({
+                        type: 'text',
+                        name: cellId
+                        })
+                    .addClass('form-control')
+                    .addClass('multitext-box')
+                    .appendTo($gridCell);
             }
         }
 
