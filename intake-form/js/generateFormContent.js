@@ -297,7 +297,7 @@ var generateFormContent = (function(){
                 return $cellInput;
             }
         };
-        return _makeGenericGrid(text, gridId, allData, callbacks);        
+        return _makeGenericGrid(text, gridId, allData, callbacks);
     }
 
     function _makeCheckboxGrid(text, gridId, allData) {
@@ -326,7 +326,7 @@ var generateFormContent = (function(){
                 return $cellInput;
             }
         };
-        return _makeGenericGrid(text, gridId, allData, callbacks);         
+        return _makeGenericGrid(text, gridId, allData, callbacks);
     }
 
     function _generateQuestionContent(questionData) {
@@ -364,7 +364,7 @@ var generateFormContent = (function(){
         var pagesData = formData.pages || [];
         var $pages = [];
         for (var i=0; i < pagesData.length; i++) {
-            var questionDataList = pagesData[i];
+            var questionDataList = pagesData[i].questions;
             $pages.push(_generatePageContent(questionDataList, i));
         }
         return $pages;
