@@ -57,10 +57,19 @@ var generateFormContent = (function(){
     function _makeRadioInput(text, radioId, allData) {
         var $title = _makeQuestionTitleHeader(text);
 
-        var $content = $('<div>').addClass(QUESTION_CONTENT_CLASS);
+        var $content = $('<table>')
+            .addClass(QUESTION_CONTENT_CLASS);
 
         var options = allData.options || [];
+        var tableRowCells = [];
         for (var i=0; i < options.length; i++) {
+            // There are four radios to each row of the table
+            if (tableRowCells.length === 4) {
+                $('<tr>')
+                    .append(tableRowCells)
+                    .appendTo($content);
+                tableRowCells = [];
+            }
             var optionData = options[i];
             // Compressed version that goes into the value attribute and is
             // used for id generation
@@ -73,7 +82,7 @@ var generateFormContent = (function(){
             // with a 'for' attribute
             var labelTargetId = ['__option', radioId, optValueId].join('__');
 
-            var $option = $('<div>').appendTo($content);
+            var $option = $('<td>').addClass('radio-box');
 
             var $radioButton = $('<input>')
                 .addClass(QUESTION_INPUT_CLASS)
@@ -88,6 +97,7 @@ var generateFormContent = (function(){
             var $label = $('<label>')
                 .attr('for', labelTargetId)
                 .text(optLabelText)
+                .addClass('radio-label')
                 .appendTo($option);
 
             var hasTextField = !!optionData.text_input;
@@ -101,10 +111,15 @@ var generateFormContent = (function(){
                         type: 'text',
                         name: textFieldId
                     })
+                    .addClass('form-control')
+                    .addClass('radio-text')
                     .appendTo($option);
             }
+            tableRowCells.push($option);
         }
-
+        $('<tr>')
+            .append(tableRowCells)
+            .appendTo($content);
         return [$title, $content];
     }
 
