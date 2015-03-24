@@ -51,7 +51,9 @@ var generateFormContent = (function(){
             .addClass('control-label')
             .addClass('col-xs-5');
 
-        var $optionWrapper = $('<div>').addClass('col-xs-4');
+        var $optionWrapper = $('<div>')
+            .addClass('col-xs-4')
+            .addClass('col-xs-offset-1');;
         var $dropdownSelect = $('<select>')
             .attr({
                 id: dropdownId,
@@ -181,7 +183,8 @@ var generateFormContent = (function(){
             .addClass('control-label')
             .addClass('col-xs-5');
         var $inputWrapper = $('<div>')
-            .addClass('col-xs-4');
+            .addClass('col-xs-4')
+            .addClass('col-xs-offset-1');;
         var $input = $('<input>')
             .addClass(QUESTION_INPUT_CLASS)
             .addClass(QUESTION_CONTENT_CLASS)
@@ -201,7 +204,8 @@ var generateFormContent = (function(){
             .addClass('control-label')
             .addClass('col-xs-5');
         var $inputWrapper = $('<div>')
-            .addClass('col-xs-4');
+            .addClass('col-xs-4')
+            .addClass('col-xs-offset-1');
         var $input = $('<textarea>')
             .addClass(QUESTION_INPUT_CLASS)
             .addClass(QUESTION_CONTENT_CLASS)
@@ -297,7 +301,7 @@ var generateFormContent = (function(){
                 return $cellInput;
             }
         };
-        return _makeGenericGrid(text, gridId, allData, callbacks);        
+        return _makeGenericGrid(text, gridId, allData, callbacks);
     }
 
     function _makeCheckboxGrid(text, gridId, allData) {
@@ -326,7 +330,7 @@ var generateFormContent = (function(){
                 return $cellInput;
             }
         };
-        return _makeGenericGrid(text, gridId, allData, callbacks);         
+        return _makeGenericGrid(text, gridId, allData, callbacks);
     }
 
     function _generateQuestionContent(questionData) {
@@ -350,8 +354,13 @@ var generateFormContent = (function(){
         return $question;
     }
 
-    function _generatePageContent(questionDataList, pageIndex) {
+    function _generatePageContent(questionDataList, pageTitle, pageIndex) {
         var $page = _makeEmptyPage(pageIndex);
+        var $title = $('<h2>')
+                .text(pageTitle)
+                .addClass('form-title')
+
+        $page.append($title);
 
         for (var i=0; i < questionDataList.length; i++) {
             var questionData = questionDataList[i];
@@ -364,8 +373,9 @@ var generateFormContent = (function(){
         var pagesData = formData.pages || [];
         var $pages = [];
         for (var i=0; i < pagesData.length; i++) {
-            var questionDataList = pagesData[i];
-            $pages.push(_generatePageContent(questionDataList, i));
+            var questionDataList = pagesData[i].questions;
+            var pageTitle = pagesData[i].title;
+            $pages.push(_generatePageContent(questionDataList, pageTitle, i));
         }
         return $pages;
     }
