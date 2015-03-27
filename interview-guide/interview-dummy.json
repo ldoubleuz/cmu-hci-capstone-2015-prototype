@@ -3,20 +3,139 @@
         {
             "fields":[
                 {
-                    "value":"friendly",
+                    "title":"Name",
+                    "value":"Skip"
+                },
+                {
+                    "title":"Nickname",
+                    "value":"Skippy"
+                },
+                {
+                    "title":"Breed",
+                    "value":"Boston Terrier"
+                },
+                {
+                    "title":"Age",
+                    "value":"2 years"
+                },
+                {
+                    "title":"Date of birth",
+                    "value":"7/6/2013"
+                },
+                {
+                    "title":"Gender",
+                    "value":"Male"
+                },
+                {
+                    "title":"Altered",
+                    "value":"Y"
+                },
+                {
+                    "title":"Primrary Color",
+                    "value":"Black"
+                },
+                {
+                    "title":"Secondary Color",
+                    "value":"White"
+                },
+                {
+                    "title":"Color Pattern",
+                    "value":"Bi Smooth"
+                },
+                {
+                    "title":"Coat",
+                    "value":"Solid"
+                },
+                {
+                    "title":"Had dog for",
+                    "value":"2 years"
+                },
+                {
+                    "title":"Obtained dog by",
+                    "value":"Breeder"
+                },
+                {
+                    "title":"Tried another shelter",
+                    "value":"No"
+                },
+                {
+                    "title":"What dog eats",
+                    "value":"Dry, Wet/Canned"
+                },
+                {
+                    "title":"How often dog eats",
+                    "value":"2 times a day, snacks in between"
+                }
+            ],
+            "title": "Dog Information"
+        },
+        {
+            "fields":[
+                {
+                    "title":"Dog spends most of its time in",
+                    "value":"Office"
+                },
+                {
+                    "title":"Dog sleeps",
+                    "value":"Dog bed"
+                },
+                {
+                    "title":"Dog allowed on furniture?",
+                    "value":"No"
+                }
+            ] ,
+            "title": "Home Context"
+        },
+        {
+            "fields":[
+                {
+                    "title":"At home",
+                    "value":"Barks, Crieds"
+                },
+                {
+                    "title":"Alone",
+                    "value":"Barks, Cries"
+                },
+                {
+                    "title":"When playing",
+                    "value":"Jumps"
+                },
+                {
+                    "title":"What dog chases",
+                    "value":"Squirrels"
+                }
+            ] ,
+            "title": "Typical Behavoir"
+        },
+        {
+            "fields":[
+                {
+                    "value":"Friendly",
                     "title":"Vet"
                 },
                 {
-                    "value":"friendly",
+                    "title":"With children",
+                    "value":"Friendly"
+                },
+                {
+                    "value":"Friendly",
                     "title":"Cats"
                 },
                 {
-                    "value":"friendly",
-                    "title":"Children"
+                    "value":"Friendly",
+                    "title":"Other dogs"
                 },
                 {
-                    "value":"friendly",
-                    "title":"Other dogs"
+                    "title":"In a car",
+                    "value":"Friendly"
+                },
+                {
+                    "title":"With unfamiliar people",
+                    "value":"Friendly"
+                },
+                {
+                    "title":"Fears",
+                    "value":"Water"
                 }
             ],
             "title":"Behavior with others"
@@ -59,6 +178,22 @@
                 {
                     "value":"Ball, frisbee, squeaky toy",
                     "title":"Favorite toy"
+                },
+                {
+                    "title":"Favroite food",
+                    "value":"Meat"
+                },
+                {
+                    "title":"Favorite games",
+                    "value":"Fetch, Tug, Chase, Wrestling"
+                },
+                {
+                    "title":"Areas dog does not like to be touched",
+                    "value":"None"
+                },
+                {
+                    "title":"If touched in above places, dog response by",
+                    "value":"N/A"
                 }
             ],
             "title":"Dog's preferences"
