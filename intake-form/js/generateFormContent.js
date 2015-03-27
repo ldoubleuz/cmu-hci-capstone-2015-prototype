@@ -27,7 +27,7 @@ var generateFormContent = (function(){
     }
 
     function _makeEmptyQuestion(type) {
-        var type = 'questiontype_'+type;
+        type = 'questiontype_'+type;
 
         return $('<div>')
             .addClass('question form-group')
@@ -53,7 +53,7 @@ var generateFormContent = (function(){
 
         var $optionWrapper = $('<div>')
             .addClass('col-xs-4')
-            .addClass('col-xs-offset-1');;
+            .addClass('col-xs-offset-1');
         var $dropdownSelect = $('<select>')
             .attr({
                 id: dropdownId,
@@ -175,7 +175,7 @@ var generateFormContent = (function(){
                 .appendTo($tbody);
             $content.append($tbody);
             return [$title, $content];
-        }
+        };
     }
 
     function _makeShortTextInput(text, fieldId, allData) {
@@ -184,7 +184,7 @@ var generateFormContent = (function(){
             .addClass('col-xs-5');
         var $inputWrapper = $('<div>')
             .addClass('col-xs-4')
-            .addClass('col-xs-offset-1');;
+            .addClass('col-xs-offset-1');
         var $input = $('<input>')
             .addClass(QUESTION_INPUT_CLASS)
             .addClass(QUESTION_CONTENT_CLASS)
@@ -243,8 +243,8 @@ var generateFormContent = (function(){
 
         // create the remaining column labels
         for (var colIndex=0; colIndex < cols.length; colIndex++) {
-            var colValue = cols[colIndex].value || '';
-            var $colLabel = $('<th>').text(colValue);
+            var colLabel = cols[colIndex].value || '';
+            var $colLabel = $('<th>').text(colLabel);
             postProcessColLabel($colLabel);
 
             $headerRow.append($colLabel);
@@ -262,12 +262,12 @@ var generateFormContent = (function(){
             $rowHeader.appendTo($gridRow);
 
             // create a text input for each cell
-            for (var colIndex=0; colIndex < cols.length; colIndex++) {
+            for (colIndex=0; colIndex < cols.length; colIndex++) {
                 var colData = cols[colIndex];
                 var colId = colData.id || '';
                 var colValue = colData.value || '';
 
-                var $gridCell = $('<td>')
+                var $gridCell = $('<td>');
                 postProcessDataCell($gridCell);
                 $gridCell.appendTo($gridRow);
 
@@ -283,7 +283,7 @@ var generateFormContent = (function(){
     function _makeMultiTextGrid(text, gridId, allData) {
         var callbacks = {
             postProcessRowLabel: function($label) {
-                $label.addClass('multitext-row-header')
+                $label.addClass('multitext-row-header');
             },
             postProcessColLabel: function($label) {
                 $label.addClass('multitext-col');
@@ -305,7 +305,7 @@ var generateFormContent = (function(){
     }
 
     function _makeCheckboxGrid(text, gridId, allData) {
-        var text = addCheckboxSuffix(text);
+        text = addCheckboxSuffix(text);
 
         var callbacks = {
             postProcessRowLabel: function($label) {
@@ -358,7 +358,7 @@ var generateFormContent = (function(){
         var $page = _makeEmptyPage(pageIndex);
         var $title = $('<h2>')
                 .text(pageTitle)
-                .addClass('form-title')
+                .addClass('form-title');
 
         $page.append($title);
 
