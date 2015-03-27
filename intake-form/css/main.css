@@ -90,6 +90,8 @@ body {
   border-color: #32b27c;
   vertical-align: top;
   zoom: 1;
+
+  cursor: pointer;
 }
 
 .crumb-prev {
@@ -97,9 +99,17 @@ body {
   color: #32b27c;
 }
 
+.crumb-prev:hover {
+  background-color: #0064ae;
+}
+
 .crumb-next {
   background-color: #ffffff;
   color: #32b27c;
+}
+
+.crumb-next:hover {
+  background-color: #eee;
 }
 
 .crumb-cur {
@@ -107,7 +117,9 @@ body {
   color: #ffffff;
 }
 
-
+.crumb-cur:hover {
+  background-color: #4bcc96;
+}
 .crumb-stretch {
   width: 100%;
   display: inline-block;

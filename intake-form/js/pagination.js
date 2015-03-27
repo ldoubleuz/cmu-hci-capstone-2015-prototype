@@ -12,6 +12,11 @@ var Pagination = function($pages, $crumbs, $prevButton, $nextButton) {
     for (var i=0; i < this.$crumbs.length; i++) {
         var $crumb = $(this.$crumbs[i]);
 
+        var $page = $(this.$pages[i]);
+        var pageTitle = $page.find('.form-title').text();
+
+        $crumb.attr('title', pageTitle);
+
         $crumb.click(function(index, showPageFn) {
             return function() {
                 showPageFn(index);
