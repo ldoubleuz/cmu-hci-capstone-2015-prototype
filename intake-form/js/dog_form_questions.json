@@ -87,7 +87,8 @@
             {
                "type":"short-text",
                "question":"Nickname (if any)",
-               "id":"pet_nickname"
+               "id":"pet_nickname",
+               "optional": true
             },
             {
                "type":"short-text",
@@ -168,7 +169,8 @@
             {
                "type":"short-text",
                "question":"Date of birth (if known)",
-               "id":"pet_date_of_birth"
+               "id":"pet_date_of_birth",
+               "optional": true
             },
             {
                "type":"radio",
@@ -198,7 +200,8 @@
             {
                "type":"short-text",
                "question":"Secondary Color",
-               "id":"secondary_color"
+               "id":"secondary_color",
+               "optional": true
             },
             {
                "type":"dropdown",
@@ -232,7 +235,7 @@
                ]
             },
             {
-               "type":"dropdown",
+               "type":"checkbox",
                "question":"Coat",
                "id":"coat",
                "options":[
