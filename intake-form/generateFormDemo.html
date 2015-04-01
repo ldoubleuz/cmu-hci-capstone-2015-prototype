@@ -79,11 +79,17 @@
 
                 var $pages = $container.find('.page');
 
+                /* TODO: uncomment if we want crumbs to be generated based on json
                 // generate appropriate number of breadcrumbs
-                // TODO: figure out why this obliterates the spacing CSS
-                /*var $crumbs = [];
+                var $crumbs = [];
                 for (var i=0; i < $pages.length; i++) {
-                    $crumbs.push(makeCrumb(i+1));
+                    var leftCss = ((i / $pages.length)*100).toFixed(2) + "%";
+                    var $crumb = makeCrumb(i+1).css({
+                        'left': leftCss,
+                        'position': 'absolute'
+                    });
+
+                    $crumbs.push($crumb);
                 }
 
                 var $crumbWrapper = $('#breadcrumbs');
