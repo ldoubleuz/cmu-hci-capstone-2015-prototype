@@ -106,7 +106,7 @@ var generateFormContent = (function(){
             var $radioLabel = $("<label>")
                 .attr('for', labelTargetId)
                 .text(optLabelText);
-                
+
             $option.append($radioButton);
             $option.append($radioLabel);
 
@@ -146,7 +146,7 @@ var generateFormContent = (function(){
 
 
     function _generateDynamicRowControl(text, id, data) {
-        var $title = $("<h2>").addClass('title').text(text);
+        var $title = _makeQuestionTitleHeader(text);
         var $container = $("<ol>").addClass('dynamic-row-container');
 
         var colDataList = data.columns || [];
