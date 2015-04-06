@@ -1,5 +1,6 @@
 (function() {
     'use strict';
+    var PETPOINT_URL = "https://sms.petpoint.com/sms3";
 
     $(document).ready(function() {
         $('.scroll-button.up').click(function() {
@@ -11,6 +12,7 @@
         });
 
         loadIntakeInfo();
+        initSubmitButton();
     });
 
     function buildField(field) {
@@ -54,8 +56,24 @@
         }
     }
 
+    // add handler so that clicking submit moves sidebars around and adds 
+    // a petpoint frame
+    function initSubmitButton() {
+        var $submit = $("#submit-button");
+
+        $submit.on("click", function(e) {
+            e.preventDefault();
+
+            // Just opens a new tab with petpoint, since it has security options
+            // that prevent us from loading it in an iframe
+            window.open(PETPOINT_URL, "_blank");
+        });
+    }
+
     function loadIntakeInfo() {
+        // TODO: replace this path with dynamic loading
         var filePath = 'interview-dummy.json';
+
         $.ajax({
             url: filePath,
             dataType: 'json',
