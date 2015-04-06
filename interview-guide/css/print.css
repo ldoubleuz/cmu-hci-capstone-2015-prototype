@@ -1,0 +1,17 @@
+@media print {
+    #submit-button, #back-button, .scroll-button {
+        display: none;
+    }
+
+    .side-by-side-window {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+    }
+
+    #interview-guide textarea {
+        border-width: 0;
+    }
+}
