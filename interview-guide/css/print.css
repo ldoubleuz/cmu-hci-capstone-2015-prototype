@@ -12,6 +12,10 @@
     }
 
     #interview-guide textarea {
-        border-width: 0;
+        display: none;
+    }
+
+    #interview-guide .textarea-print-helper {
+        display: block;
     }
 }

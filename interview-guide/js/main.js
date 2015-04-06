@@ -12,6 +12,7 @@
         });
 
         loadIntakeInfo();
+        initPrintableTextareas();
         initSubmitButton();
     });
 
@@ -68,6 +69,40 @@
             // that prevent us from loading it in an iframe
             window.open(PETPOINT_URL, "_blank");
         });
+    }
+
+    // Add print helpers that allow textareas to show overflow text when printed
+    // Essentially just copies over textarea text into a hidden div that is
+    // only shown when the page is printed.
+    function initPrintableTextareas() {
+        var $textareas = $("#interview-guide textarea");
+        $textareas.each(function(_, textarea) {
+            var $textarea = $(textarea);
+            var $printHelper = $("<div>").addClass("textarea-print-helper");
+            $printHelper.insertAfter($textarea);
+
+            // Add callback to copy over text when updated (with proper
+            // variable binding)
+            var copyToHelper = function($textarea, $printHelper) {
+                var curText = $textarea.val();
+                return function() {
+                    var newText = $textarea.val();
+                    if (curText !== newText) {
+                        curText = newText;
+
+                        // Create paragraphs for each text line
+                        $printHelper.empty();
+                        var textLines = curText.split("\n");
+                        for (var i=0; i < textLines.length; i++) {
+                            var $line = $("<p>").text(textLines[i]);
+                            $printHelper.append($line);
+                        }
+                    }
+                };
+            }($textarea, $printHelper);
+
+            $textarea.on("input propertychange change keyup paste", copyToHelper);
+        })
     }
 
     function loadIntakeInfo() {

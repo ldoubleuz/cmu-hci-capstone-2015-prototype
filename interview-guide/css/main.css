@@ -116,6 +116,17 @@
     border: 2px solid #000;
 }
 
+/* stays hidden until page is printed. Allows printed page to view all text
+ * in textarea, including overflow */
+#interview-guide .textarea-print-helper {
+    display: none;
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    min-height: 120px;
+    background-color: #E7F2ED;
+}
+
 #interview-guide .scroll-button {
     right: 25px;
 }
