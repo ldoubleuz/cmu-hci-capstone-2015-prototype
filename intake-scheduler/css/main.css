@@ -1,0 +1,111 @@
+/* Calendar Styles */
+#calendar {
+  width: auto;
+  text-transform: uppercase;
+}
+
+/* Calendar header */
+#calendar .ui-datepicker-header {
+  position: relative;
+  width: auto;
+  padding: 15px 0;
+  background-color: #0D4380;
+  color: white;
+  font-size: 18px;
+}
+
+/* Calendar previous button */
+#calendar .ui-datepicker-prev, .ui-datepicker-next {
+  position: absolute;
+  top: 30px;
+  height: 30px;
+  margin-top: -12px;
+  color: white;
+}
+
+#calendar .ui-datepicker-prev {
+  left: 10px;
+}
+
+#calendar .ui-datepicker-prev span {
+  width: 0px;
+  height: 0px;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid white;
+  display: block;
+  text-indent: -99999px;
+}
+
+#calendar .ui-datepicker-prev span:hover {
+  border-right-color: #EFEFEF;
+}
+
+/* Calendar next Button */
+#calendar .ui-datepicker-next {
+  right: 10px;
+}
+
+#calendar .ui-datepicker-next span {
+  width: 0px;
+  height: 0px;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 10px solid white;
+  display: block;
+  text-indent: -99999px;
+}
+
+#calendar .ui-datepicker-next span:hover {
+  border-left-color: #EFEFEF;
+}
+
+#calendar .ui-datepicker-title {
+  text-align: center;
+}
+
+#calendar .ui-datepicker-calendar {
+  width: 100%;
+  text-align: center;
+  background-color: white;
+}
+
+#calendar .ui-datepicker-calendar th {
+  padding: 10px;
+  color: white;
+}
+
+#calendar .ui-datepicker-calendar thead {
+  background-color: #0D4380;
+}
+
+#calendar td {
+
+}
+
+#calendar td.ui-datepicker-other-month {
+  border: none;
+}
+
+#calendar td:hover {
+  background-color: #E0F7FE;
+}
+
+#calendar td.ui-datepicker-unselectable:hover {
+  background-color: white;
+  cursor: default !important;
+}
+
+#calendar td a {
+  border: 2px solid #EFEFEF;
+  text-align: center;
+  color: #79929D;
+  height: 100%;
+  width: 100%;
+  display: inline-block;
+  line-height: 50px;
+}
+
+#calendar td a:focus, a:hover {
+  text-decoration: none;
+}
