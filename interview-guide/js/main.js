@@ -49,7 +49,7 @@
 
     function buildInfoHtml(data) {
         var sections = data.sections || [];
-        var $container = $('#intake-information');
+        var $container = $('#intake-information-generated-data');
 
         for (var i=0; i < sections.length; i++) {
             var $section = buildSection(sections[i]);
@@ -78,7 +78,9 @@
         var $textareas = $("#interview-guide textarea");
         $textareas.each(function(_, textarea) {
             var $textarea = $(textarea);
-            var $printHelper = $("<div>").addClass("textarea-print-helper");
+            var $printHelper = $("<div>")
+                .addClass("textarea-print-helper")
+                .addClass("print-media-only");
             $printHelper.insertAfter($textarea);
 
             // Add callback to copy over text when updated (with proper

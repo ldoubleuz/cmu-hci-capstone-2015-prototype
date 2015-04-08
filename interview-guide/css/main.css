@@ -77,10 +77,6 @@
     border-bottom: 2px solid grey;
 }
 
-#intake-information .intake-section .title {
-    font-size: 1.2em;
-}
-
 #intake-information .intake-field {
     display: block;
     position: relative;
@@ -166,4 +162,8 @@
     overflow-y: scroll;
     padding-left: 15px;
     padding-right: 70px;
+}
+
+.print-media-only {
+    display: none;
 }
