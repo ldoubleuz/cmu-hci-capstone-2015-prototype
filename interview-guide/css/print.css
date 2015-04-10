@@ -1,5 +1,5 @@
 @media print {
-    @page { 
+    @page {
         margin-top: 16px; /* Hides automatic print header/footer (Chrome only) */
         margin-bottom: 12px;
     }
@@ -23,10 +23,11 @@
     #header {
         background-color: #fff;
         color: #3BB176;
-        height: 100px;
+        height: 115px;
         font-weight: bold;
         margin-top: 8px;
         padding-top: 8px;
+        position: relative;
     }
 
     #header #title {
