@@ -229,12 +229,6 @@ var generateFormContent = (function(){
 
     function _inputTableFactory(inputType) {
         return function (text, questionId, allData) {
-            if (!questionId) {
-                console.warn('Warning: no id given for question: "'+
-                    text+
-                    '" (submitted form will not be able to see this question)');
-            }
-
             var $title = _makeQuestionTitleHeader(text);
 
             var $content = $('<table>').addClass(QUESTION_CONTENT_CLASS);
@@ -465,16 +459,13 @@ var generateFormContent = (function(){
         return _makeGenericGrid(text, gridId, allData, callbacks);
     }
 
-    function _generateQuestionContent(questionData) {
+    function _generateQuestionContent(text, idName, questionData) {
         var type = questionData.type || 'short-text';
 
         var $question = _makeEmptyQuestion(type);
 
         if (type in _QUESTION_TYPE_GEN_MAP) {
             var generatorFn = _QUESTION_TYPE_GEN_MAP[type];
-            var text = questionData.question || '';
-            var idName = questionData.id || '';
-
             $question.append(generatorFn(text, idName, questionData));
         } else {
             $question.append(
@@ -486,7 +477,12 @@ var generateFormContent = (function(){
         return $question;
     }
 
-    function _generatePageContent(questionDataList, pageTitle, pageIndex) {
+    function _generatePageContent(
+        questionDataList, 
+        pageTitle, 
+        pageIndex, 
+        seenQuestionIDs
+    ) {
         var $page = _makeEmptyPage(pageIndex);
         var $title = $('<h2>')
                 .text(pageTitle)
@@ -496,7 +492,22 @@ var generateFormContent = (function(){
 
         for (var i=0; i < questionDataList.length; i++) {
             var questionData = questionDataList[i];
-            $page.append(_generateQuestionContent(questionData));
+            var text = questionData.question || '';
+            var idName = questionData.id || '';
+
+            $page.append(_generateQuestionContent(text, idName, questionData));
+
+            if (!idName) {
+                console.warn('Warning: no ID given for question: "'+text+'"');
+            }
+            if (idName in seenQuestionIDs) {
+                console.warn(
+                    'Warning: the following questions have the same ID and '+
+                    'will conflict: "'+seenQuestionIDs[idName]+'", "'+text+'"'
+                );
+            } else {
+                seenQuestionIDs[idName] = text;
+            }
         }
         return $page;
     }
@@ -504,10 +515,13 @@ var generateFormContent = (function(){
     function _generateFormContent(formData) {
         var pagesData = formData.pages || [];
         var $pages = [];
+        var seenQuestionIDs = {};
         for (var i=0; i < pagesData.length; i++) {
             var questionDataList = pagesData[i].questions;
             var pageTitle = pagesData[i].title;
-            $pages.push(_generatePageContent(questionDataList, pageTitle, i));
+            $pages.push(_generatePageContent(
+                questionDataList, pageTitle, i, seenQuestionIDs
+            ));
         }
         return $pages;
     }
