@@ -35,6 +35,10 @@
             </div>
             <div id="form-info">
                 <form id="demo-form" class="form-horizontal">
+                    <div id="dynamic-content"></div>
+                    <noscript>
+                        <button type="submit">Submit</button>
+                    </noscript>
                 </form>
             </div>
         </div>
@@ -44,6 +48,9 @@
             </button>
             <button id="next-button">
                 Next
+            </button>
+            <button id="submit-button">
+                Submit
             </button>
         </div>
         <script src="js/jquery.min.js"></script>
@@ -69,15 +76,16 @@
         }
 
         window.onload = function() {
-            var $container = $("#demo-form");
+            var $form = $("#demo-form");
+            var $dynamicContainer = $("#demo-form #dynamic-content");
 
             loadFormJson(function(json) {
                 console.log('data:', json);
                 var $formContent = generateFormContent(json);
                 console.log('content:', $formContent);
-                $container.append($formContent);
+                $dynamicContainer.append($formContent);
 
-                var $pages = $container.find('.page');
+                var $pages = $dynamicContainer.find('.page');
 
                 /* TODO: uncomment if we want crumbs to be generated based on json
                 // generate appropriate number of breadcrumbs
@@ -100,10 +108,40 @@
 
                 var $prevButton = $('#prev-button');
                 var $nextButton = $('#next-button');
+                var $submitButton = $("#submit-button");
+
+                $submitButton.on('click', function(e) {
+                    e.preventDefault();
+                    $form.submit();
+                });
 
                 var pagination = new Pagination(
-                    $pages, $crumbs, $prevButton, $nextButton
+                    $pages, $crumbs, $prevButton, $nextButton, 
+                    // On page switch, enable/disable the submit button 
+                    // accordingly
+                    function(pageSwitchData) {
+                        var newIndex = pageSwitchData.newIndex;
+                        var totalPages = pageSwitchData.totalPages;
+
+                        if (newIndex === totalPages-1) {
+                            $submitButton.show();
+                            $nextButton.hide();
+                        } else {
+                            $submitButton.hide();
+                            $nextButton.show();
+                        }
+                    }
                 );
+
+                // TODO: remove this once we no longer need to debug the form
+                // submission data
+                $form.on('submit', function(e) {
+                    e.preventDefault();
+
+                    var $serialized = $form.serializeArray();
+                    console.log($serialized);
+                    alert(JSON.stringify($serialized));
+                });
             });
         }
         </script>

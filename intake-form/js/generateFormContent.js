@@ -23,10 +23,6 @@ var generateFormContent = (function(){
     var INLINE_OPTIONS_PER_ROW = 4;
     var ID_SEPARATOR = '__';
 
-    function addCheckboxSuffix(text) {
-        return text + ' (Select all that apply)';
-    }
-
     function _makeEmptyQuestion(type) {
         type = 'questiontype_'+type;
 
@@ -233,8 +229,10 @@ var generateFormContent = (function(){
 
     function _inputTableFactory(inputType) {
         return function (text, questionId, allData) {
-            if (inputType === 'checkbox') {
-                text = addCheckboxSuffix(text);
+            if (!questionId) {
+                console.warn('Warning: no id given for question: "'+
+                    text+
+                    '" (submitted form will not be able to see this question)');
             }
 
             var $title = _makeQuestionTitleHeader(text);
@@ -287,7 +285,11 @@ var generateFormContent = (function(){
                 var hasTextField = !!optionData.text_input;
                 if (hasTextField) {
                     var textFieldId = optionData.text_input_id || optValueId;
-                    textFieldId = [questionId, textFieldId].join(ID_SEPARATOR);
+                    textFieldId = [
+                        "TEXTOPTION",
+                        questionId, 
+                        textFieldId
+                    ].join(ID_SEPARATOR);
 
                     var $textField = $('<input>')
                         .addClass(QUESTION_INPUT_CLASS)
@@ -437,8 +439,6 @@ var generateFormContent = (function(){
     }
 
     function _makeCheckboxGrid(text, gridId, allData) {
-        text = addCheckboxSuffix(text);
-
         var callbacks = {
             postProcessRowLabel: function($label) {
                 $label.addClass('multiselect-row');
