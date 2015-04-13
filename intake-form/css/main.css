@@ -69,12 +69,6 @@ body {
   padding-right: 75px;
 }
 
-#buttons {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  position: relative;
-}
-
 .crumb {
   display: inline-block;
   *display: inline;
@@ -127,16 +121,34 @@ body {
   line-height: 0
 }
 
+#controls {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+#prev-button, #progress-indicator, #next-button, #submit-button {
+  display: inline-block;
+  height: 40px;
+  line-height: 40px;
+}
+
 #prev-button {
   width: 200px;
-  height: 40px;
   background-color: #ffffff;
-  line-height: 40px;
   font-size: 30px;
   color: #32b27c;
   border-style: solid;
   border-width: 1px;
   border-color: #32b27c;
+}
+
+#progress-indicator {
+  left: 200px;
+  position: absolute;
+  right: 200px;
+  text-align: center;
+  top: 0;
 }
 
 #next-button, #submit-button {
