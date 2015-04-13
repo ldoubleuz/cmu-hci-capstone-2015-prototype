@@ -7,8 +7,8 @@
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Language" content="en">
-    
-    
+
+
     <title>css-to-pdf/xepOnline.jqPlugin.js at master · Xportability/css-to-pdf · GitHub</title>
     <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="GitHub">
     <link rel="fluid-icon" href="https://github.com/fluidicon.png" title="GitHub">
@@ -22,9 +22,9 @@
       <meta content="GitHub" property="og:site_name" /><meta content="object" property="og:type" /><meta content="https://avatars3.githubusercontent.com/u/8261529?v=3&amp;s=400" property="og:image" /><meta content="Xportability/css-to-pdf" property="og:title" /><meta content="https://github.com/Xportability/css-to-pdf" property="og:url" /><meta content="css-to-pdf - Convert any HTML page or region to PDF - supports CSS, SVG objects, embedid Xml objects, and more.." property="og:description" />
       <meta name="browser-stats-url" content="/_stats">
     <link rel="assets" href="https://assets-cdn.github.com/">
-    
+
     <meta name="pjax-timeout" content="1000">
-    
+
 
     <meta name="msapplication-TileImage" content="/windows-tile.png">
     <meta name="msapplication-TileColor" content="#ffffff">
@@ -32,10 +32,10 @@
       <meta name="google-analytics" content="UA-3769691-2">
 
     <meta content="collector.githubapp.com" name="octolytics-host" /><meta content="collector-cdn.github.com" name="octolytics-script-host" /><meta content="github" name="octolytics-app-id" /><meta content="80EDE1F6:54B4:606BC1:550C7938" name="octolytics-dimension-request_id" />
-    
+
     <meta content="Rails, view, blob#show" name="analytics-event" />
 
-    
+
     <link rel="icon" type="image/x-icon" href="https://assets-cdn.github.com/favicon.ico">
 
 
@@ -44,13 +44,13 @@
 
     <link href="https://assets-cdn.github.com/assets/github-099e0ecc2851c8aca89ef6dafa191df3b0f2a2c8ad34e134c5473ca1ba0a59b2.css" media="all" rel="stylesheet" />
     <link href="https://assets-cdn.github.com/assets/github2-f6dc14b9b985cbf75d063b2aaced60379f23e152b5997d194d5fcd0a53f3df7d.css" media="all" rel="stylesheet" />
-    
-    
+
+
 
 
     <meta http-equiv="x-pjax-version" content="24939ad60b0f0a374df7bdf546bc1555">
 
-      
+
   <meta name="description" content="css-to-pdf - Convert any HTML page or region to PDF - supports CSS, SVG objects, embedid Xml objects, and more..">
   <meta name="go-import" content="github.com/Xportability/css-to-pdf git https://github.com/Xportability/css-to-pdf.git">
 
@@ -63,12 +63,12 @@
   <body class="logged_out  env-production macintosh vis-public page-blob">
     <a href="#start-of-content" tabindex="1" class="accessibility-aid js-skip-to-content">Skip to content</a>
     <div class="wrapper">
-      
-      
-      
 
 
-        
+
+
+
+
         <div class="header header-logged-out" role="banner">
   <div class="container clearfix">
 
@@ -119,11 +119,11 @@
       <div id="start-of-content" class="accessibility-aid"></div>
           <div class="site" itemscope itemtype="http://schema.org/WebPage">
     <div id="js-flash-container">
-      
+
     </div>
     <div class="pagehead repohead instapaper_ignore readability-menu">
       <div class="container">
-        
+
 <ul class="pagehead-actions">
 
   <li>
@@ -183,7 +183,7 @@
     <div class="container">
       <div class="repository-with-sidebar repo-container new-discussion-timeline  ">
         <div class="repository-sidebar clearfix">
-            
+
 <nav class="sunken-menu repo-nav js-repo-nav js-sidenav-container-pjax js-octicon-loaders"
      role="navigation"
      data-pjax="#js-repo-pjax-container"
@@ -231,7 +231,7 @@
 </nav>
 
               <div class="only-with-full-nav">
-                  
+
 <div class="clone-url open"
   data-protocol-type="http"
   data-url="/users/set_protocol?protocol_selector=http&amp;protocol_type=clone">
@@ -245,7 +245,7 @@
   </div>
 </div>
 
-  
+
 <div class="clone-url "
   data-protocol-type="subversion"
   data-url="/users/set_protocol?protocol_selector=subversion&amp;protocol_type=clone">
@@ -286,14 +286,14 @@
         </div><!-- /.repository-sidebar -->
 
         <div id="js-repo-pjax-container" class="repository-content context-loader-container" data-pjax-container>
-          
+
 
 <a href="/Xportability/css-to-pdf/blob/674560c619e1f88047c233eb73432ac9944fa8aa/js/xepOnline.jqPlugin.js" class="hidden js-permalink-shortcut" data-hotkey="y">Permalink</a>
 
 <!-- blob contrib key: blob_contributors:v21:efa190fa7f49b8f5fecaa885829696d2 -->
 
 <div class="file-navigation js-zeroclipboard-container">
-  
+
 <div class="select-menu js-menu-container js-select-menu left">
   <span class="btn btn-sm select-menu-button js-menu-target css-truncate" data-hotkey="w"
     data-master-branch="master"
@@ -455,7 +455,7 @@ http://stackoverflow.com/questions/26961205/using-css-print-media-with-xporabili
       22.044 kb
     </div>
   </div>
-  
+
   <div class="blob-wrapper data type-javascript">
       <table class="highlight tab-size-8 js-file-line-container">
       <tr>
@@ -2636,8 +2636,8 @@ http://stackoverflow.com/questions/26961205/using-css-print-media-with-xporabili
 
 
 
-    
-    
+
+
 
     <div id="ajax-error-message" class="flash flash-error">
       <span class="octicon octicon-alert"></span>
@@ -2648,8 +2648,8 @@ http://stackoverflow.com/questions/26961205/using-css-print-media-with-xporabili
 
       <script crossorigin="anonymous" src="https://assets-cdn.github.com/assets/frameworks-d22b59d0085e83b7549ba4341ec9e68f80c2f29c8e49213ee182003dc8d568c6.js"></script>
       <script async="async" crossorigin="anonymous" src="https://assets-cdn.github.com/assets/github-0bc0f45c838b5d9d25bc071d2a4b0abe759a093392087dce55cd2caa00ea4f36.js"></script>
-      
-      
+
+
 
   </body>
 </html>
