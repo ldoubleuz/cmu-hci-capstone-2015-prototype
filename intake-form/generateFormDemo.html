@@ -81,6 +81,7 @@
 
                 var $pages = $dynamicContainer.find('.page');
 
+
                 // generate appropriate number of breadcrumbs based on JSON
                 var $crumbs = [];
                 var $crumbWrapper = $('#breadcrumbs');
@@ -93,7 +94,7 @@
                     if (i === 0) {
                         // We have to add to DOM before attempting to read the width, 
                         // or else we get zero-widths, so temporarily add it
-                        // to read width, then remove it to be properly added 
+                        // to read width, then remove it to be properly added
                         // later
                         $crumbWrapper.append($crumb);
                         crumbWidth = $crumb.outerWidth();
@@ -107,7 +108,7 @@
                         );
                     } else {
                         // Distribute the crumbs along a line such that they are
-                        // evenly spaced, with the first crumb touching the left of 
+                        // evenly spaced, with the first crumb touching the left of
                         // the wrapper, and the last crumb touching the right of the
                         // wrapper. We do this by thinking of distributing the crumb
                         // centerpoints as points on a numberline that is slightly
@@ -117,7 +118,7 @@
                         var columnWidth = numberLineWidth / ($pages.length-1);
                         // these lines could be combined, but are left for clarity
                         var centerPx = (columnWidth * i) + crumbWidth/2;
-                        var leftPx = centerPx - crumbWidth/2; 
+                        var leftPx = centerPx - crumbWidth/2;
                         var leftPct = leftPx / wrapperWidth;
 
                         leftCss = cssPercent(leftPct);
@@ -127,7 +128,7 @@
                         'left': leftCss,
                         'position': 'absolute'
                     });
-                    $crumbs.push($crumb); 
+                    $crumbs.push($crumb);
                 }
 
                 $crumbWrapper.find('.crumb').remove();
@@ -143,8 +144,8 @@
                 });
 
                 var pagination = new Pagination(
-                    $pages, $crumbs, $prevButton, $nextButton, 
-                    // On page switch, enable/disable the submit button 
+                    $pages, $crumbs, $prevButton, $nextButton,
+                    // On page switch, enable/disable the submit button
                     // accordingly
                     function(pageSwitchData) {
                         var newIndex = pageSwitchData.newIndex;

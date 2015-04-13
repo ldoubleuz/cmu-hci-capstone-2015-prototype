@@ -57,7 +57,7 @@
         }
     }
 
-    // add handler so that clicking submit moves sidebars around and adds 
+    // add handler so that clicking submit moves sidebars around and adds
     // a petpoint frame
     function initSubmitButton() {
         var $submit = $("#submit-button");
@@ -104,7 +104,7 @@
             }($textarea, $printHelper);
 
             $textarea.on("input propertychange change keyup paste", copyToHelper);
-        })
+        });
     }
 
     function loadIntakeInfo() {

@@ -1,4 +1,6 @@
-var mongoose = require('mongoose'),
+/* jshint node: true */
+var fs = require('fs'),
+    mongoose = require('mongoose'),
     express = require('express'),
     bodyParser = require('body-parser');
 
@@ -20,13 +22,24 @@ var intake = mongoose.model('intake', {
 
 var app = express();
 app.use(bodyParser)
-   .get('/intake', function (req, res) {
+   .get('/intake', function(req, res) {
       res.send('TODO: send the actual intake form');
     })
-    .post('/intake', function(req, res) {
-
+    .get('/intake/:animalType', function(req, res) {
+      // TODO: send along the intake form that corresponds to the animal type
+      res.send('TODO: send the actual intake form');
     })
-    .get('/interview/:id', function (req, res) {
+    .post('/intake/:animalType', function(req, res) {
+      var animalType = req.params.animalType,
+          intakeQuestionsPath = 'intake_questions/' + animalType + '.json';
+
+      fs.readFile(intakeQuestionsPath, 'utf8', function(err, data) {
+        if (err) throw err;
+        var questions = JSON.parse(data);
+        // TODO: Use these questions to parse the form data into a formatted json
+      });
+    })
+    .get('/interview/:id', function(req, res) {
       res.send('TODO: send the actual interview guide');
     });
 

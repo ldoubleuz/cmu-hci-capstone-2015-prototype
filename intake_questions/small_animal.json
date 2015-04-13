@@ -1,0 +1,690 @@
+{
+   "pages":[
+      {
+         "title":"Your Information",
+         "questions":[
+            {
+               "type":"short-text",
+               "question":"Full Name",
+               "id":"owner_name"
+            },
+            {
+               "type":"short-text",
+               "question":"Phone Number",
+               "id":"owner_phone"
+            },
+            {
+               "type":"short-text",
+               "question":"Street Address",
+               "id":"street_address"
+            },
+            {
+               "type":"short-text",
+               "question":"City",
+               "id":"city"
+            },
+            {
+               "type":"short-text",
+               "question":"State",
+               "id":"state"
+            },
+            {
+               "type":"short-text",
+               "question":"Zip code",
+               "id":"zip_code"
+            },
+            {
+               "type":"multi-text",
+               "question":"Including yourself, how many people of the following ages live in your home?",
+               "id":"ages_in_household",
+               "columns":[
+                  {
+                     "value":"0-3 yrs",
+                     "id":"0-3"
+                  },
+                  {
+                     "value":"4-9 yrs",
+                     "id":"4-9"
+                  },
+                  {
+                     "value":"10-17 yrs",
+                     "id":"10-17"
+                  },
+                  {
+                     "value":"18-29 yrs",
+                     "id":"18-29"
+                  },
+                  {
+                     "value":"30-59 yrs",
+                     "id":"30-59"
+                  },
+                  {
+                     "value":"60+",
+                     "id":"60+"
+                  }
+               ],
+               "rows":[
+                  {
+                     "value":"Male",
+                     "id":"male"
+                  },
+                  {
+                     "value":"Female",
+                     "id":"female"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "title": "Pet Information",
+         "questions":[
+            {
+               "type":"radio",
+               "question":"Species",
+               "id":"species",
+               "options":[
+                  {
+                     "value":"Chinchilla",
+                     "id":"chinchilla"
+                  },
+                  {
+                     "value":"Ferret",
+                     "id":"ferret"
+                  },
+                  {
+                     "value":"Gerbil",
+                     "id":"gerbil"
+                  },
+                  {
+                     "value":"Guinea Pig",
+                     "id":"guinea_pig"
+                  },
+                  {
+                     "value":"Hamster",
+                     "id":"hamster"
+                  },
+                  {
+                     "value":"Mouse",
+                     "id":"mouse"
+                  }
+               ]
+            },
+            {
+               "type":"short-text",
+               "question":"Name",
+               "id":"pet_name"
+            },
+            {
+               "type":"short-text",
+               "question":"Breed",
+               "id":"breed"
+            },
+            {
+               "type":"dropdown",
+               "question":"Age",
+               "id":"pet_age",
+               "options":[
+                  {
+                     "value":"Less than 6 months",
+                     "id":"less_than_a_week"
+                  },
+                  {
+                     "value":"1 year",
+                     "id":"1_year"
+                  },
+                  {
+                     "value":"2 years",
+                     "id":"2_year"
+                  },
+                  {
+                     "value":"3 years",
+                     "id":"3_years"
+                  },
+                  {
+                     "value":"4 years",
+                     "id":"4_years"
+                  },
+                  {
+                     "value":"5 years",
+                     "id":"5_years"
+                  },
+                  {
+                     "value":"6 years",
+                     "id":"6_years"
+                  },
+                  {
+                     "value":"7 years",
+                     "id":"7_years"
+                  },
+                  {
+                     "value":"8 years",
+                     "id":"8_years"
+                  },
+                  {
+                     "value":"9 years",
+                     "id":"9_years"
+                  },
+                  {
+                     "value":"10 years",
+                     "id":"10_years"
+                  },
+                  {
+                     "value":"11 years",
+                     "id":"11_years"
+                  },
+                  {
+                     "value":"12 years",
+                     "id":"12_years"
+                  },
+                  {
+                     "value":"13 years",
+                     "id":"13_years"
+                  },
+                  {
+                     "value":"14 years",
+                     "id":"14_years"
+                  },
+                  {
+                     "value":"15+ years",
+                     "id":"15_or_more_years"
+                  }
+               ]
+            },
+            {
+               "type":"short-text",
+               "question":"Date of birth (if known)",
+               "id":"pet_date_of_birth",
+               "optional": true
+            },
+            {
+               "type":"radio",
+               "question":"Gender",
+               "id":"pet_gender",
+               "options":[
+                  {
+                     "value":"Male",
+                     "id":"male"
+                  },
+                  {
+                     "value":"Female",
+                     "id":"female"
+                  }
+               ]
+            },
+            {
+               "type":"yes-no",
+               "question":"Spay/Neutered",
+               "id":"gender_altered"
+            },
+            {
+               "type":"short-text",
+               "question":"Color",
+               "id":"color"
+            },
+            {
+               "type":"long-text",
+               "question":"Why are you surrendering your pet?",
+               "id":"why_surrender"
+            },
+            {
+               "type":"radio",
+               "question":"Where did you get your pet?",
+               "id":"method_to_obtain_pet",
+               "options":[
+                  {
+                     "value":"This Shelter (ARL)",
+                     "id":"ARL"
+                  },
+                  {
+                     "value":"Relative",
+                     "id":"relative"
+                  },
+                  {
+                     "value":"Friend",
+                     "id":"friend"
+                  },
+                  {
+                     "value":"Newspaper/Web Ad",
+                     "id":"advertisment"
+                  },
+                  {
+                     "value":"Found/Stray",
+                     "id":"stray"
+                  },
+                  {
+                     "value":"Breeder",
+                     "id":"breeder"
+                  },
+                  {
+                     "value":"Pet Store",
+                     "id":"pet_store"
+                  },
+                  {
+                     "value":"Shelter",
+                     "id":"another_shelter",
+                     "text_input":true
+                  },
+                  {
+                     "value":"Other",
+                     "id":"other",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"dropdown",
+               "question":"How long have you had your pet?",
+               "id":"duration_of_ownership",
+               "options":[
+                  {
+                     "value":"Less than a week",
+                     "id":"less_than_a_week"
+                  },
+                  {
+                     "value":"1-2 weeks",
+                     "id":"1_to_2_weeks"
+                  },
+                  {
+                     "value":"2-4 weeks",
+                     "id":"2_to_4_weeks"
+                  },
+                  {
+                     "value":"1-6 months",
+                     "id":"1_to_6_months"
+                  },
+                  {
+                     "value":"6-12 months",
+                     "id":"6_to_12_months"
+                  },
+                  {
+                     "value":"1 year",
+                     "id":"1_year"
+                  },
+                  {
+                     "value":"2 years",
+                     "id":"2_years"
+                  },
+                  {
+                     "value":"3 years",
+                     "id":"3_years"
+                  },
+                  {
+                     "value":"4 years",
+                     "id":"4_years"
+                  },
+                  {
+                     "value":"5+ years",
+                     "id":"5_or_more_years"
+                  }
+               ]
+            },
+            {
+               "type":"short-text",
+               "question":"Who is your veterinarian?",
+               "id":"vet_pet"
+            },
+            {
+               "type":"long-text",
+               "question":"Does your pet have any medical problems?",
+               "id":"medical_problems_pet"
+            }
+         ]
+      },
+      {
+         "title": "Typical Behavior",
+         "questions":[
+            {
+               "type":"radio",
+               "question":"What kind of cage did you have?",
+               "id":"cage_type",
+               "options":[
+                  {
+                     "value":"Aquarium",
+                     "id":"aquarium"
+                  },
+                  {
+                     "value":"Crittertrail",
+                     "id":"crittertrail"
+                  },
+                  {
+                     "value":"Multi-level cage",
+                     "id":"multi_level"
+                  },
+                  {
+                     "value":"Wire cage",
+                     "id":"wire"
+                  },
+                  {
+                     "value":"Other",
+                     "id":"other",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"radio",
+               "question":"Was the pet allowed out of the cage for exercise? If yes,how often and for how long.",
+               "id":"exercise",
+               "options":[
+                  {
+                     "value":"No",
+                     "id":"not_allowed_out"
+                  },
+                  {
+                     "value":"Yes",
+                     "id":"allowed_out",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"yes-no",
+               "question":"Was the pet allowed in a ball or free",
+               "id":"diet_hay",
+               "options":[
+                  {
+                     "value":"Ball",
+                     "id":"free"
+                  },
+                  {
+                     "value":"Free",
+                     "id":"free"
+                  },
+                  {
+                     "value":"Other",
+                     "id":"other",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"radio",
+               "question":"What is your pet used to eating? (circle all that apply) Please provide as much detail as possible.",
+               "id":"food_habits",
+               "options":[
+                  {
+                     "value":"Pellets",
+                     "id":"pellets"
+                  },
+                  {
+                     "value":"Alfalfa based",
+                     "id":"alfalfa_based"
+                  },
+                  {
+                     "value":"Timothy based",
+                     "id":"timothy_based"
+                  },
+                  {
+                     "value":"With seeds/corn",
+                     "id":"with_seeds_corn"
+                  },
+                  {
+                     "value":"Hay",
+                     "id":"hay",
+                     "text_input":true
+                  },
+                  {
+                     "value":"Vegetables/Meat",
+                     "id":"vegs_meat",
+                     "text_input":true
+                  },
+                  {
+                     "value":"Other",
+                     "id":"other",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"radio",
+               "question":"How does the pet drink water?",
+               "id":"water",
+               "options":[
+                  {
+                     "value":"Water Bottle",
+                     "id":"water_bottle"
+                  },
+                  {
+                     "value":"Bowl",
+                     "id":"bowl"
+                  },
+                  {
+                     "value":"Other",
+                     "id":"other",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"radio",
+               "question":"Is the pet litter trained?",
+               "id":"training",
+               "options":[
+                  {
+                     "value":"Yes",
+                     "id":"litter_trained"
+                  },
+                  {
+                     "value":"No",
+                     "id":"not_litter_trained"
+                  },
+                  {
+                     "value":"If yes, what brand?",
+                     "id":"litter_brand"
+                  }
+               ]
+            },
+            {
+               "type":"radio",
+               "question":"Did your pet take dust baths? If yes, what brand? how often?",
+               "id":"dust_baths",
+               "options":[
+                  {
+                     "value":"No",
+                     "id":"not_allowed_out"
+                  },
+                  {
+                     "value":"Yes",
+                     "id":"allowed_out",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"checkbox",
+               "question":"Is your pet accustomed to: (select all that apply)",
+               "options":[
+                  {
+                     "value":"Brushing",
+                     "id":"brushing"
+                  },
+                  {
+                     "value":"Ear Cleaning",
+                     "id":"ear_cleaning"
+                  },
+                  {
+                     "value":"Bathing",
+                     "id":"bathing"
+                  },
+                  {
+                     "value":"Nail Clipping",
+                     "id":"nail_clipping"
+                  }
+               ]
+            },
+            {
+               "type":"checkbox",
+               "question":"What type of bedding did you use",
+               "id":"bedding",
+               "options":[
+                  {
+                     "value":"Aspen",
+                     "id":"aspen"
+                  },
+                  {
+                     "value":"Carefresh",
+                     "id":"carefresh"
+                  },
+                  {
+                     "value":"Cedar Shavings",
+                     "id":"cedar_shavings"
+                  },
+                  {
+                     "value":"Newspaper",
+                     "id":"newspaper"
+                  },
+                  {
+                     "value":"Pine Shavings",
+                     "id":"pine_shavings"
+                  },
+                  {
+                     "value":"Yesterday's News",
+                     "id":"yesterdays_news"
+                  },
+                  {
+                     "value":"Other",
+                     "id":"other",
+                     "text_input":true
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "title": "Behavior with Others",
+         "questions":[
+            {
+               "type":"checkbox",
+               "question":"What other animals has your pet lived with?",
+               "id":"animals_lived_with",
+               "options":[
+                  {
+                     "value":"Dog(s)",
+                     "id":"dogs"
+                  },
+                  {
+                     "value":"Cat(s)",
+                     "id":"cats"
+                  },
+                  {
+                     "value":"Rabbit(s)",
+                     "id":"pets"
+                  },{
+                     "value":"Other",
+                     "id":"other",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"radio",
+               "question":"Did your pet have a cage mate? If yes, did they fight?",
+               "id":"bitten",
+               "options":[
+                  {
+                     "value":"No",
+                     "id":"no"
+                  },
+                  {
+                     "value":"Yes",
+                     "id":"yes",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"radio",
+               "question":"Has your pet ever bitten anyone? If yes, please explain",
+               "id":"bitten",
+               "options":[
+                  {
+                     "value":"No",
+                     "id":"no"
+                  },
+                  {
+                     "value":"Yes",
+                     "id":"yes",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"radio",
+               "question":"Has your pet lived with children? If yes, what ages?",
+               "id":"bitten",
+               "options":[
+                  {
+                     "value":"No",
+                     "id":"no"
+                  },
+                  {
+                     "value":"Yes",
+                     "id":"yes",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"radio",
+               "question":"Is your pet tolerant with children?",
+               "id":"interation_with_kids",
+               "options":[
+                  {
+                     "value":"Friendly",
+                     "id":"friendly"
+                  },
+                  {
+                     "value":"Tolerant",
+                     "id":"tolerant"
+                  },
+                  {
+                     "value":"Uninterested",
+                     "id":"uninterested"
+                  }
+               ]
+            },
+            {
+               "type":"yes-no",
+               "question":"Is pet tolerant with being handled/petted?",
+               "id":"handle_and_pet"
+            },
+            {
+               "type":"yes-no",
+               "question":"Is pet tolerant with being lifted/held?",
+               "id":"lift_and_held"
+            },
+            {
+               "type":"short-text",
+               "question":"Does the pet have any naughty behaviors?",
+               "id":"naughty_behavior"
+            }
+         ]
+      },
+      {
+         "title": "Additional Information",
+         "questions":[
+            {
+               "type":"short-text",
+               "question":"What games/toys does the pet enjoy?",
+               "id":"games_toys"
+            },
+            {
+               "type":"yes-no",
+               "question":"Describe your pet’s personality",
+               "id":"personality"
+            },
+            {
+               "type":"long-text",
+               "question":"What is your pet’s best quality?",
+               "id":"best_quality"
+            },
+            {
+               "type":"long-text",
+               "question":"Additional Comments",
+               "id":"comments"
+            }
+         ]
+      }
+   ]
+}

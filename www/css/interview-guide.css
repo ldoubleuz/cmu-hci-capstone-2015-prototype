@@ -114,6 +114,15 @@
     border: 2px solid #000;
 }
 
+#interview-guide .section-title {
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+#interview-guide .scroll-button {
+    right: 25px;
+}
+
 /* stays hidden until page is printed. Allows printed page to view all text
  * in textarea, including overflow */
 #interview-guide .textarea-print-helper {
@@ -125,25 +134,16 @@
     background-color: #E7F2ED;
 }
 
-#interview-guide .scroll-button {
-    right: 25px;
-}
-
-.section-title {
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
 /* Scroll buttons */
 .scroll-button {
-    height: 50px;
-    width: 50px;
-    background: none;
-    border: 2px solid #29618F;
-    border-radius: 10px;
-    font-size: 34px;
-    line-height: 50px;
-    color: #29618F;
+  height: 50px;
+  width: 50px;
+  background: none;
+  border: 2px solid #29618F;
+  border-radius: 10px;
+  font-size: 34px;
+  line-height: 50px;
+  color: #29618F;
 }
 
 .scroll-button.up {
