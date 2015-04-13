@@ -35,6 +35,7 @@ var Pagination = function($pages, $crumbs, $prevButton, $nextButton) {
 
     // add listeners to prev/next buttons
     $prevButton.click(function(){
+
         this.showPage(this._currIndex-1);
         scrollToTop();
     }.bind(this));
@@ -54,7 +55,6 @@ Pagination.prototype.showPage = function(showIndex) {
     for (var i=0; i < this.$pages.length; i++) {
         var $page = $(this.$pages[i]);
         var $crumb = $(this.$crumbs[i]);
-
         $crumb.removeClass([
             this._prevCrumbClass, this._nextCrumbClass, this._currCrumbClass
         ].join(' '));

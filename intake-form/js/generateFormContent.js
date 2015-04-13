@@ -26,12 +26,13 @@ var generateFormContent = (function(){
         return text + ' (Select all that apply)';
     }
 
-    function _makeEmptyQuestion(type) {
-        type = 'questiontype_'+type;
+    function _makeEmptyQuestion(type, isOptional) {
+        var type = 'questiontype_'+type;
 
-        return $('<div>')
+        questionDiv = $('<div>')
             .addClass('question form-group')
             .addClass(type);
+        return isOptional ? questionDiv.addClass('is-optional') : questionDiv;
     }
 
     function _makeQuestionTitleHeader(text) {
@@ -154,6 +155,8 @@ var generateFormContent = (function(){
 
                 var hasTextField = !!optionData.text_input;
                 if (hasTextField) {
+                    $option.addClass('has-text');
+
                     var textFieldId = optionData.text_input_id || optValueId;
                     textFieldId = [questionId, textFieldId].join(ID_SEPARATOR);
 
@@ -335,8 +338,8 @@ var generateFormContent = (function(){
 
     function _generateQuestionContent(questionData) {
         var type = questionData.type || 'short-text';
-
-        var $question = _makeEmptyQuestion(type);
+        var isOptional = questionData.optional ? true : false;
+        var $question = _makeEmptyQuestion(type, isOptional);
 
         if (type in _QUESTION_TYPE_GEN_MAP) {
             var generatorFn = _QUESTION_TYPE_GEN_MAP[type];

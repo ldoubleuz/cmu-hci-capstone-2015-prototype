@@ -31,7 +31,8 @@
             {
                "type":"short-text",
                "question":"Zip code",
-               "id":"zip_code"
+               "id":"zip_code",
+               "optional":"true"
             },
             {
                "type":"multi-text",
