@@ -47,13 +47,21 @@ var generateFormContent = (function(){
         return $("<span>").text(text).addClass('dynamic-row-col-label');
     }
 
+    function _makeDynamicRowColContainer() {
+        return $('<span>').addClass('dynamic-row-col');
+    }
+
     function _generateDynamicRowTextCol(colText, uniqueId, colData) {
         var $colText = _makeDynamicRowColLabel(colText).addClass('text-col-label');
         var $input = $("<input>").attr({
             type: "text",
             name: uniqueId
         });
-        return [$colText, $input];                
+
+        var $col = _makeDynamicRowColContainer()
+            .addClass('text-col')
+            .append([$colText, $input]);
+        return $col;                
     }
 
     function _generateDynamicRowDropdownCol(colText, uniqueId, colData) {
@@ -63,14 +71,17 @@ var generateFormContent = (function(){
 
         var $dropdownSelect = _makeDropdownSelectBox(dropdownId, options);
 
-        return [$colText, $dropdownSelect];
+        var $col = _makeDynamicRowColContainer()
+            .addClass('dropdown-col')
+            .append([$colText, $dropdownSelect]);
+        return $col;
     }
 
     function _generateDynamicRowRadioCol(colText, uniqueId, colData) {
         var $colText = _makeDynamicRowColLabel(colText).addClass('radio-col-label');
         var options = colData.options || [];
 
-        var output = [$colText];
+        var colContents = [$colText];
 
         for (var i=0; i < options.length; i++) {
             // TODO: This is almost identical to portions of the radio
@@ -106,9 +117,13 @@ var generateFormContent = (function(){
             $option.append($radioButton);
             $option.append($radioLabel);
 
-            output.push($option);
+            colContents.push($option);
         }
-        return output;
+
+        var $col = _makeDynamicRowColContainer()
+            .addClass('radio-col')
+            .append(colContents);
+        return $col;
     }
 
     function _generateDynamicRow(parentId, colDataList, rowIndex) {
