@@ -31,61 +31,48 @@
             {
                "type":"short-text",
                "question":"Zip code",
-               "id":"zip_code",
-               "optional":"true"
+               "id":"zip_code"
             },
             {
-               "type":"dynamic-row",
+               "type":"multi-text",
                "question":"Including yourself, how many people of the following ages live in your home?",
                "id":"ages_in_household",
-                  "columns": [
-                    {
-                        "type": "radio",
-                        "id": "gender",
-                        "text": "Gender",
-                        "options":[
-                            {
-                             "value":"Male",
-                             "id":"male"
-                            },
-                            {
-                             "value":"Female",
-                             "id":"female"
-                            }
-                        ]
-                    },
-                    {
-                        "type": "dropdown",
-                        "text": "Age",
-                        "id": "age",
-                        "options": [
-                            {
-                             "value":"0-3 yrs",
-                             "id":"0-3"
-                            },
-                            {
-                             "value":"4-9 yrs",
-                             "id":"4-9"
-                            },
-                            {
-                             "value":"10-17 yrs",
-                             "id":"10-17"
-                            },
-                            {
-                             "value":"18-29 yrs",
-                             "id":"18-29"
-                            },
-                            {
-                             "value":"30-59 yrs",
-                             "id":"30-59"
-                            },
-                            {
-                             "value":"60+",
-                             "id":"60+"
-                            }
-                        ]
-                    }
-                  ]
+               "columns":[
+                  {
+                     "value":"0-3 yrs",
+                     "id":"0-3"
+                  },
+                  {
+                     "value":"4-9 yrs",
+                     "id":"4-9"
+                  },
+                  {
+                     "value":"10-17 yrs",
+                     "id":"10-17"
+                  },
+                  {
+                     "value":"18-29 yrs",
+                     "id":"18-29"
+                  },
+                  {
+                     "value":"30-59 yrs",
+                     "id":"30-59"
+                  },
+                  {
+                     "value":"60+",
+                     "id":"60+"
+                  }
+               ],
+               "rows":[
+                  {
+                     "value":"Male",
+                     "id":"male"
+                  },
+                  {
+                     "value":"Female",
+                     "id":"female"
+                  }
+               ]
             }
          ]
       },
@@ -379,7 +366,6 @@
             {
                "type":"checkbox",
                "question":"What types of food does your dog eat? (select all that apply)",
-               "id": "diet",
                "options":[
                   {
                      "value":"Dry",
@@ -409,7 +395,6 @@
             {
                "type":"radio",
                "question":"Where does your dog spend most of its time?",
-               "id": "home_environment",
                "options":[
                   {
                      "value":"Runs Free in House",
@@ -432,7 +417,6 @@
             {
                "type":"checkbox",
                "question":"Where does your dog sleep?",
-               "id": "sleep_location",
                "options":[
                   {
                      "value":"Cage",
@@ -474,7 +458,6 @@
             {
                "type":"multi-select",
                "question":"How does your dog behave...",
-               "id": "behavior_with_others",
                "columns":[
                   {
                      "value":"Unknown",
@@ -519,7 +502,6 @@
             {
                "type":"checkbox",
                "question":"How does your dog act when someone enters the house?",
-               "id": "guest_reaction",
                "options":[
                   {
                      "value":"Friendly",

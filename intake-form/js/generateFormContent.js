@@ -11,8 +11,9 @@ var generateFormContent = (function(){
         'radio': _makeRadioInput,
         'yes-no': _makeYesNoGenerator(false),
         'yes-no-other': _makeYesNoGenerator(true),
-        'dropdown': _makeDropdown,
-        'multi-select': _makeCheckboxGrid
+        'dropdown': _makeDropdownQuestion,
+        'multi-select': _makeCheckboxGrid,
+        'dynamic-row': _generateDynamicRowControl
     };
 
     var QUESTION_TITLE_CLASS = 'question-title';
@@ -21,10 +22,6 @@ var generateFormContent = (function(){
     var PAGE_CLASS = 'page';
     var INLINE_OPTIONS_PER_ROW = 4;
     var ID_SEPARATOR = '__';
-
-    function addCheckboxSuffix(text) {
-        return text + ' (Select all that apply)';
-    }
 
     function _makeEmptyQuestion(type, isOptional) {
         var type = 'questiontype_'+type;
@@ -47,23 +44,139 @@ var generateFormContent = (function(){
         return $('<div>').addClass(PAGE_CLASS).attr('index', pageIndex);
     }
 
-    function _makeDropdown(text, dropdownId, allData) {
-        var $title = _makeQuestionTitleHeader(text)
-            .addClass('control-label')
-            .addClass('col-xs-5');
+    function _makeDynamicRowColLabel(text) {
+        return $("<span>").text(text).addClass('dynamic-row-col-label');
+    }
 
-        var $optionWrapper = $('<div>')
-            .addClass('col-xs-4')
-            .addClass('col-xs-offset-1');
+    function _generateDynamicRowTextCol(colText, uniqueId, colData) {
+        var $colText = _makeDynamicRowColLabel(colText).addClass('text-col-label');
+        var $input = $("<input>").attr({
+            type: "text",
+            name: uniqueId
+        });
+        return [$colText, $input];                
+    }
+
+    function _generateDynamicRowDropdownCol(colText, uniqueId, colData) {
+        var $colText = _makeDynamicRowColLabel(colText).addClass('dropdown-col-label');
+        var dropdownId = uniqueId;
+        var options = colData.options || [];
+
+        var $dropdownSelect = _makeDropdownSelectBox(dropdownId, options);
+
+        return [$colText, $dropdownSelect];
+    }
+
+    function _generateDynamicRowRadioCol(colText, uniqueId, colData) {
+        var $colText = _makeDynamicRowColLabel(colText).addClass('radio-col-label');
+        var options = colData.options || [];
+
+        var output = [$colText];
+
+        for (var i=0; i < options.length; i++) {
+            // TODO: This is almost identical to portions of the radio
+            // input factory. We should abstract this to reduce code duplication
+
+            var optionData = options[i];
+            // Compressed version that goes into the value attribute and is
+            // used for id generation
+            var optValueId = optionData.id || '';
+
+            // What is printed in the option's label
+            var optLabelText = optionData.value || '';
+
+            // What id to give the input so that we can have labels
+            // with a 'for' attribute
+            var labelTargetId = [
+                'option', uniqueId, optValueId
+            ].join(ID_SEPARATOR);
+
+            var $option = $("<span>").addClass('radio-box');
+            var $radioButton = $('<input>')
+                .attr({
+                    id: labelTargetId,
+                    type: 'radio',
+                    name: uniqueId,
+                    value: optValueId
+                });
+
+            var $radioLabel = $("<label>")
+                .attr('for', labelTargetId)
+                .text(optLabelText);
+
+            $option.append($radioButton);
+            $option.append($radioLabel);
+
+            output.push($option);
+        }
+        return output;
+    }
+
+    function _generateDynamicRow(parentId, colDataList, rowIndex) {
+        var $row = $("<li>").addClass('dynamic-row');
+
+        for (var colIndex=0; colIndex < colDataList.length; colIndex++) {
+            var colData = colDataList[colIndex];
+            var colType = colData.type;
+            var colText = colData.text || '';
+            var colId = colData.id || '';
+            var uniqueId = [parentId, colId, ''+rowIndex].join("__");
+
+            var generatorFn = null;
+            if (colType == 'text') {
+                generatorFn = _generateDynamicRowTextCol;
+            } else if (colType == 'dropdown') {
+                generatorFn = _generateDynamicRowDropdownCol;
+            } else if (colType == 'radio') {
+                generatorFn = _generateDynamicRowRadioCol;
+            }
+
+            var $column = generatorFn && 
+                generatorFn(colText, uniqueId, colData);
+            if ($column) {
+                $row.append($column);
+            }
+        }
+
+        return $row;
+    }
+
+
+    function _generateDynamicRowControl(text, id, data) {
+        var $title = _makeQuestionTitleHeader(text);
+        var $container = $("<ol>").addClass('dynamic-row-container');
+
+        var colDataList = data.columns || [];
+        var numRows = 0;
+        var _addRowFn = function() {
+            $container.append(
+                _generateDynamicRow(id, colDataList, numRows)
+            );
+            numRows++;
+        };
+
+        var $addButton = $("<button>")
+            .text('Add new row')
+            .addClass('dynamic-row-add-button');
+        $addButton.click(function(e) {
+            e.preventDefault();
+            _addRowFn();
+        });
+
+        // Also populate with one empty row
+        _addRowFn();
+
+        return [$title, $container, $addButton];
+    }
+
+    function _makeDropdownSelectBox(dropdownId, options) {
         var $dropdownSelect = $('<select>')
             .attr({
                 id: dropdownId,
                 name: dropdownId
             })
-            .addClass('form-control')
-            .appendTo($optionWrapper);
+            .addClass('form-control');
 
-        var options = allData.options || [];
         for (var i=0; i < options.length; i++) {
             var optionData = options[i];
             var optText = optionData.value || '';
@@ -74,6 +187,21 @@ var generateFormContent = (function(){
                 .attr('value', optId);
             $dropdownSelect.append($option);
         }
+        return $dropdownSelect;
+    }
+
+    function _makeDropdownQuestion(text, dropdownId, allData) {
+        var $title = _makeQuestionTitleHeader(text)
+            .addClass('control-label')
+            .addClass('col-xs-5');
+
+        var $optionWrapper = $('<div>')
+            .addClass('col-xs-4')
+            .addClass('col-xs-offset-1');
+
+        var options = allData.options || [];
+        var $dropdownSelect = _makeDropdownSelectBox(dropdownId, options);
+        $optionWrapper.append($dropdownSelect);
 
         return [$title, $optionWrapper];
     }
@@ -102,10 +230,6 @@ var generateFormContent = (function(){
 
     function _inputTableFactory(inputType) {
         return function (text, questionId, allData) {
-            if (inputType === 'checkbox') {
-                text = addCheckboxSuffix(text);
-            }
-
             var $title = _makeQuestionTitleHeader(text);
 
             var $content = $('<table>').addClass(QUESTION_CONTENT_CLASS);
@@ -158,7 +282,11 @@ var generateFormContent = (function(){
                     $option.addClass('has-text');
 
                     var textFieldId = optionData.text_input_id || optValueId;
-                    textFieldId = [questionId, textFieldId].join(ID_SEPARATOR);
+                    textFieldId = [
+                        "TEXTOPTION",
+                        questionId, 
+                        textFieldId
+                    ].join(ID_SEPARATOR);
 
                     var $textField = $('<input>')
                         .addClass(QUESTION_INPUT_CLASS)
@@ -308,8 +436,6 @@ var generateFormContent = (function(){
     }
 
     function _makeCheckboxGrid(text, gridId, allData) {
-        text = addCheckboxSuffix(text);
-
         var callbacks = {
             postProcessRowLabel: function($label) {
                 $label.addClass('multiselect-row');
@@ -336,16 +462,13 @@ var generateFormContent = (function(){
         return _makeGenericGrid(text, gridId, allData, callbacks);
     }
 
-    function _generateQuestionContent(questionData) {
+    function _generateQuestionContent(text, idName, questionData) {
         var type = questionData.type || 'short-text';
         var isOptional = questionData.optional ? true : false;
         var $question = _makeEmptyQuestion(type, isOptional);
 
         if (type in _QUESTION_TYPE_GEN_MAP) {
             var generatorFn = _QUESTION_TYPE_GEN_MAP[type];
-            var text = questionData.question || '';
-            var idName = questionData.id || '';
-
             $question.append(generatorFn(text, idName, questionData));
         } else {
             $question.append(
@@ -357,7 +480,12 @@ var generateFormContent = (function(){
         return $question;
     }
 
-    function _generatePageContent(questionDataList, pageTitle, pageIndex) {
+    function _generatePageContent(
+        questionDataList, 
+        pageTitle, 
+        pageIndex, 
+        seenQuestionIDs
+    ) {
         var $page = _makeEmptyPage(pageIndex);
         var $title = $('<h2>')
                 .text(pageTitle)
@@ -367,7 +495,22 @@ var generateFormContent = (function(){
 
         for (var i=0; i < questionDataList.length; i++) {
             var questionData = questionDataList[i];
-            $page.append(_generateQuestionContent(questionData));
+            var text = questionData.question || '';
+            var idName = questionData.id || '';
+
+            $page.append(_generateQuestionContent(text, idName, questionData));
+
+            if (!idName) {
+                console.warn('Warning: no ID given for question: "'+text+'"');
+            }
+            if (idName in seenQuestionIDs) {
+                console.warn(
+                    'Warning: the following questions have the same ID and '+
+                    'will conflict: "'+seenQuestionIDs[idName]+'", "'+text+'"'
+                );
+            } else {
+                seenQuestionIDs[idName] = text;
+            }
         }
         return $page;
     }
@@ -375,10 +518,13 @@ var generateFormContent = (function(){
     function _generateFormContent(formData) {
         var pagesData = formData.pages || [];
         var $pages = [];
+        var seenQuestionIDs = {};
         for (var i=0; i < pagesData.length; i++) {
             var questionDataList = pagesData[i].questions;
             var pageTitle = pagesData[i].title;
-            $pages.push(_generatePageContent(questionDataList, pageTitle, i));
+            $pages.push(_generatePageContent(
+                questionDataList, pageTitle, i, seenQuestionIDs
+            ));
         }
         return $pages;
     }

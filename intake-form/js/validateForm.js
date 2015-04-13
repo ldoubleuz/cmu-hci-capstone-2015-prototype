@@ -83,7 +83,7 @@ var ValidateForm = (function() {
     }
 
     function _validateCheckboxGrid($question) {
-      
+      return (true, '');
     }
 
     function validateTextCheckboxOption($question) {

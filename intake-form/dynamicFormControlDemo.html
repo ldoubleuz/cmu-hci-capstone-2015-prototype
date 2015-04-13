@@ -2,10 +2,15 @@
 <html>
     <head>
         <style>
-            .dynamic-row label {
+            .dynamic-row-col-label {
                 font-weight: bold;
                 margin-left: 8px;
                 margin-right: 4px;
+            }
+
+            .dynamic-row-add-button {
+                background: #00B37B;
+                color: white;
             }
         </style>
     </head>
@@ -17,130 +22,78 @@
             <input type="submit"></input>
         </form>
         <script src="js/jquery.min.js"></script>
+        <script src="js/generateFormContent.js"></script>
         <script>
-            function generateDynamicRow(parentId, columnDataList, rowIndex) {
-                var $row = $("<li>").addClass('dynamic-row');
-
-                for (var colIndex=0; colIndex < columnDataList.length; colIndex++) {
-                    var columnData = columnDataList[colIndex];
-                    var colType = columnData.type;
-                    var colLabel = columnData.label || '';
-                    var colId = columnData.id || '';
-                    var uniqueId = [parentId, colId, ''+rowIndex].join("__");
-
-                    var $colLabel = $("<label>").text(colLabel);
-                    $row.append($colLabel);
-
-                    if (colType == 'text') {
-                        $colLabel.addClass('text-label');
-                        var $input = $("<input>").attr({
-                            type: "text",
-                            name: uniqueId
-                        }).appendTo($row);
-                    } else if (colType == 'dropdown') {
-                        $colLabel.addClass('dropdown-label');
-                        var dropdownId = uniqueId;
-                        var options = columnData.options || [];
-
-                        // START: copied from generateFormContent, 
-                        // should probably call existing _makeDropdown function
-                        var $optionWrapper = $('<div>')
-                            .addClass('col-xs-4')
-                            .addClass('col-xs-offset-1');
-                        var $dropdownSelect = $('<select>')
-                            .attr({
-                                id: dropdownId,
-                                name: dropdownId
-                            })
-                            .addClass('form-control')
-                            .appendTo($optionWrapper);
-
-                        for (var i=0; i < options.length; i++) {
-                            var optionData = options[i];
-                            var optText = optionData.value || '';
-                            var optId = optionData.id || '';
-
-                            var $option = $('<option>')
-                                .text(optText)
-                                .attr('value', optId);
-                            $dropdownSelect.append($option);
-                        }
-                        // END: copied from generateFormContent
-
-                        $dropdownSelect.appendTo($row);
-                    }
-
-
-                }
-
-                return $row;
-            }
-
-
-            function generateDynamicControl(text, id, data) {
-                var $title = $("<h2>").addClass('title').text(text);
-                var $container = $("<ol>").addClass('dynamic-row-container');
-
-                var columnDataList = data.columns || [];
-                var numRows = 0;
-                var _addRowFn = function() {
-                    $container.append(
-                        generateDynamicRow(id, columnDataList, numRows)
-                    );
-                    numRows++;
-                };
-
-                var $addButton = $("<button>").text('Add new row');
-                $addButton.click(function(e) {
-                    e.preventDefault();
-                    _addRowFn();
-                });
-
-                // Also populate with one empty row
-                _addRowFn();
-
-                return [$title, $container, $addButton];
-            }
-
-
             window.onload = function() {
                 var data = {
-                    "type":"dynamic-row",
-                    "question":"Household info",
-                    "id":"household",
-                    "columns": [
-                        {
-                            "type": "dropdown",
-                            "label": "Gender",
-                            "id": "gender",
-                            "options": [
+                    "pages":[{
+                         "title":"Test page",
+                         "questions":[{
+                            "type":"dynamic-row",
+                            "question":"Household info",
+                            "id":"household",
+                            "columns": [
                                 {
-                                    "id": "male",
-                                    "value": "Male"
+                                    "type": "radio",
+                                    "id": "gender",
+                                    "text": "Gender",
+                                    "options":[
+                                        {
+                                         "value":"Male",
+                                         "id":"male"
+                                        },
+                                        {
+                                         "value":"Female",
+                                         "id":"female"
+                                        }
+                                    ]
                                 },
                                 {
-                                    "id": "female",
-                                    "value": "Female"
+                                    "type": "dropdown",
+                                    "text": "Age",
+                                    "id": "age",
+                                    "options": [
+                                        {
+                                         "value":"0-3 yrs",
+                                         "id":"0-3"
+                                        },
+                                        {
+                                         "value":"4-9 yrs",
+                                         "id":"4-9"
+                                        },
+                                        {
+                                         "value":"10-17 yrs",
+                                         "id":"10-17"
+                                        },
+                                        {
+                                         "value":"18-29 yrs",
+                                         "id":"18-29"
+                                        },
+                                        {
+                                         "value":"30-59 yrs",
+                                         "id":"30-59"
+                                        },
+                                        {
+                                         "value":"60+",
+                                         "id":"60+"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "Sample text",
+                                    "id": "sampletext"
                                 }
                             ]
-                        },
-                        {
-                            "type": "text",
-                            "label": "Foo",
-                            "id": "foo"
-                        }
-                    ]
+                        }]
+                    }]
                 };
 
 
 
                 var $form = $('#foo');
                 var $container = $form.find("#wrapper");
-                $container.append(generateDynamicControl(
-                    data.question,
-                    data.id,
-                    data
-                ));
+                $container.append(generateFormContent(data));
 
                 $form.on('submit', function(e) {
                     e.preventDefault();

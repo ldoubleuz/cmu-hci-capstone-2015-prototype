@@ -23,18 +23,14 @@
         </div>
         <div id="content" class="container">
             <div id="breadcrumbs">
-                <div class="crumb crumb-prev">1</div>
-                <div class="crumb crumb-cur">2</div>
-                <div class="crumb crumb-next">3</div>
-                <div class="crumb crumb-next">4</div>
-                <div class="crumb crumb-next">5</div>
-                <div class="crumb crumb-next">6</div>
-                <div class="crumb crumb-next">7</div>
-                <div class="crumb crumb-next">8</div>
                 <span class="crumb-stretch"></span>
             </div>
             <div id="form-info">
                 <form id="demo-form" class="form-horizontal">
+                    <div id="dynamic-content"></div>
+                    <noscript>
+                        <button type="submit">Submit</button>
+                    </noscript>
                 </form>
             </div>
         </div>
@@ -44,6 +40,9 @@
             </button>
             <button id="next-button">
                 Next
+            </button>
+            <button id="submit-button">
+                Submit
             </button>
         </div>
         <script src="js/jquery.min.js"></script>
@@ -68,36 +67,109 @@
             return $('<div>').addClass('crumb').text(index);
         }
 
+        function cssPercent(fraction) {
+            return (fraction*100).toFixed(2) + "%";
+        }
+
         window.onload = function() {
-            var $container = $("#demo-form");
+            var $form = $("#demo-form");
+            var $dynamicContainer = $("#demo-form #dynamic-content");
 
             loadFormJson(function(json) {
-                console.log('data:', json);
                 var $formContent = generateFormContent(json);
-                console.log('content:', $formContent);
-                $container.append($formContent);
+                $dynamicContainer.append($formContent);
 
-                var $pages = $container.find('.page');
+                var $pages = $dynamicContainer.find('.page');
 
-                // generate appropriate number of breadcrumbs
-                // TODO: figure out why this obliterates the spacing CSS
-                /*var $crumbs = [];
+
+                // generate appropriate number of breadcrumbs based on JSON
+                var $crumbs = [];
+                var $crumbWrapper = $('#breadcrumbs');
+                var wrapperWidth = $crumbWrapper.innerWidth();
+                var crumbWidth = null;
                 for (var i=0; i < $pages.length; i++) {
-                    $crumbs.push(makeCrumb(i+1));
+                    var $crumb = makeCrumb(i+1);
+
+                    // Assume all crumbs are same width
+                    if (i === 0) {
+                        // We have to add to DOM before attempting to read the width, 
+                        // or else we get zero-widths, so temporarily add it
+                        // to read width, then remove it to be properly added
+                        // later
+                        $crumbWrapper.append($crumb);
+                        crumbWidth = $crumb.outerWidth();
+                        $crumb.remove();
+                    }
+
+                    var leftCss;
+                    if ($pages.length === 1) {
+                        leftCss = cssPercent(
+                            (wrapperWidth/2 - crumbWidth/2) / wrapperWidth
+                        );
+                    } else {
+                        // Distribute the crumbs along a line such that they are
+                        // evenly spaced, with the first crumb touching the left of
+                        // the wrapper, and the last crumb touching the right of the
+                        // wrapper. We do this by thinking of distributing the crumb
+                        // centerpoints as points on a numberline that is slightly
+                        // smaller than the full wrapper so that the first and last
+                        // crumbs don't overflow their parent
+                        var numberLineWidth = wrapperWidth - crumbWidth;
+                        var columnWidth = numberLineWidth / ($pages.length-1);
+                        // these lines could be combined, but are left for clarity
+                        var centerPx = (columnWidth * i) + crumbWidth/2;
+                        var leftPx = centerPx - crumbWidth/2;
+                        var leftPct = leftPx / wrapperWidth;
+
+                        leftCss = cssPercent(leftPct);
+                    }
+
+                    $crumb.css({
+                        'left': leftCss,
+                        'position': 'absolute'
+                    });
+                    $crumbs.push($crumb);
                 }
 
-                var $crumbWrapper = $('#breadcrumbs');
                 $crumbWrapper.find('.crumb').remove();
-                $crumbWrapper.prepend($crumbs);*/
-
-                var $crumbs = $('#breadcrumbs .crumb');
+                $crumbWrapper.prepend($crumbs);
 
                 var $prevButton = $('#prev-button');
                 var $nextButton = $('#next-button');
+                var $submitButton = $("#submit-button");
+
+                $submitButton.on('click', function(e) {
+                    e.preventDefault();
+                    $form.submit();
+                });
 
                 var pagination = new Pagination(
-                    $pages, $crumbs, $prevButton, $nextButton
+                    $pages, $crumbs, $prevButton, $nextButton,
+                    // On page switch, enable/disable the submit button
+                    // accordingly
+                    function(pageSwitchData) {
+                        var newIndex = pageSwitchData.newIndex;
+                        var totalPages = pageSwitchData.totalPages;
+
+                        if (newIndex === totalPages-1) {
+                            $submitButton.show();
+                            $nextButton.hide();
+                        } else {
+                            $submitButton.hide();
+                            $nextButton.show();
+                        }
+                    }
                 );
+
+                // TODO: remove this once we no longer need to debug the form
+                // submission data
+                $form.on('submit', function(e) {
+                    e.preventDefault();
+
+                    var $serialized = $form.serializeArray();
+                    console.log($serialized);
+                    alert(JSON.stringify($serialized));
+                });
             });
         }
         </script>

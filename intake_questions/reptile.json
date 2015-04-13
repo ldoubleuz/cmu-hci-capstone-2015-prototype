@@ -1,0 +1,556 @@
+{
+   "pages":[
+      {
+         "title":"Your Information",
+         "questions":[
+            {
+               "type":"short-text",
+               "question":"Full Name",
+               "id":"owner_name"
+            },
+            {
+               "type":"short-text",
+               "question":"Phone Number",
+               "id":"owner_phone"
+            },
+            {
+               "type":"short-text",
+               "question":"Street Address",
+               "id":"street_address"
+            },
+            {
+               "type":"short-text",
+               "question":"City",
+               "id":"city"
+            },
+            {
+               "type":"short-text",
+               "question":"State",
+               "id":"state"
+            },
+            {
+               "type":"short-text",
+               "question":"Zip code",
+               "id":"zip_code"
+            },
+            {
+               "type":"multi-text",
+               "question":"Including yourself, how many people of the following ages live in your home?",
+               "id":"ages_in_household",
+               "columns":[
+                  {
+                     "value":"0-3 yrs",
+                     "id":"0-3"
+                  },
+                  {
+                     "value":"4-9 yrs",
+                     "id":"4-9"
+                  },
+                  {
+                     "value":"10-17 yrs",
+                     "id":"10-17"
+                  },
+                  {
+                     "value":"18-29 yrs",
+                     "id":"18-29"
+                  },
+                  {
+                     "value":"30-59 yrs",
+                     "id":"30-59"
+                  },
+                  {
+                     "value":"60+",
+                     "id":"60+"
+                  }
+               ],
+               "rows":[
+                  {
+                     "value":"Male",
+                     "id":"male"
+                  },
+                  {
+                     "value":"Female",
+                     "id":"female"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "title":"Reptile Information",
+         "questions":[
+            {
+               "type":"short-text",
+               "question":"Name",
+               "id":"pet_name"
+            },
+            {
+               "type":"short-text",
+               "question":"Species",
+               "id":"species"
+            },
+            {
+               "type":"dropdown",
+               "question":"Age",
+               "id":"pet_age",
+               "options":[
+                  {
+                     "value":"Less than 6 months",
+                     "id":"less_than_a_week"
+                  },
+                  {
+                     "value":"1 year",
+                     "id":"1_year"
+                  },
+                  {
+                     "value":"2 years",
+                     "id":"2_year"
+                  },
+                  {
+                     "value":"3 years",
+                     "id":"3_years"
+                  },
+                  {
+                     "value":"4 years",
+                     "id":"4_years"
+                  },
+                  {
+                     "value":"5 years",
+                     "id":"5_years"
+                  },
+                  {
+                     "value":"6 years",
+                     "id":"6_years"
+                  },
+                  {
+                     "value":"7 years",
+                     "id":"7_years"
+                  },
+                  {
+                     "value":"8 years",
+                     "id":"8_years"
+                  },
+                  {
+                     "value":"9 years",
+                     "id":"9_years"
+                  },
+                  {
+                     "value":"10 years",
+                     "id":"10_years"
+                  },
+                  {
+                     "value":"11 years",
+                     "id":"11_years"
+                  },
+                  {
+                     "value":"12 years",
+                     "id":"12_years"
+                  },
+                  {
+                     "value":"13 years",
+                     "id":"13_years"
+                  },
+                  {
+                     "value":"14 years",
+                     "id":"14_years"
+                  },
+                  {
+                     "value":"15+ years",
+                     "id":"15_or_more_years"
+                  }
+               ]
+            },
+            {
+               "type":"radio",
+               "question":"Gender",
+               "id":"pet_gender",
+               "options":[
+                  {
+                     "value":"Male",
+                     "id":"male"
+                  },
+                  {
+                     "value":"Female",
+                     "id":"female"
+                  },
+                  {
+                     "value":"Unknown",
+                     "id": "unknown"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "title":"Reptile Information Continued",
+         "questions":[
+            {
+               "type":"checkbox",
+               "question":"Why are you surrendering your animal today? (select all that apply)",
+               "id":"reason_for_surrender",
+               "options": [
+                  {
+                     "value":"Behavioral Problems",
+                     "id":"behavioral_problems"
+                  },
+                  {
+                     "value":"Time Commitment",
+                     "id":"time_commitment"
+                  },
+                  {
+                     "value":"Family Issues",
+                     "id":"family_issues"
+                  },
+                  {
+                     "value":"Cost",
+                     "id":"cost"
+                  }
+               ]
+            },
+            {
+               "type":"radio",
+               "question":"Where did you get your reptile?",
+               "id":"obtained_reptile_from",
+               "options":[
+                  {
+                     "value":"This Shelter (ARL)",
+                     "id":"ARL"
+                  },
+                  {
+                     "value":"Relative",
+                     "id":"relative"
+                  },
+                  {
+                     "value":"Friend",
+                     "id":"friend"
+                  },
+                  {
+                     "value":"Newspaper/Web Ad",
+                     "id":"advertisment"
+                  },
+                  {
+                     "value":"Found/Stray",
+                     "id":"stray"
+                  },
+                  {
+                     "value":"Breeder",
+                     "id":"breeder"
+                  },
+                  {
+                     "value":"Pet Store",
+                     "id":"pet_store"
+                  },
+                  {
+                     "value":"Shelter",
+                     "id":"another_shelter",
+                     "text_input":true
+                  },
+                  {
+                     "value":"Other",
+                     "id":"other",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"dropdown",
+               "question":"How long has your reptile lived with you?",
+               "id":"duration_of_ownership",
+               "options":[
+                  {
+                     "value":"Less than a week",
+                     "id":"less_than_a_week"
+                  },
+                  {
+                     "value":"1-2 weeks",
+                     "id":"1_to_2_weeks"
+                  },
+                  {
+                     "value":"2-4 weeks",
+                     "id":"2_to_4_weeks"
+                  },
+                  {
+                     "value":"1-6 months",
+                     "id":"1_to_6_months"
+                  },
+                  {
+                     "value":"6-12 months",
+                     "id":"6_to_12_months"
+                  },
+                  {
+                     "value":"1 year",
+                     "id":"1_year"
+                  },
+                  {
+                     "value":"2 years",
+                     "id":"2_years"
+                  },
+                  {
+                     "value":"3 years",
+                     "id":"3_years"
+                  },
+                  {
+                     "value":"4 years",
+                     "id":"4_years"
+                  },
+                  {
+                     "value":"5+ years",
+                     "id":"5_or_more_years"
+                  }
+               ]
+            },
+            {
+               "type":"short-text",
+               "question":"What other shelters have you tried to surrender your reptile to?",
+               "id":"other_shelters_surrendered_to"
+            }
+         ]
+      },
+      {
+         "title":"Medical",
+         "questions":[
+            {
+               "type":"radio",
+               "question":"Does your reptile have any past/present medical issues? If yes, what medical issues and when?",
+               "id": "medical_issues",
+               "options":[
+                  {
+                     "value":"No",
+                     "id":"no"
+                  },
+                  {
+                     "value":"Yes",
+                     "id":"yes",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"radio",
+               "question":"History of mites? If yes, when?",
+               "id": "mites",
+               "options":[
+                  {
+                     "value":"No",
+                     "id":"no"
+                  },
+                  {
+                     "value":"Yes",
+                     "id":"yes",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"radio",
+               "question":"Was it treated by a vet?",
+               "id": "medical_issues",
+               "options":[
+                  {
+                     "value":"Yes",
+                     "id":"yes"
+                  },
+                  {
+                     "value":"No",
+                     "id":"no"
+                  }
+               ]
+            },
+            {
+               "type":"short-text",
+               "question":"Who is your veterinarian? (if any)",
+               "id":"vet_name"
+            }
+
+         ]
+      },
+      {
+         "title":"Housing Environment",
+         "questions":[
+            {
+               "type":"short-text",
+               "question":"Where do you keep your reptile?",
+               "id":"housing_environment"
+            },
+            {
+               "type":"short-text",
+               "question":"In the cage: Decorations and hiding places?",
+               "id":"decorations_and_hiding_places"
+            },
+            {
+               "type":"short-text",
+               "question":"What is the size of the waterbowl in the cage?",
+               "id":"waterbowl_size"
+            },
+            {
+               "type":"short-text",
+               "question":"What heating devices do you use (if any)?",
+               "id":"heating_devices"
+            },
+            {
+               "type":"short-text",
+               "question":"What light(s) do you use (if any)?",
+               "id":"lights"
+            },
+            {
+               "type":"short-text",
+               "question":"What is the average day temperature in the housing environment?",
+               "id":"avg_day_temp"
+            },
+            {
+               "type":"short-text",
+               "question":"What is the average night temperature in the housing environment?",
+               "id":"avg_night_temp"
+            },
+            {
+               "type":"short-text",
+               "question":"How was the cage ventilated?",
+               "id":"cage_ventilation"
+            },
+            {
+               "type":"short-text",
+               "question":"How often do you handle him/her?",
+               "id":"handling"
+            },
+            {
+               "type":"short-text",
+               "question":"What does your reptile do when you pick him/her up?",
+               "id":"reptile_reaction_to_handling"
+            }
+         ]
+      },
+      {
+         "title":"Feeding Habits",
+         "questions":[
+            {
+               "type":"short-text",
+               "question":"How often do you feed him/her?",
+               "id":"frequency_of_feeding"
+            },
+            {
+               "type":"short-text",
+               "question":"Describe the reptiles diet including veggies, insects, other small animals etc.?",
+               "id":"food_description"
+            },
+            {
+               "type":"short-text",
+               "question":"How is the reptile offered food? (ex: food tongs)",
+               "id":"how_offered_food"
+            },
+            {
+               "type":"radio",
+               "question":"Is it fed separately or communally?",
+               "id":"how_it's_fed",
+               "options": [
+                  {
+                     "value":"Separately",
+                     "id":"separately"
+                  },
+                  {
+                     "value":"Communally",
+                     "id":"communally"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "title":"Behavior with Others",
+         "questions":[
+            {
+               "type":"short-text",
+               "question":"What other animals has your reptile lived with?",
+               "id":"other_animals_lived_with"
+            },
+            {
+               "type":"short-text",
+               "question":"How often do they interact?",
+               "id":"interaction_frequency"
+            },
+            {
+               "type":"radio",
+               "question":"Has your reptile lived with children? If yes, what ages?",
+               "id":"lived_with_children",
+               "options":[
+                  {
+                     "value":"No",
+                     "id":"no"
+                  },
+                  {
+                     "value":"Yes",
+                     "id":"yes",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"radio",
+               "question":"Is your reptile friendly or tolerant with children?",
+               "id":"friendly_or_tolerant_with_children",
+               "options":[
+                  {
+                     "value":"Friendly",
+                     "id":"friendly"
+                  },
+                  {
+                     "value":"Tolerant",
+                     "id":"tolerant"
+                  }
+               ]
+            },
+            {
+               "type":"short-text",
+               "question":"Please explain your reptiles interaction with childern?",
+               "id":"interaction_with kids"
+            },
+            {
+               "type":"radio",
+               "question":"Has your reptile shown aggression? If yes, please explain",
+               "id":"shown_aggression",
+               "options":[
+                  {
+                     "value":"No",
+                     "id":"no"
+                  },
+                  {
+                     "value":"Yes",
+                     "id":"yes",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"radio",
+               "question":"Has your reptile ever bitten (broken skin)? If yes, please explain",
+               "id":"bitten_anyone",
+               "options":[
+                  {
+                     "value":"No",
+                     "id":"no"
+                  },
+                  {
+                     "value":"Yes",
+                     "id":"yes",
+                     "text_input":true
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "title":"Additional Information",
+         "questions":[
+            {
+               "type":"long-text",
+               "question":"What kind of home would be a good fit if your reptile gets adopted out of the shelter?",
+               "id":"good_fit"
+            },
+            {
+               "type":"long-text",
+               "question":"Is there anything else you would want a potential adopter to know about your reptile?",
+               "id":"anything_else"
+            }
+         ]
+      }
+   ]
+}

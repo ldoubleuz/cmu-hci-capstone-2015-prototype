@@ -1,0 +1,165 @@
+/* */
+#make-an-appointment {
+  color: #14477E;
+  font-weight: 300;
+  font-size: 32px;
+}
+
+/* */
+#selected-date {
+  color: #14477E;
+  font-weight: 300;
+  font-size: 20px;
+  margin-top: 28px;
+  margin-bottom: 10px;
+  background: none;
+  border: none;
+  cursor: default;
+}
+
+/* Calendar Styles */
+#calendar {
+  width: auto;
+  text-transform: uppercase;
+}
+
+/* Calendar header */
+#calendar .ui-datepicker-header {
+  position: relative;
+  width: auto;
+  padding: 15px 0;
+  background-color: #0D4380;
+  color: white;
+  font-size: 18px;
+}
+
+/* Calendar previous button */
+#calendar .ui-datepicker-prev, .ui-datepicker-next {
+  position: absolute;
+  top: 30px;
+  height: 30px;
+  margin-top: -12px;
+  color: white;
+}
+
+#calendar .ui-datepicker-prev {
+  left: 10px;
+}
+
+#calendar .ui-datepicker-prev span {
+  width: 0px;
+  height: 0px;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid white;
+  display: block;
+  text-indent: -99999px;
+}
+
+#calendar .ui-datepicker-prev span:hover {
+  border-right-color: #EFEFEF;
+}
+
+/* Calendar next Button */
+#calendar .ui-datepicker-next {
+  right: 10px;
+}
+
+#calendar .ui-datepicker-next span {
+  width: 0px;
+  height: 0px;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 10px solid white;
+  display: block;
+  text-indent: -99999px;
+}
+
+#calendar .ui-datepicker-next span:hover {
+  border-left-color: #EFEFEF;
+}
+
+#calendar .ui-datepicker-title {
+  text-align: center;
+}
+
+#calendar .ui-datepicker-calendar {
+  width: 100%;
+  text-align: center;
+  background-color: white;
+}
+
+#calendar .ui-datepicker-calendar th {
+  color: white;
+}
+
+#calendar .ui-datepicker-calendar thead {
+  background-color: #0D4380;
+}
+
+#calendar tr:first-child td {
+  border-top: none;
+}
+
+#calendar tr:last-child td {
+  border-bottom: none;
+}
+
+#calendar .ui-state-active {
+  background-color: #E0F7FE;
+}
+
+#calendar td.ui-datepicker-other-month {
+  border: none;
+}
+
+#calendar td {
+  border: 2px solid #EFEFEF;
+}
+
+#calendar td:hover {
+  background-color: #E0F7FE;
+}
+
+#calendar td.ui-datepicker-unselectable:hover {
+  background-color: white;
+  cursor: default !important;
+}
+
+#calendar td a {
+  text-align: center;
+  color: #79929D;
+  height: 100%;
+  width: 100%;
+  display: inline-block;
+  line-height: 50px;
+}
+
+#calendar td a:focus, a:hover {
+  text-decoration: none;
+}
+
+
+/* time-of-day styles */
+#time-of-day {
+  list-style-type: none;
+  margin: 0;
+}
+
+#time-of-day li {
+  height: 30px;
+  padding: 10px;
+  background-color: white;
+  color: #79929D;
+  margin-bottom: 1px;
+}
+
+#time-of-day li.selected {
+  background-color: lightgray;
+  color: white;
+}
+
+#time-of-day li:hover {
+  background-color: lightgray;
+  color: white;
+}

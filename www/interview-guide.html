@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Dog Interview Guide</title>
+        <meta name="description" content="Dog Interview Guide">
+
+        <!-- Stylesheets -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/global.css" rel="stylesheet">
+        <link href="css/interview-guide.css" rel="stylesheet">
+        <link href="css/interview-guide-print.css" rel="stylesheet" media="print">
+    </head>
+    <body>
+        <div id="header">
+            <img id="main-logo" class="print-media-only" src="img/logo.png"/>
+            <img id="animal-logo" class="print-media-only" src="img/dog.png"/>
+            <button id="back-button">Back</button>
+            <div id="title">
+                Dog Interview Guide
+            </div>
+            <button id="submit-button">Open PetPoint</button>
+        </div>
+
+        <div id="content">
+            <!--      Intake Information Window      -->
+            <div id="intake-information" class="side-by-side-window">
+                <button class="scroll-button up">
+                    <span class="glyphicon glyphicon-menu-up"></span>
+                </button>
+                <button class="scroll-button down">
+                    <span class="glyphicon glyphicon-menu-down"></span>
+                </button>
+                <div id="hidden-intake-header" class="intake-section print-media-only">
+                    <div class="intake-field">
+                        <span class="name">Date:</span><span class="value">Intake counselor:</span>
+                    </div>
+                </div>
+                <div id="intake-information-generated-data"></div>
+            </div>
+
+            <!--      Interview Guide Window     -->
+            <div id="interview-guide" class="side-by-side-window">
+                <button class="scroll-button up">
+                    <span class="glyphicon glyphicon-menu-up"></span>
+                </button>
+                <button class="scroll-button down">
+                    <span class="glyphicon glyphicon-menu-down"></span>
+                </button>
+                <section>
+                    <h3 class="section-title">Reason for surrender</h3>
+                    <textarea placeholder="Type notes here"></textarea>
+                </section>
+                <section>
+                    <h3 class="section-title">Medical history</h3>
+                    <textarea placeholder="Type notes here"></textarea>
+                </section>
+                <section>
+                    <h3 class="section-title">Dog's personality</h3>
+                    <textarea placeholder="Type notes here"></textarea>
+                </section>
+                <section>
+                    <h3 class="section-title">If you could change one thing about your dog</h3>
+                    <textarea placeholder="Type notes here"></textarea>
+                </section>
+                <section>
+                    <h3 class="section-title">Likes and dislikes</h3>
+                    <textarea placeholder="Type notes here"></textarea>
+                </section>
+                <section>
+                    <h3 class="section-title">How often is the dog alone? Behavior when alone? Is it crated?</h3>
+                    <textarea placeholder="Type notes here"></textarea>
+                </section>
+                <section>
+                    <h3 class="section-title">Instances interacting with other animals</h3>
+                    <textarea placeholder="Type notes here"></textarea>
+                </section>
+                <section>
+                    <h3 class="section-title">Instances interacting with children</h3>
+                    <textarea placeholder="Type notes here"></textarea>
+                </section>
+                <section>
+                    <h3 class="section-title">Instances in the car</h3>
+                    <textarea placeholder="Type notes here"></textarea>
+                </section>
+                <section>
+                    <h3 class="section-title">Instances of aggression towards others</h3>
+                    <textarea placeholder="Type notes here"></textarea>
+                </section>
+                <section>
+                    <h3 class="section-title">Where do you envision your dog?</h3>
+                    <textarea placeholder="Type notes here"></textarea>
+                </section>
+            </div>
+        </div>
+
+        <!-- Javascript -->
+        <script src='js/jquery.min.js'></script>
+        <script src='js/interview-guide.js'></script>
+    </body>
+</html>

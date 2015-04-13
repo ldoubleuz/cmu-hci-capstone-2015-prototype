@@ -1,0 +1,926 @@
+{
+   "pages":[
+      {
+         "title":"Your Information",
+         "questions":[
+            {
+               "type":"short-text",
+               "question":"Full Name",
+               "id":"owner_name"
+            },
+            {
+               "type":"short-text",
+               "question":"Phone Number",
+               "id":"owner_phone"
+            },
+            {
+               "type":"short-text",
+               "question":"Street Address",
+               "id":"street_address"
+            },
+            {
+               "type":"short-text",
+               "question":"City",
+               "id":"city"
+            },
+            {
+               "type":"short-text",
+               "question":"State",
+               "id":"state"
+            },
+            {
+               "type":"short-text",
+               "question":"Zip code",
+               "id":"zip_code"
+            },
+            {
+               "type":"multi-text",
+               "question":"Including yourself, how many people of the following ages live in your home?",
+               "id":"ages_in_household",
+               "columns":[
+                  {
+                     "value":"0-3 yrs",
+                     "id":"0-3"
+                  },
+                  {
+                     "value":"4-9 yrs",
+                     "id":"4-9"
+                  },
+                  {
+                     "value":"10-17 yrs",
+                     "id":"10-17"
+                  },
+                  {
+                     "value":"18-29 yrs",
+                     "id":"18-29"
+                  },
+                  {
+                     "value":"30-59 yrs",
+                     "id":"30-59"
+                  },
+                  {
+                     "value":"60+",
+                     "id":"60+"
+                  }
+               ],
+               "rows":[
+                  {
+                     "value":"Male",
+                     "id":"male"
+                  },
+                  {
+                     "value":"Female",
+                     "id":"female"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "title":"Cat Information",
+         "questions":[
+            {
+               "type":"short-text",
+               "question":"Name",
+               "id":"pet_name"
+            },
+            {
+               "type":"short-text",
+               "question":"Nickname (if any)",
+               "id":"pet_nickname",
+               "optional": true
+            },
+            {
+               "type":"short-text",
+               "question":"Breed",
+               "id":"breed"
+            },
+            {
+               "type":"dropdown",
+               "question":"Age",
+               "id":"pet_age",
+               "options":[
+                  {
+                     "value":"Less than 6 months",
+                     "id":"less_than_a_week"
+                  },
+                  {
+                     "value":"1 year",
+                     "id":"1_year"
+                  },
+                  {
+                     "value":"2 years",
+                     "id":"2_year"
+                  },
+                  {
+                     "value":"3 years",
+                     "id":"3_years"
+                  },
+                  {
+                     "value":"4 years",
+                     "id":"4_years"
+                  },
+                  {
+                     "value":"5 years",
+                     "id":"5_years"
+                  },
+                  {
+                     "value":"6 years",
+                     "id":"6_years"
+                  },
+                  {
+                     "value":"7 years",
+                     "id":"7_years"
+                  },
+                  {
+                     "value":"8 years",
+                     "id":"8_years"
+                  },
+                  {
+                     "value":"9 years",
+                     "id":"9_years"
+                  },
+                  {
+                     "value":"10 years",
+                     "id":"10_years"
+                  },
+                  {
+                     "value":"11 years",
+                     "id":"11_years"
+                  },
+                  {
+                     "value":"12 years",
+                     "id":"12_years"
+                  },
+                  {
+                     "value":"13 years",
+                     "id":"13_years"
+                  },
+                  {
+                     "value":"14 years",
+                     "id":"14_years"
+                  },
+                  {
+                     "value":"15+ years",
+                     "id":"15_or_more_years"
+                  }
+               ]
+            },
+            {
+               "type":"short-text",
+               "question":"Date of birth (if known)",
+               "id":"pet_date_of_birth",
+               "optional": true
+            },
+            {
+               "type":"radio",
+               "question":"Gender",
+               "id":"pet_gender",
+               "options":[
+                  {
+                     "value":"Male",
+                     "id":"male"
+                  },
+                  {
+                     "value":"Female",
+                     "id":"female"
+                  }
+               ]
+            },
+            {
+               "type":"yes-no",
+               "question":"Spay/Neutered",
+               "id":"gender_altered"
+            },
+            {
+               "type":"yes-no",
+               "question":"Declawed?",
+               "id":"declawed",
+               "options":[
+                  {
+                     "value":"Front",
+                     "id":"front"
+                  },
+                  {
+                     "value":"All four paws",
+                     "id":"all_four_paws"
+                  },
+                  {
+                     "type":"short-text",
+                     "question":"Distinguishing Marks",
+                     "id":"marks"
+                  },
+                  {
+                     "type":"checkbox",
+                     "question":"Why are you surrendering your cat today?",
+                     "id":"reason_for_surrender",
+                     "options":[
+                        {
+                           "value":"Behavioral Problem",
+                           "id":"behavioral_problem"
+                        },
+                        {
+                           "value":"Time Commitment",
+                           "id":"time_commitment"
+                        },
+                        {
+                           "value":"Family Issues",
+                           "id":"family_issues"
+                        },
+                        {
+                           "value":"Movine",
+                           "id":"moving"
+                        },
+                        {
+                           "value":"Cost",
+                           "id":"cost"
+                        },
+                        {
+                           "value":"Medical Issues",
+                           "id":"medical_issues"
+                        },
+                        {
+                           "value":"New Baby",
+                           "id":"new_baby"
+                        },
+                        {
+                           "value":"Biting/Scratching",
+                           "id":"biting_scratching"
+                        },
+                        {
+                           "value":"Allergies",
+                           "id":"allergies"
+                        },
+                        {
+                           "value":"Other",
+                           "id":"other",
+                           "text_input":true
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "title":"Cat Information Continued",
+         "questions":[
+            {
+               "type":"radio",
+               "question":"Where did you get your cat?",
+               "id":"obtained_cat_from",
+               "options":[
+                  {
+                     "value":"This Shelter (ARL)",
+                     "id":"ARL"
+                  },
+                  {
+                     "value":"Relative",
+                     "id":"relative"
+                  },
+                  {
+                     "value":"Friend",
+                     "id":"friend"
+                  },
+                  {
+                     "value":"Newspaper/Web Ad",
+                     "id":"advertisment"
+                  },
+                  {
+                     "value":"Found/Stray",
+                     "id":"stray"
+                  },
+                  {
+                     "value":"Breeder",
+                     "id":"breeder"
+                  },
+                  {
+                     "value":"Pet Store",
+                     "id":"pet_store"
+                  },
+                  {
+                     "value":"Friend/Relative",
+                     "id":"friend_relative"
+                  },
+                  {
+                     "value":"Gift",
+                     "id":"gift"
+                  },
+                  {
+                     "value":"Another Shelter",
+                     "id":"another_shelter",
+                     "text_input":true
+                  },
+                  {
+                     "value":"Other",
+                     "id":"other",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"dropdown",
+               "question":"How old was the cat when you acquired him/her?",
+               "id":"duration_of_ownership",
+               "options":[
+                  {
+                     "value":"Less than a week",
+                     "id":"less_than_a_week"
+                  },
+                  {
+                     "value":"1-2 weeks",
+                     "id":"1_to_2_weeks"
+                  },
+                  {
+                     "value":"2-4 weeks",
+                     "id":"2_to_4_weeks"
+                  },
+                  {
+                     "value":"1-6 months",
+                     "id":"1_to_6_months"
+                  },
+                  {
+                     "value":"6-12 months",
+                     "id":"6_to_12_months"
+                  },
+                  {
+                     "value":"1 year",
+                     "id":"1_year"
+                  },
+                  {
+                     "value":"2 years",
+                     "id":"2_years"
+                  },
+                  {
+                     "value":"3 years",
+                     "id":"3_years"
+                  },
+                  {
+                     "value":"4 years",
+                     "id":"4_years"
+                  },
+                  {
+                     "value":"5+ years",
+                     "id":"5_or_more_years"
+                  }
+               ]
+            },
+            {
+               "type":"short-text",
+               "question":"What other shelters have you tried to surrender your cat to?",
+               "id":"other_shelters_surrendered_to"
+            }
+         ]
+      },
+      {
+         "title":"Typical Behavior",
+         "questions":[
+            {
+               "type":"checkbox",
+               "question":"Which words describe this cat?",
+               "id":"cat_qualities",
+               "options":[
+                  {
+                     "value":"Playful",
+                     "id":"playful"
+                  },
+                  {
+                     "value":"Affectionate",
+                     "id":"affectionate"
+                  },
+                  {
+                     "value":"Lazy",
+                     "id":"lazy"
+                  },
+                  {
+                     "value":"Shy",
+                     "id":"shy"
+                  },
+                  {
+                     "value":"Vocal",
+                     "id":"vocal"
+                  },
+                  {
+                     "value":"Aggressive",
+                     "id":"aggressive"
+                  },
+                  {
+                     "value":"Rambunctious",
+                     "id":"rambunctious"
+                  },
+                  {
+                     "value":"Aloof",
+                     "id":"aloof"
+                  },
+                  {
+                     "value":"Lap Cat",
+                     "id":"lap_cat"
+                  },
+                    {
+                     "value":"Don't Know",
+                     "id":"don't_know"
+                  },
+                  {
+                     "value":"Other",
+                     "id":"other",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"radio",
+               "question":"Does your cat eat wet food or dry food?",
+               "id":"type_of_food",
+               "options":[
+                  {
+                     "value":"Wet",
+                     "id":"wet"
+                  },
+                  {
+                     "value":"Dry",
+                     "id":"dry"
+                  }
+               ]
+            },
+            {
+               "type":"radio",
+               "question":"Is it free fed or fed on a schedule?",
+               "id":"frequency_of_food",
+               "options":[
+                  {
+                     "value":"Free fed",
+                     "id":"free_fed"
+                  },
+                  {
+                     "value":"Schedule (please describe)",
+                     "id":"schedule",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"short-text",
+               "question":"What brand of food does your cat eat?",
+               "id":"brand_of_food"
+            },
+            {
+               "type":"yes-no",
+               "question":"Is your cat litter trained?",
+               "id":"litter_trained"
+            },
+            {
+               "type":"short-text",
+               "question":"How many litter boxes do you have?",
+               "id":"litter_box_count"
+            },
+            {
+               "type":"short-text",
+               "question":"Where are the boxes?",
+               "id":"litter_box_location"
+            },
+            {
+               "type":"short-text",
+               "question":"What type of litter box does the cat use?",
+               "id":"litter_box_type"
+            },
+            {
+               "type":"short-text",
+               "question":"What kind of litter do you use?",
+               "id":"litter_type"
+            },
+            {
+               "type":"radio",
+               "question":"How often is the box cleaned?",
+               "id":"litter_box_cleaned",
+               "options":[
+                  {
+                     "value":"Every Day",
+                     "id":"every_day"
+                  },
+                  {
+                     "value":"Every Few Days",
+                     "id":"every_few_days"
+                  },
+                  {
+                     "value":"Weekly",
+                     "id":"weekly"
+                  },
+                  {
+                     "value":"Other",
+                     "id":"other",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"radio",
+               "question":"If you have other cats, how many shared a litter box?",
+               "id":"litter_box_cleaned",
+               "options":[
+                  {
+                     "value":"One",
+                     "id":"one"
+                  },
+                  {
+                     "value":"Two or more",
+                     "id":"two_or_more"
+                  },
+                  {
+                     "value":"Many cats share one box",
+                     "id":"Many_share_one"
+                  },
+                  {
+                     "value":"Multiple boxes for multiple cats",
+                     "id":"multiple_for_multiple_cats"
+                  }
+               ]
+            },
+            {
+               "type":"checkbox",
+               "question":"Is your cat accustomed to: (select all that apply)",
+               "id":"cat_accustomed_to",
+               "options":[
+                  {
+                     "value":"Bathing",
+                     "id":"bathing"
+                  },
+                  {
+                     "value":"Nail Clipping",
+                     "id":"nali_clipping"
+                  },
+                  {
+                     "value":"Ear Cleaning",
+                     "id":"ear_cleaning"
+                  },
+                  {
+                     "value":"Being in a Carrier",
+                     "id":"being_in_a_carrier"
+                  },
+                  {
+                     "value":"Being Picked Up",
+                     "id":"being_picked_up"
+                  },
+                  {
+                     "value":"Riding in a Car",
+                     "id":"riding_in_car"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "title":"Behavioral History",
+         "questions":[
+            {
+               "type":"radio",
+               "question":"Has your cat ever scratched at you or anyone else? If yes, please describe.",
+               "id":"has_scratched",
+               "options":[
+                  {
+                     "value":"No",
+                     "id":"no"
+                  },
+                  {
+                     "value":"Yes",
+                     "id":"yes",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"radio",
+               "question":"Has your cat ever bitten(broken skin) you or anyone else? If yes, please describe.",
+               "id":"has_bitten",
+               "options":[
+                  {
+                     "value":"No",
+                     "id":"no"
+                  },
+                  {
+                     "value":"Yes",
+                     "id":"yes",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"radio",
+               "question":"Does your cat destroy things? If yes, please describe.",
+               "id":"destructive_behavior",
+               "options":[
+                  {
+                     "value":"No",
+                     "id":"no"
+                  },
+                  {
+                     "value":"Yes",
+                     "id":"yes",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"radio",
+               "question":"Do these things happen when you are:",
+               "id":"accident_context",
+               "options":[
+                  {
+                     "value":"Home",
+                     "id":"home"
+                  },
+                  {
+                     "value":"Not Home",
+                     "id":"not_home"
+                  },
+                  {
+                     "value":"Both",
+                     "id":"both"
+                  }
+               ]
+            },
+            {
+               "type":"short-text",
+               "question":"What has been done to correct these behaviors?",
+               "id":"to_correct_behavior"
+            },
+            {
+               "type":"short-text",
+               "question":"How does your cat behave in the car?",
+               "id":"behavior_in_car"
+            },
+            {
+               "type":"checkbox",
+               "question":"What makes this cat nervous or causes it to behave in an unusual manner?",
+               "id":"unusual_behavior_caused_by",
+               "options":[
+                  {
+                     "value":"Men",
+                     "id":"men"
+                  },
+                  {
+                     "value":"Women",
+                     "id":"women"
+                  },
+                  {
+                     "value":"Children",
+                     "id":"children"
+                  },
+                  {
+                     "value":"Strangers",
+                     "id":"strangers"
+                  },
+                  {
+                     "value":"Going to the wet",
+                     "id":"vet_visit"
+                  },
+                  {
+                     "value":"Going in the car",
+                     "id":"car"
+                  },
+                  {
+                     "value":"Cat carriers",
+                     "id":"carrier"
+                  },
+                  {
+                     "value":"Bathing",
+                     "id":"bathing"
+                  },
+                  {
+                     "value":"Nail Clipping",
+                     "id":"nali_clipping"
+                  },
+                  {
+                     "value":"Other cats",
+                     "id":"other_cats"
+                  },
+                  {
+                     "value":"Other animals",
+                     "id":"other_animals"
+                  },
+                  {
+                     "value":"Other",
+                     "id":"other",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"short-text",
+               "question":"Is there anywhere that the cat does not like to be touched or petted?",
+               "id":"do_not_touch"
+            },
+            {
+               "type":"short-text",
+               "question":"Does your cat have any undesirable behaviors?",
+               "id":"undesirable_behaviors"
+            }
+         ]
+      },
+      {
+         "title":"Home Context",
+         "questions":[
+            {
+               "type":"radio",
+               "question":"Where does your cat spend most of its time?",
+               "id":"most_time_spent",
+               "options":[
+                  {
+                     "value":"Inside",
+                     "id":"inside"
+                  },
+                  {
+                     "value":"Outside",
+                     "id":"outside"
+                  },
+                  {
+                     "value":"Both",
+                     "id":"both"
+                  }
+               ]
+            },
+            {
+               "type":"radio",
+               "question":"If cat goes outside, how does it get out?",
+               "id":"outside_indicator",
+               "options":[
+                  {
+                     "value":"Cat Door",
+                     "id":"cat_door"
+                  },
+                  {
+                     "value":"Window",
+                     "id":"window"
+                  },
+                  {
+                     "value":"Person Let Out",
+                     "id":"person_let_out"
+                  },
+                  {
+                     "value":"Other",
+                     "id":"other",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"short-text",
+               "question":"How long is your cat left alone in the house?",
+               "id":"time_alone"
+            },
+            {
+               "type":"short-text",
+               "question":"Where does the cat sleep at night (inside/outside, where, with whom)",
+               "id":"sleeping_context"
+            }
+         ]
+      },
+      {
+         "title":"Training Information",
+         "questions":[
+            {
+               "type":"yes-no",
+               "question":"Does your cat scratch furniture or carpet?",
+               "id":"scratches"
+            },
+            {
+               "type":"radio",
+               "question":"Do you have scratching posts, does your cat use it?",
+               "id":"scratching_posts",
+               "options":[
+                  {
+                     "value":"Yes",
+                     "id":"yes"
+                  },
+                  {
+                     "value":"No",
+                     "id":"no"
+                  },
+                  {
+                     "value":"If yes, how many?",
+                     "id":"number_of_posts"
+                  }
+               ]
+            },
+            {
+               "type":"short-text",
+               "question":"What type of scratching post?",
+               "id":"type_of_post"
+            },
+            {
+               "type":"yes-no",
+               "question":"Is your cat trained to stay off counters?",
+               "id":"stays_off_counters"
+            },
+            {
+               "type":"short-text",
+               "question":"Do you correct/discipline your cat? How?",
+               "id":"discipline_methods"
+            }
+         ]
+      },
+      {
+         "title":"Behavior with Others",
+         "questions":[
+            {
+               "type":"radio",
+               "question":"Has your cat lived with other animals?",
+               "id":"walked_on_leash",
+               "options":[
+                  {
+                     "value":"Yes",
+                     "id":"yes"
+                  },
+                  {
+                     "value":"No",
+                     "id":"no"
+                  },
+                  {
+                     "value":"cats (how many)",
+                     "id":"number_of_cats_lived",
+                     "text_input":true
+                  },
+                   {
+                     "value":"dogs (how many and what kind)",
+                     "id":"number_of_dogs_lived",
+                     "text_input":true
+                  }
+               ]
+            },
+            {
+               "type":"short-text",
+               "question":"How does your cat behave with other animals, has your cat ever fought with another cat or dog?",
+               "id":"interation_with_animals"
+            },
+            {
+               "type":"short-text",
+               "question":"What does your cat do when he/she sees another cat outside?",
+               "id":"sees_another_cat"
+            },
+            {
+               "type":"short-text",
+               "question":"If your cat goes outside, does he/she catch/kill wildlife?",
+               "id":"wildlife"
+            },
+            {
+               "type":"yes-no",
+               "question":"How does your pet behave with new people?",
+               "id":"behavior_with_strangers"
+            },
+            {
+               "type":"short-text",
+               "question":"How does your cat behave with the veterinarian?",
+               "id":"behavior_with_vet"
+            },
+            {
+               "type":"radio",
+               "question":"Is your cat tolerant with children?",
+               "id":"interation_with_kids",
+               "options":[
+                  {
+                     "value":"Friendly",
+                     "id":"friendly"
+                  },
+                  {
+                     "value":"Tolerant",
+                     "id":"tolerant"
+                  },
+                  {
+                     "value":"Uninterested",
+                     "id":"uninterested"
+                  }
+               ]
+            },
+            {
+               "type":"short-text",
+               "question":"If your cat doesn’t live with kids, how often does he/she interact with kids? (describe)",
+               "id":"child_interaction_frequency"
+            }
+         ]
+      },
+      {
+         "title":"Additional Information",
+         "questions":[
+            {
+               "type":"short-text",
+               "question":"What is your cat’s favourite treat? ",
+               "id":"favourite_treat"
+            },
+            {
+               "type":"short-text",
+               "question":"What is your cat’s favourite game or toy? ",
+               "id":"favourite_treat"
+            },
+            {
+               "type":"long-text",
+               "question":"What are your cat's best qualities?",
+               "id":"best_qualities"
+            },
+            {
+               "type":"long-text",
+               "question":"Is there any other information that you would want the new owners to know, possibly special traits or habits?",
+               "id":"good_fit"
+            }
+         ]
+      }
+   ]
+}

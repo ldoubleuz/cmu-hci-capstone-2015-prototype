@@ -1,0 +1,79 @@
+@media print {
+    @page {
+        margin-top: 16px; /* Hides automatic print header/footer (Chrome only) */
+        margin-bottom: 12px;
+    }
+
+    .print-media-only {
+        display: block; /* default appearance: override this for specific tags */
+    }
+
+    #submit-button, #back-button, .scroll-button {
+        display: none;
+    }
+
+    .side-by-side-window {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+    }
+
+    #header {
+        background-color: #fff;
+        color: #3BB176;
+        height: 115px;
+        font-weight: bold;
+        margin-top: 8px;
+        padding-top: 8px;
+        position: relative;
+    }
+
+    #header #title {
+        margin-top: 16px;
+    }
+
+    #main-logo, #animal-logo {
+        background-repeat: no-repeat;
+        background-size: contain;
+        display: inline-block;
+        height: 100px;
+        width: 100px;
+    }
+
+    #main-logo {
+        float: left;
+    }
+
+    #animal-logo {
+        float: right;
+    }
+
+    #intake-information {
+        margin-top: 36px;
+    }
+
+    #intake-information .intake-section {
+        border-bottom-style: dotted;
+        border-bottom-color: #3BB176;
+    }
+
+    #hidden-intake-header .value {
+        font-weight: bold;
+    }
+
+    .section-title {
+        color: #25408F;
+    }
+
+    #interview-guide textarea {
+        display: none;
+    }
+
+    #interview-guide .textarea-print-helper {
+        display: block;
+    }
+
+
+}
