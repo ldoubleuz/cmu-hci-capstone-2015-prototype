@@ -1,3 +1,22 @@
+/* */
+#make-an-appointment {
+  color: #14477E;
+  font-weight: 300;
+  font-size: 32px;
+}
+
+/* */
+#selected-date {
+  color: #14477E;
+  font-weight: 300;
+  font-size: 20px;
+  margin-top: 28px;
+  margin-bottom: 10px;
+  background: none;
+  border: none;
+  cursor: default;
+}
+
 /* Calendar Styles */
 #calendar {
   width: auto;
@@ -71,7 +90,6 @@
 }
 
 #calendar .ui-datepicker-calendar th {
-  padding: 10px;
   color: white;
 }
 
@@ -79,12 +97,24 @@
   background-color: #0D4380;
 }
 
-#calendar td {
+#calendar tr:first-child td {
+  border-top: none;
+}
 
+#calendar tr:last-child td {
+  border-bottom: none;
+}
+
+#calendar .ui-state-active {
+  background-color: #E0F7FE;
 }
 
 #calendar td.ui-datepicker-other-month {
   border: none;
+}
+
+#calendar td {
+  border: 2px solid #EFEFEF;
 }
 
 #calendar td:hover {
@@ -97,7 +127,6 @@
 }
 
 #calendar td a {
-  border: 2px solid #EFEFEF;
   text-align: center;
   color: #79929D;
   height: 100%;
@@ -108,4 +137,29 @@
 
 #calendar td a:focus, a:hover {
   text-decoration: none;
+}
+
+
+/* time-of-day styles */
+#time-of-day {
+  list-style-type: none;
+  margin: 0;
+}
+
+#time-of-day li {
+  height: 30px;
+  padding: 10px;
+  background-color: white;
+  color: #79929D;
+  margin-bottom: 1px;
+}
+
+#time-of-day li.selected {
+  background-color: lightgray;
+  color: white;
+}
+
+#time-of-day li:hover {
+  background-color: lightgray;
+  color: white;
 }
