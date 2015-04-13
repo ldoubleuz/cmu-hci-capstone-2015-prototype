@@ -1,3 +1,4 @@
+/*jshint node: true*/
 var mongoose = require('mongoose'),
     express = require('express'),
     bodyParser = require('body-parser');

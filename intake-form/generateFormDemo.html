@@ -23,14 +23,6 @@
         </div>
         <div id="content" class="container">
             <div id="breadcrumbs">
-                <div class="crumb crumb-prev">1</div>
-                <div class="crumb crumb-cur">2</div>
-                <div class="crumb crumb-next">3</div>
-                <div class="crumb crumb-next">4</div>
-                <div class="crumb crumb-next">5</div>
-                <div class="crumb crumb-next">6</div>
-                <div class="crumb crumb-next">7</div>
-                <div class="crumb crumb-next">8</div>
                 <span class="crumb-stretch"></span>
             </div>
             <div id="form-info">
@@ -80,7 +72,7 @@
                 var $pages = $container.find('.page');
 
                 /* TODO: uncomment if we want crumbs to be generated based on json
-                // generate appropriate number of breadcrumbs
+                // generate appropriate number of breadcrumbs*/
                 var $crumbs = [];
                 for (var i=0; i < $pages.length; i++) {
                     var leftCss = ((i / $pages.length)*100).toFixed(2) + "%";
@@ -94,7 +86,7 @@
 
                 var $crumbWrapper = $('#breadcrumbs');
                 $crumbWrapper.find('.crumb').remove();
-                $crumbWrapper.prepend($crumbs);*/
+                $crumbWrapper.prepend($crumbs);
 
                 var $crumbs = $('#breadcrumbs .crumb');
 

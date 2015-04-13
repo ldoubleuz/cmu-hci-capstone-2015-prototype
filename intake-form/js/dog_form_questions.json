@@ -260,13 +260,8 @@
                      "id":"curly"
                   }
                ]
-            }
-         ]
-      },
-      {
-         "title":"Dog Information Continued",
-         "questions":[
-            {
+            },
+           {
                "type":"short-text",
                "question":"Distinguishing Marks",
                "id":"marks"
