@@ -139,10 +139,9 @@ body {
   border-color: #32b27c;
 }
 
-#next-button {
+#next-button, #submit-button {
   width: 200px;
   height: 40px;
-  background-color: #32b27c;
   line-height: 40px;
   font-size: 30px;
   color: #ffffff;
@@ -152,6 +151,16 @@ body {
   border-color: #32b27c;
   position: absolute;
   right: 0;
+  top: 0;
+}
+
+#next-button {
+  background-color: #32b27c;
+}
+
+#submit-button {
+  background-color: #00477B;
+  display: none;
 }
 
 .form-title {

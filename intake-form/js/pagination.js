@@ -1,8 +1,17 @@
-var Pagination = function($pages, $crumbs, $prevButton, $nextButton) {
+/* onPageChangeFn is an optional callback that gets called whenever the page is
+ * switched, and gets called with one parameter: a dictionary in the format
+ * {
+ *    'newIndex': The index of the page we just switched to,
+ *    'oldIndex': The index of the page we switched from,
+ *    'totalPages': The total number of pages we are handling
+ * }
+ */
+var Pagination = function($pages, $crumbs, $prevButton, $nextButton, onPageChangeFn) {
     this.$pages = $pages;
     this.$crumbs = $crumbs;
     this.$prevButton = $prevButton;
     this.$nextButton = $nextButton;
+    this._onPageChangeFn = onPageChangeFn;
 
     this._currCrumbClass = 'crumb-cur';
     this._prevCrumbClass = 'crumb-prev';
@@ -73,7 +82,16 @@ Pagination.prototype.showPage = function(showIndex) {
         }
         $crumb.addClass(newCrumbClass)
     }
+    var prevIndex = this._currIndex;
     this._currIndex = showIndex;
+
+    if (this._onPageChangeFn) {
+        this._onPageChangeFn({
+            'newIndex': showIndex,
+            'oldIndex': prevIndex,
+            'totalPages': this.$pages.length
+        });
+    }
 
     // TODO: enable/disable prev/next buttons accordingly to new index
 };
