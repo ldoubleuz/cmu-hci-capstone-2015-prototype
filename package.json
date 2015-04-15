@@ -6,6 +6,8 @@
   "dependencies": {
     "body-parser": "^1.12.2",
     "express": "^4.12.3",
+    "googleapis": "^2.0.2",
+    "moment": "^2.10.2",
     "mongoose": "^4.0.1"
   },
   "devDependencies": {},
