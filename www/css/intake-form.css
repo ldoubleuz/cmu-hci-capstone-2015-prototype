@@ -59,7 +59,7 @@ body {
   z-index: 1;
 }
 
-#form-info {
+#form-container {
   width: 1000px;
   border-style: solid;
   border-width: 1px;

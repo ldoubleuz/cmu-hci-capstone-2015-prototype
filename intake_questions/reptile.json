@@ -178,12 +178,7 @@
                      "id": "unknown"
                   }
                ]
-            }
-         ]
-      },
-      {
-         "title":"Reptile Information Continued",
-         "questions":[
+            },
             {
                "type":"checkbox",
                "question":"Why are you surrendering your animal today? (select all that apply)",

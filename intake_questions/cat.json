@@ -259,12 +259,7 @@
                      ]
                   }
                ]
-            }
-         ]
-      },
-      {
-         "title":"Cat Information Continued",
-         "questions":[
+            },
             {
                "type":"radio",
                "question":"Where did you get your cat?",
