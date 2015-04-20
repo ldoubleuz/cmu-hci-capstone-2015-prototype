@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Scheudle Your Intake</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/intake-scheduler.css">
+  </head>
+  <body>
+    <div class="container" id="scheduler-container">
+      <div id="header">
+        <img id="logo" src="/img/logo.png" alt="Animal Rescue League Logo">
+        <img id="dog" src="/img/dog.png" alt="Dog Picture">
+        <h1 id="title">Schedule an appointment</h1>
+      </div>
+      <div class="row" id="calendar-container">
+        <div class="col-xs-4">
+          <div id="calendar"></div>
+        </div>
+        <div class="col-xs-8">
+          <input id="selected-date" readonly>
+          <div class="row">
+            <h4 class="col-xs-8">Please select a time slot (30 min)</h4>
+          </div>
+          <ol id="time-of-day" class="row">
+            <li id="time-of-day-11-00">
+              <div>11:00 AM</div></li>
+            <li id="time-of-day-11-30">
+              <div>11:30 AM</div></li>
+            <li id="time-of-day-12-00">
+              <div>12:00 PM</div></li>
+            <li id="time-of-day-12-30">
+              <div>12:30 PM</div></li>
+            <li id="time-of-day-01-00">
+              <div>1:00 PM</div></li>
+            <li id="time-of-day-01-30">
+              <div>1:30 PM</div></li>
+            <li id="time-of-day-02-00">
+              <div>2:00 PM</div></li>
+            <li id="time-of-day-02-30">
+              <div>2:30 PM</div></li>
+            <li id="time-of-day-03-00">
+              <div>3:00 PM</div></li>
+            <li id="time-of-day-03-30">
+              <div>3:30 PM</div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <script src="/js/jquery.min.js"></script>
+    <script src='http://code.jquery.com/ui/1.11.3/jquery-ui.min.js'></script>
+    <script src="/js/intake-scheduler.js"></script>
+  </body>
+</html>

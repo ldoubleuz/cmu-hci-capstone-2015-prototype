@@ -11,6 +11,32 @@ body {
   min-width: 1024px;
 }
 
+#header {
+  text-align: center;
+  position: relative;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+#title {
+  font-size: 28px;
+  color: #00477B;
+}
+
+#logo {
+  width: 67px;
+  height: 67px;
+  position: absolute;
+  left: 0;
+}
+
+#dog {
+  width: 85px;
+  height: 67px;
+  position: absolute;
+  right: 0;
+}
+
 /* Fonts */
 @font-face {
   font-family: "OpenSans";
