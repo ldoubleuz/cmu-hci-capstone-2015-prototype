@@ -5,49 +5,22 @@ var fs = require('fs'),
     express = require('express'),
     bodyParser = require('body-parser'),
     google = require('googleapis'),
+    googleAPIKeys = require('./googleAPIKeys'),
+    answerParser = require('./intake-form-answer-parser'),
     moment = require('moment');
 
 var mongooseUrl = 'mongodb://localhost/test';
 var serverPort = 3000;
 
-// Set up DB connections
-mongoose.connect(mongooseUrl);
-
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function (callback) {
-  console.log('MongoDB connection open at ' + mongooseUrl);
-});
-
-
 // Google calendar authentication info
-var googleAPIKeys = require('./googleAPIKeys');
-var calendar = google.calendar('v3');
+var calendar = google.calendar('v3'),
     oAuthClient = null, // To be setup by _initGoogleClient
     authedCalendar = false,
     OAUTH_REDIRECT_PATH = '/admin/auth-calendar';
 
-function _initGoogleClient() {
-  var host = 'localhost';
-  var port = serverPort;
-  var redirectURL = util.format('http://%s:%s%s', host, port, OAUTH_REDIRECT_PATH);
-  // Update global variable
-  oAuthClient = new google.auth.OAuth2(
-    googleAPIKeys.clientID, 
-    googleAPIKeys.clientSecret, 
-    redirectURL
-  );
-  console.log("google client initialized pointing at %s", redirectURL);
-};
-
-
-// How we plan to store info from the intake form
-var intake = mongoose.model('intake', {
-
-});
-
 var app = express();
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static('./www'));
 
 app.get('/calendar-demo', function(req, res) {
   if (!authedCalendar) {
@@ -85,18 +58,18 @@ app.get('/calendar-demo', function(req, res) {
 });
 
 app.get(OAUTH_REDIRECT_PATH, function(req, res) {
-  var oAuthCode = req.param('code'); // Present if redirected from oauth
+  var oAuthCode = req.query.code; // Present if redirected from oauth
   if (oAuthCode) {
     // handle oauth response flow
     // Get an access token based on our OAuth code
     oAuthClient.getToken(oAuthCode, function(err, tokens) {
       if (err) {
-        console.log('Error authenticating')
+        console.log('Error authenticating');
         console.log(err);
       } else {
         console.log('Successfully authenticated');
         console.log(tokens);
-        
+
         // Store our credentials and redirect back to our main page
         oAuthClient.setCredentials(tokens);
         authedCalendar = true;
@@ -104,26 +77,47 @@ app.get(OAUTH_REDIRECT_PATH, function(req, res) {
       }
     });
   }
-});
-
-app.get('/intake', function(req, res) {
-  res.send('TODO: send the actual intake form');
+  else {
+    res.redirect(OAUTH_REDIRECT_PATH);
+  }
 });
 
 app.get('/intake/:animalType', function(req, res) {
   // TODO: send along the intake form that corresponds to the animal type
-  res.send('TODO: send the actual intake form');
+  var file = 'intake-form-' + req.params.animalType + '.html',
+      options = {
+        root: __dirname + '/www/'
+      };
+  res.sendFile(file, options);
 });
 
 app.post('/intake/:animalType', function(req, res) {
   var animalType = req.params.animalType,
+      formBody = req.body,
       intakeQuestionsPath = 'intake_questions/' + animalType + '.json';
 
-  fs.readFile(intakeQuestionsPath, 'utf8', function(err, data) {
+  var answers = answerParser.parse(formBody);
+  /*fs.readFile(intakeQuestionsPath, 'utf8', function(err, data) {
     if (err) throw err;
-    var questions = JSON.parse(data);
+    var output = [];
+    var pages = JSON.parse(data).pages;
+    pages.forEach(function(page) {
+      var title = page.title,
+          questions = page.questions;
+
+      questions.map(function(questionObj) {
+        var type = questionObj.type,
+            question = questionObj.question,
+            id = questionObj.id;
+
+        return {
+          question: question,
+          answer: answer
+        };
+      });
+    });
     // TODO: Use these questions to parse the form data into a formatted json
-  });
+  });*/
 });
 
 app.get('/interview/:id', function(req, res) {
@@ -137,4 +131,32 @@ var server = app.listen(serverPort, function () {
 
   console.log('Example app listening at http://%s:%s', host, port);
   _initGoogleClient();
+});
+
+// Set up DB connections
+mongoose.connect(mongooseUrl);
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function (callback) {
+  console.log('MongoDB connection open at ' + mongooseUrl);
+});
+
+function _initGoogleClient() {
+  var host = server.address().address;
+  var port = server.address().port;
+  var redirectURL = util.format('http://%s:%s%s', host, port, OAUTH_REDIRECT_PATH);
+  // Update global variable
+  oAuthClient = new google.auth.OAuth2(
+    googleAPIKeys.clientID,
+    googleAPIKeys.clientSecret,
+    redirectURL
+  );
+  console.log("google client initialized pointing at %s", redirectURL);
+}
+
+
+// How we plan to store info from the intake form
+var intake = mongoose.model('intake', {
+
 });
