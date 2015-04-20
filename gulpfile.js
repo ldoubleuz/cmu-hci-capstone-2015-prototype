@@ -4,7 +4,7 @@ var gulp = require('gulp'),
     jquery = require('jquery'),
     intakeFormGenerator = require('./intake-form-generator.js');
 
-var intakeQuestionsDir= './intake_questions/';
+var intakeQuestionsDir = './intake_questions/';
 var intakeFormSkeletonPath = './intake-form-skeleton.html';
 
 gulp.task('default', function() {
@@ -35,6 +35,6 @@ gulp.task('update-intake-forms', function() {
         $body.find('#title').text(formTitle);
         $body.find('#dynamic-content').append(formContent);
 
-        return fs.writeFileSync(outputFile, document.documentElement.innerHTML);
+        fs.writeFileSync(outputFile, document.documentElement.innerHTML);
     });
 });
