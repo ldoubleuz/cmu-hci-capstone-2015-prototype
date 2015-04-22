@@ -114,9 +114,10 @@ app.get(OAUTH_REDIRECT_PATH, function(req, res) {
   }
 });
 
-app.get('/intake/:animalType', function(req, res) {
+app.get('/intake', function(req, res) {
   // TODO: send along the intake form that corresponds to the animal type
-  var file = 'intake-form-' + req.params.animalType + '.html',
+  var animal = req.query.animal;
+  var file = 'intake-form-' + animal + '.html',
       options = {
         root: __dirname + '/www/'
       };
@@ -124,7 +125,7 @@ app.get('/intake/:animalType', function(req, res) {
 });
 
 app.post('/intake/:animalType', function(req, res) {
-  var animalType = req.params.animalType,
+  var animalType = req.query.animalType,
       formBody = req.body,
       intakeQuestionsPath = 'intake_questions/' + animalType + '.json';
 
