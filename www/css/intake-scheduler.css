@@ -132,13 +132,17 @@
   cursor: default !important;
 }
 
-#calendar td a {
+#calendar td .ui-state-default {
   text-align: center;
   color: #79929D;
   height: 100%;
   width: 100%;
   display: inline-block;
   line-height: 50px;
+}
+
+#calendar td.ui-datepicker-unselectable .ui-state-default {
+  color: white;
 }
 
 #calendar td a:focus,

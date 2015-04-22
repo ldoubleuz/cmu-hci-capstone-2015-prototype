@@ -55,7 +55,7 @@ function doAuthCalendar(req, res) {
 
 var app = express();
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
 app.use(express.static('./www'));
 
 app.get('/calendar-hello-world', function(req, res) {
@@ -88,10 +88,18 @@ app.get('/calendar-hello-world', function(req, res) {
   }
 });
 
+app.get('/scheduler', function(req, res) {
+  var file = 'intake-scheduler.html',
+      options = {
+        root: __dirname + '/www/'
+      };
+  res.sendFile(file, options);
+});
+
 /* Retrieve available timeslots for intake scheduler
  * Expects the followings params in GET:
  *  - month: a number between 0 and 11 representing which month to retrieve
- *  - year: a number representing the year to retrieve, defaults to current year 
+ *  - year: a number representing the year to retrieve, defaults to current year
  * Returns data dict of events during the given month in the following format:
  *  - events: [
  *      {
@@ -100,17 +108,16 @@ app.get('/calendar-hello-world', function(req, res) {
  *      }
  *    ]
  */
-app.get('/scheduler', function(req, res) {
+app.get('/scheduler/get-timeslots', function(req, res) {
   if (shouldTriggerAuthCalendar(req, res)) {
     res.status(403).send('Error: calendar not authorized; contact admin');
-  } else {
-    var now = moment();
-    var month = req.query.month || now.month();
-    var year = req.query.year || now.year();
-
-
-    console.log("request:", month, year);
+    return;
   }
+  var now = moment();
+  var month = req.query.month || now.month();
+  var year = req.query.year || now.year();
+  console.log("request:", month, year);
+  res.status(200).send({hello: 'world'});
 });
 
 
