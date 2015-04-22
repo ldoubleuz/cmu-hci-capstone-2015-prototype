@@ -110,6 +110,11 @@
   border: 1px solid #EFEFEF;
 }
 
+#calendar td.ui-datepicker-current-day {
+  background-color: #41DC58;
+  color: white;
+}
+
 #calendar td.ui-state-active {
   background-color: #E0F7FE;
 }
@@ -118,12 +123,16 @@
   background-color: #E0F7FE;
 }
 
+#calendar td:hover.ui-datepicker-current-day {
+  background-color: #41DC58;
+}
+
 #calendar td.ui-datepicker-unselectable:hover {
   background-color: white;
   cursor: default !important;
 }
 
-#calendar td a {
+#calendar td .ui-state-default {
   text-align: center;
   color: #79929D;
   height: 100%;
@@ -132,11 +141,18 @@
   line-height: 50px;
 }
 
+#calendar td.ui-datepicker-unselectable .ui-state-default {
+  color: white;
+}
+
 #calendar td a:focus,
 #calendar td a:hover {
   text-decoration: none;
 }
 
+#calendar td a.ui-state-active {
+  color: white;
+}
 
 
 /* time-of-day styles */
@@ -174,25 +190,36 @@
   color: white;
 }
 
-#time-of-day li.selected:hover div {
-  background-color: #41DC98;
+/* Confirmation checkbox */
+#confirmation-checkbox-container {
+  position: relative;
+  margin-top: 35px;
 }
 
-/* Confirmation checkbox */
 #confirmation-checkbox {
   width: 40px;
   height: 40px;
-  margin-top: 35px;
   display: inline-block;
   border: 1px solid #0D4380;
 }
 
-#confirmation-checkbox:hover {
+#confirmation-checkmark {
+  position: absolute;
+  top: 0px;
+  bottom: 0;
+  left: 20px;
+  right: -20px;
+}
+
+.hidden {
+  display: none;
+}
+
+#confirmation-checkbox-container:hover #confirmation-checkbox {
   background-color: #DCF8FF;
 }
 
 /* Continue Button styles */
-
 #continue-button {
   margin-top: 60px;
   width: auto;
@@ -202,3 +229,5 @@
   border: none;
   font-weight: 100;
 }
+
+

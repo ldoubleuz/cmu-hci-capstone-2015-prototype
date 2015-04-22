@@ -21,7 +21,7 @@ var googleCalendar = google.calendar('v3'),
     // (should match url set up in the Google API client)
     OAUTH_REDIRECT_PATH = '/admin/auth-calendar',
     // what path we should redirect to after a successful admin calendar oatuh
-    OAUTH_SUCCESS_PATH = '/scheduler';
+    OAUTH_SUCCESS_PATH = '/';
 
 // TODO: setup sessions for a site admin, then call this before anything that
 // should require an admin login
@@ -55,7 +55,7 @@ function doAuthCalendar(req, res) {
 
 var app = express();
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
 app.use(express.static('./www'));
 
 app.get('/calendar-hello-world', function(req, res) {
@@ -88,6 +88,14 @@ app.get('/calendar-hello-world', function(req, res) {
   }
 });
 
+app.get('/scheduler', function(req, res) {
+  var file = 'intake-scheduler.html',
+      options = {
+        root: __dirname + '/www/'
+      };
+  res.sendFile(file, options);
+});
+
 /* Retrieve available timeslots for intake scheduler
  * Expects the followings params in GET:
  *  - month: a number between 0 and 11 representing which month to retrieve
@@ -100,7 +108,7 @@ app.get('/calendar-hello-world', function(req, res) {
  *      }
  *    ]
  */
-app.get('/scheduler', function(req, res) {
+app.get('/scheduler/get-timeslots', function(req, res) {
   if (shouldTriggerAuthCalendar(req, res)) {
     res.status(403).send('Error: calendar not authorized; contact admin');
   } else {
@@ -153,7 +161,7 @@ app.get('/scheduler', function(req, res) {
         res.send(outputItems);
       }
     });
-
+    return;
   }
 });
 
@@ -208,9 +216,10 @@ app.get(OAUTH_REDIRECT_PATH, function(req, res) {
   }
 });
 
-app.get('/intake/:animalType', function(req, res) {
+app.get('/intake', function(req, res) {
   // TODO: send along the intake form that corresponds to the animal type
-  var file = 'intake-form-' + req.params.animalType + '.html',
+  var animal = req.query.animal;
+  var file = 'intake-form-' + animal + '.html',
       options = {
         root: __dirname + '/www/'
       };
@@ -218,7 +227,7 @@ app.get('/intake/:animalType', function(req, res) {
 });
 
 app.post('/intake/:animalType', function(req, res) {
-  var animalType = req.params.animalType,
+  var animalType = req.query.animalType,
       formBody = req.body,
       intakeQuestionsPath = 'intake_questions/' + animalType + '.json';
 
