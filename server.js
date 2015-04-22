@@ -55,9 +55,10 @@ function doAuthCalendar(req, res) {
 
 var app = express();
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json()); 
 app.use(express.static('./www'));
 
-app.get('/calendar-demo', function(req, res) {
+app.get('/calendar-hello-world', function(req, res) {
   if (shouldTriggerAuthCalendar(req, res)) {
     // trigger oauth flow
     doAuthCalendar(req, res);
@@ -84,6 +85,55 @@ app.get('/calendar-demo', function(req, res) {
         res.send(events);
       }
     });
+  }
+});
+
+/* Retrieve available timeslots for intake scheduler
+ * Expects the followings params in GET:
+ *  - month: a number between 0 and 11 representing which month to retrieve
+ *  - year: a number representing the year to retrieve, defaults to current year 
+ * Returns data dict of events during the given month in the following format:
+ *  - events: [
+ *      {
+ *         start: an ISO string of the start time of the event,
+ *         end: an ISO string of the end time of the event
+ *      }
+ *    ]
+ */
+app.get('/scheduler', function(req, res) {
+  if (shouldTriggerAuthCalendar(req, res)) {
+    res.status(403).send('Error: calendar not authorized; contact admin');
+  } else {
+    var now = moment();
+    var month = req.query.month || now.month();
+    var year = req.query.year || now.year();
+
+
+    console.log("request:", month, year);
+  }
+});
+
+
+// Send request to add a new event to the google calendar
+// Expects the following params in POST:
+// - start: an ISO timestamp of the start time
+// - duration: the number of milliseconds the appointment should last for
+//             (we will use this to autogenerate an end time)
+// - userData: any additional user info to store in the description
+app.post('/scheduler/add-event', function(req, res) {
+  if (shouldTriggerAuthCalendar(req, res)) {
+    res.status(403).send('Error: calendar not authorized; contact admin');
+  } else {
+    var startTime = req.body.start;
+    var duration = req.body.duration;
+    var userData = req.body.userData || {};
+
+    if (!startTime || !duration) {
+      req.status(403).send('Bad request');
+    }
+
+
+    console.log("request:", startTime, duration);
   }
 });
 
