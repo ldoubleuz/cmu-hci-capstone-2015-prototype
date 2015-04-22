@@ -21,7 +21,7 @@ var googleCalendar = google.calendar('v3'),
     // (should match url set up in the Google API client)
     OAUTH_REDIRECT_PATH = '/admin/auth-calendar',
     // what path we should redirect to after a successful admin calendar oatuh
-    OAUTH_SUCCESS_PATH = '/calendar-demo';
+    OAUTH_SUCCESS_PATH = '/scheduler';
 
 // TODO: setup sessions for a site admin, then call this before anything that
 // should require an admin login
@@ -92,8 +92,8 @@ app.get('/calendar-hello-world', function(req, res) {
  * Expects the followings params in GET:
  *  - month: a number between 0 and 11 representing which month to retrieve
  *  - year: a number representing the year to retrieve, defaults to current year 
- * Returns data dict of events during the given month in the following format:
- *  - events: [
+ * Returns list of events during the given month in the following format:
+ *  - [
  *      {
  *         start: an ISO string of the start time of the event,
  *         end: an ISO string of the end time of the event
@@ -105,11 +105,55 @@ app.get('/scheduler', function(req, res) {
     res.status(403).send('Error: calendar not authorized; contact admin');
   } else {
     var now = moment();
-    var month = req.query.month || now.month();
-    var year = req.query.year || now.year();
+    var month = req.query.month && parseInt(req.query.month);
+    if (!month || isNaN(month)) {
+      month = now.month();
+    }
 
+    var year = req.query.year && parseInt(req.query.year);
+    if (!year || isNaN(year)) {
+      year = now.year();
+    }
 
-    console.log("request:", month, year);
+    var startTime = moment.utc([year, month]);
+    var endTime = moment.utc(startTime).endOf('month');
+
+    var startStr = startTime.toISOString();
+    var endStr = endTime.toISOString();
+    console.log(startStr, endStr);
+
+    // Call google to fetch events on calendar within month
+    googleCalendar.events.list({
+      calendarId: googleAPIKeys.calendarID,
+      timeMin: startStr,
+      timeMax: endStr,
+      singleEvents: true, // split recurring events into single events
+      auth: oAuthClient
+    }, function(err, data) {
+      if(err) {
+        console.log('Error fetching events');
+        console.log(err);
+        res.status(500).send('Server error while fetching calendar');
+      } else {
+        // Retrieve calendar events and convert to output format
+        var eventItems = data.items || [];
+        var outputItems = [];
+
+        for (var i=0; i < eventItems.length; i++) {
+          var item = eventItems[i];
+          var eventStart = item.start && item.start.dateTime;
+          var eventEnd = item.end && item.end.dateTime;
+          outputItems.push({
+            'start': eventStart,
+            'end': eventEnd,
+            'summary': item.summary || ''
+          });
+        }
+
+        res.send(outputItems);
+      }
+    });
+
   }
 });
 
