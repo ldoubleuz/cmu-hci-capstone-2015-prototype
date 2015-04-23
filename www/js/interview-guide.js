@@ -109,7 +109,7 @@
 
     function loadIntakeInfo() {
         // TODO: replace this path with dynamic loading
-        var filePath = 'interview-dummy.json';
+        var filePath = '/js/interview-dummy.json';
 
         $.ajax({
             url: filePath,
