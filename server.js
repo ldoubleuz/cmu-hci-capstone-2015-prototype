@@ -169,7 +169,7 @@ app.get('/scheduler/get-timeslots', function(req, res) {
 // Send request to add a new event to the google calendar
 // Expects the following params in POST:
 // - start: an ISO timestamp of the start time
-// - duration: the number of milliseconds the appointment should last for
+// - minutes: the number of minutes the appointment should last for
 //             (we will use this to autogenerate an end time)
 // - userData: any additional user info to store in the description
 app.post('/scheduler/add-event', function(req, res) {
@@ -177,15 +177,15 @@ app.post('/scheduler/add-event', function(req, res) {
     res.status(403).send('Error: calendar not authorized; contact admin');
   } else {
     var startTime = req.body.start;
-    var duration = req.body.duration;
+    var minutes = req.body.minutes;
     var userData = req.body.userData || {};
 
-    if (!startTime || !duration) {
+    if (!startTime || !minutes) {
       req.status(403).send('Bad request');
     }
 
 
-    console.log("request:", startTime, duration);
+    console.log("request:", startTime, minutes);
   }
 });
 
