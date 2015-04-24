@@ -29,28 +29,35 @@ body {
   left: 0;
 }
 
-#dog {
-  width: 85px;
-  height: 67px;
+#animal-type {
   position: absolute;
   right: 0;
+}
+
+#animal-type.dog {
+  height: 67px;
+}
+
+#animal-type.small-animal {
+  height: 40px;
+  top: 15px;
 }
 
 /* Fonts */
 @font-face {
   font-family: "OpenSans";
-  font-weight: normal;
-  src: url("../fonts/OpenSans-Regular.ttf") format("truetype");
+  font-weight: 500;
+  src: url("/fonts/OpenSans-Regular.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "OpenSans";
-  font-weight: bold;
-  src: url("../fonts/OpenSans-Bold.ttf") format("truetype");
+  font-weight: 700;
+  src: url("/fonts/OpenSans-Bold.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "OpenSans";
-  font-weight: lighter;
-  src: url("../fonts/OpenSans-Light.ttf") format("truetype");
+  font-weight: 300;
+  src: url("/fonts/OpenSans-Light.ttf") format("truetype");
 }
