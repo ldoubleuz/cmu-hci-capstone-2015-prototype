@@ -100,6 +100,8 @@ app.get('/scheduler', function(req, res) {
  * Expects the followings params in GET:
  *  - month: a number between 0 and 11 representing which month to retrieve
  *  - year: a number representing the year to retrieve, defaults to current year 
+ *  - numMonths: The number of months to retrieve, starting at the specified
+ *      date. Must be strictly positive, defaults to 1
  * Returns list of events during the given month in the following format:
  *  - [
  *      {
@@ -115,7 +117,7 @@ app.get('/scheduler/get-timeslots', function(req, res) {
   } else {
     var now = moment();
     var month = req.query.month && parseInt(req.query.month);
-    if (!month || isNaN(month)) {
+    if (!month || isNaN(month) || month < 0 || month > 11) {
       month = now.month();
     }
 
@@ -124,13 +126,22 @@ app.get('/scheduler/get-timeslots', function(req, res) {
       year = now.year();
     }
 
+    var numMonths = req.query.numMonths && parseInt(req.query.numMonths);
+    if (!numMonths || isNaN(numMonths) || numMonths <= 0) {
+      numMonths = 1;
+    }
+
     var startTime = moment.utc([year, month]);
-    var endTime = moment.utc(startTime).endOf('month');
+    if (!startTime.isValid()) {
+      startTime = moment.utc([now.year(), now.month()]);
+    }
+    var endTime = moment.utc(startTime).add(numMonths, 'months').startOf('month');
 
     var startStr = startTime.toISOString();
     var endStr = endTime.toISOString();
+    console.log(startStr, endStr);
 
-    // Call google to fetch events on calendar within month
+    // Call google to fetch events on calendar within time period
     googleCalendar.events.list({
       calendarId: googleAPIKeys.calendarID,
       timeMin: startStr,
