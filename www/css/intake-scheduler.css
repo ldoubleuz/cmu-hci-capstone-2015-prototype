@@ -1,3 +1,7 @@
+#header h1 {
+  line-height: 68px;
+}
+
 #scheduler-container {
   min-width: 1000px;
   margin: auto;
@@ -24,8 +28,8 @@
 }
 
 /* Calendar Styles */
-#calendar-container {
-  margin-top: 75px;
+#content {
+  margin-top: 60px;
 }
 
 #calendar {

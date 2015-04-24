@@ -22,17 +22,20 @@ gulp.task('update-intake-forms', function() {
         var questionsPath = intakeQuestionsDir + fileName,
             questions = JSON.parse(fs.readFileSync(questionsPath, 'utf8'));
 
-        var animalName = fileName.slice(0, fileName.lastIndexOf('.json')),
-            outputFile = 'www/intake-form-' + animalName + '.html';
+        var animalType = fileName.slice(0, fileName.lastIndexOf('.json')),
+            outputFile = 'www/intake-form-' + animalType + '.html';
 
         var document = jsdom(intakeFormSkeleton),
             $ = jquery(document.parentWindow),
             $body = $(document.body);
 
-        var formTitle = animalName.charAt(0).toUpperCase() + animalName.slice(1) + ' Surrender Form',
+        var formTitle = animalType.charAt(0).toUpperCase() + animalType.slice(1) + ' Surrender Form',
             formContent = intakeFormGenerator.generateFormContent($, questions);
 
         $body.find('#title').text(formTitle);
+        $body.find('#animal-type')
+          .addClass(animalType)
+          .attr('src', '/img/' + animalType + '.png');
         $body.find('#dynamic-content').append(formContent);
 
         fs.writeFileSync(outputFile, document.documentElement.innerHTML);

@@ -15,7 +15,7 @@ html, body {
 }
 
 body {
-  min-width: 1000px;
+  padding-top: 20px;
 }
 
 #content {
@@ -206,7 +206,7 @@ body {
   margin-top: 8px;
 }
 
-/*Overwriting Bootstrap's rediculousness*/
+/* Bootstrap overrides */
 
 .container {
   width: 1000px !important;

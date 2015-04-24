@@ -139,7 +139,6 @@ app.get('/scheduler/get-timeslots', function(req, res) {
 
     var startStr = startTime.toISOString();
     var endStr = endTime.toISOString();
-    console.log(startStr, endStr);
 
     // Call google to fetch events on calendar within time period
     googleCalendar.events.list({
@@ -188,7 +187,7 @@ app.get('/scheduler/get-timeslots', function(req, res) {
  *   'success': true iff event was created,
  *   'event': A Google Calendar Event JSON object, with the following fields,
  *            (as listed in https://developers.google.com/google-apps/calendar/v3/reference/events)
- *    { 
+ *    {
  *        id: The event's id,
  *       summary: The event's title,
  *       description: The event's description,
@@ -198,7 +197,7 @@ app.get('/scheduler/get-timeslots', function(req, res) {
  *       end: {
  *          dateTime: RFC3391 string of the end time of the event
  *        }
- *    }  
+ *    }
  * }
  */
 app.post('/scheduler/add-event', function(req, res) {
@@ -214,17 +213,17 @@ app.post('/scheduler/add-event', function(req, res) {
       startTime = startTime.toISOString();
     }
 
-    var minutes = parseInt(req.body.minutes);
-    if (!minutes || isNaN(minutes) || minutes <= 0) {
+    var duration = parseInt(req.body.duration);
+    if (!duration || isNaN(duration) || duration <= 0) {
       req.status(403).send('Bad request');
       return;
     }
 
-    var endTime = moment(startTime).add(minutes, 'minutes').toISOString();
+    var endTime = moment(startTime).add(duration, 'minutes').toISOString();
 
     var userData = req.body.userData || {};
     var description = util.format(
-      'Auto-generated at %s\n\nExtra data: %s', 
+      'Auto-generated at %s\n\nExtra data: %s',
       moment().format('h:mm:ssa on MM-DD-YYYY'),
       JSON.stringify(userData)
     );
@@ -254,8 +253,8 @@ app.post('/scheduler/add-event', function(req, res) {
         console.log('Create event error:', err);
       } else {
         console.log(util.format(
-          '%d-minute appointment added (starting at %s)', 
-          minutes, 
+          '%d-minute appointment added (starting at %s)',
+          duration,
           moment(startTime).format('h:mm:ssa, MM-DD-YYYY')
         ));
         success = true;
