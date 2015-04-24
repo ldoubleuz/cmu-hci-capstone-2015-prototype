@@ -3,10 +3,14 @@ $(function() {
       $timesOfDay = $('#time-of-day li'),
       $confirmationCheckbox = $('#confirmation-checkbox-container'),
       $confirmationCheckmark = $('#confirmation-checkmark'),
-      $continueButton = $('#continue-button');
+      $continueButton = $('#continue-button'),
+      $confirmation = $('#confirmation'),
+      $selectedDate = $('#selected-date'),
+      $selectedTimeAndDate = $('#selected-time-and-date');
 
   function dateSelected(dateText, context) {
     $timesOfDay.removeClass('selected');
+    $confirmation.addClass('hidden');
   }
 
   function initCalendar() {
@@ -18,8 +22,14 @@ $(function() {
     });
 
     $timesOfDay.click(function() {
+      var selectedTime = this.children[0].innerText,
+          selectedDate = $selectedDate.val();
       $timesOfDay.removeClass('selected');
       this.classList.add('selected');
+      $selectedTimeAndDate.text(selectedTime + ' on ' + selectedDate);
+      $confirmation.removeClass('hidden');
+      $confirmationCheckmark.addClass('hidden');
+      $continueButton.addClass('hidden');
     });
 
     $confirmationCheckbox.click(function() {
