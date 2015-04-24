@@ -111,6 +111,7 @@ app.get('/scheduler', function(req, res) {
 app.get('/scheduler/get-timeslots', function(req, res) {
   if (shouldTriggerAuthCalendar(req, res)) {
     res.status(403).send('Error: calendar not authorized; contact admin');
+    return;
   } else {
     var now = moment();
     var month = req.query.month && parseInt(req.query.month);
@@ -128,7 +129,6 @@ app.get('/scheduler/get-timeslots', function(req, res) {
 
     var startStr = startTime.toISOString();
     var endStr = endTime.toISOString();
-    console.log(startStr, endStr);
 
     // Call google to fetch events on calendar within month
     googleCalendar.events.list({
@@ -166,26 +166,95 @@ app.get('/scheduler/get-timeslots', function(req, res) {
 });
 
 
-// Send request to add a new event to the google calendar
-// Expects the following params in POST:
-// - start: an ISO timestamp of the start time
-// - minutes: the number of minutes the appointment should last for
-//             (we will use this to autogenerate an end time)
-// - userData: any additional user info to store in the description
+/* Send request to add a new event to the google calendar
+ * Expects the following params in POST:
+ * - start: an ISO timestamp of the start time
+ * - minutes: the number of minutes the appointment should last for
+ *             (we will use this to autogenerate an end time)
+ * - userData: any additional user info to store in the description
+ * Returns a JSON object with the following format:
+ * {
+ *   'success': true iff event was created,
+ *   'event': A Google Calendar Event JSON object, with the following fields,
+ *            (as listed in https://developers.google.com/google-apps/calendar/v3/reference/events)
+ *    { 
+ *        id: The event's id,
+ *       summary: The event's title,
+ *       description: The event's description,
+ *       start: {
+ *          dateTime: RFC3391 string of the start time of the event
+ *        },
+ *       end: {
+ *          dateTime: RFC3391 string of the end time of the event
+ *        }
+ *    }  
+ * }
+ */
 app.post('/scheduler/add-event', function(req, res) {
   if (shouldTriggerAuthCalendar(req, res)) {
     res.status(403).send('Error: calendar not authorized; contact admin');
   } else {
     var startTime = req.body.start;
-    var minutes = req.body.minutes;
-    var userData = req.body.userData || {};
-
-    if (!startTime || !minutes) {
+    startTime = startTime && moment(startTime);
+    if (!startTime || !startTime.isValid()) {
       req.status(403).send('Bad request');
+      return;
+    } else {
+      startTime = startTime.toISOString();
     }
 
+    var minutes = parseInt(req.body.minutes);
+    if (!minutes || isNaN(minutes) || minutes <= 0) {
+      req.status(403).send('Bad request');
+      return;
+    }
 
-    console.log("request:", startTime, minutes);
+    var endTime = moment(startTime).add(minutes, 'minutes').toISOString();
+
+    var userData = req.body.userData || {};
+    var description = util.format(
+      'Auto-generated at %s\n\nExtra data: %s', 
+      moment().format('h:mm:ssa on MM-DD-YYYY'),
+      JSON.stringify(userData)
+    );
+
+    // Call Google API to insert an event
+    googleCalendar.events.insert({
+      'calendarId': googleAPIKeys.calendarID,
+      // Make sure to wrap Event objects in a 'resource' dictionary
+      // Holy shit, that was annoying to figure out from the documentation
+      'resource': {
+        'end': {
+          'dateTime': endTime
+        },
+        'start': {
+          'dateTime': startTime
+        },
+        'summary': util.format('Intake appointment (%d minutes)', minutes),
+        'description': description
+      },
+      // What fields to return from the created event
+      'fields': 'description,summary,start,end,id',
+      'auth': oAuthClient
+    }, function(err, data) {
+      var success = false;
+      var outputEvent = null;
+      if (err) {
+        console.log('Create event error:', err);
+      } else {
+        console.log(util.format(
+          '%d-minute appointment added (starting at %s)', 
+          minutes, 
+          moment(startTime).format('h:mm:ssa, MM-DD-YYYY')
+        ));
+        success = true;
+        outputEvent = data;
+      }
+      res.send({
+        'success': success,
+        'event': outputEvent
+      });
+    });
   }
 });
 
