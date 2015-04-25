@@ -144,19 +144,37 @@ app.get('/scheduler/get-timeslots', function(req, res) {
         res.status(500).send('Server error while fetching calendar');
       } else {
         // Retrieve calendar events and convert to output format
-        var eventItems = data.items || [];
-        var outputItems = [];
+        if (data.items.length === 0) {
+          return res.send([]);
+        }
 
-        for (var i=0; i < eventItems.length; i++) {
-          var item = eventItems[i];
+        var eventItems = data.items;
+        eventItems.map(function(item) {
           var eventStart = item.start && item.start.dateTime;
           var eventEnd = item.end && item.end.dateTime;
-          outputItems.push({
-            'start': eventStart,
-            'end': eventEnd,
-            'summary': item.summary || ''
-          });
+          return {
+            'start': Date.parse(eventStart),
+            'end': Date.parse(eventEnd)
+          };
+        });
+
+        var outputItems = [],
+            currentStart = eventItems[0].start,
+            currentEnd = eventItems[0].end;
+        for (var i=1; i < eventItems.length; i++) {
+          var item = eventItems[i];
+          if (item.start < currentEnd) {
+            if (currentEnd < item.end) {
+              currentEnd = item.end;
+            }
+          }
+          else {
+            outputItems.push({start: currentStart, end: currentEnd});
+            currentStart = item.start;
+            currentEnd = item.end;
+          }
         }
+        outputItems.push({start: currentStart, end: currentEnd});
 
         res.send(outputItems);
       }
