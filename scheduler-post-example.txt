@@ -6,7 +6,10 @@ $.ajax({
     type: 'POST',
     data: {
         start: time.toISOString(), 
-        minutes: 30
+        minutes: 30,
+        userData: {
+            'name': 'Bob Newbie'
+        }
     },
     success: function(data){ 
         console.log('success?');
