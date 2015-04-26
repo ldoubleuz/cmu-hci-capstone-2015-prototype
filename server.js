@@ -1,5 +1,6 @@
 /* jshint node: true */
 var fs = require('fs'),
+    path = require('path'),
     util = require('util'),
     mongoose = require('mongoose'),
     express = require('express'),
@@ -333,7 +334,14 @@ app.get('/intake', function(req, res) {
       options = {
         root: __dirname + '/www/'
       };
-  res.sendFile(file, options);
+  // First validate that tempplate file exists before sending it to client
+  fs.stat(path.join(options.root, file), function(err, stats) {
+    if (err || !stats.isFile()) {
+      res.status(404).send(util.format('%s not found', file));
+    } else {
+      res.sendFile(file, options);
+    }
+  });
 });
 
 app.post('/intake/:animalType', function(req, res) {

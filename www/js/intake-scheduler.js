@@ -163,6 +163,19 @@ $(function() {
         start: appointment.toISOString(),
         minutes: 30
       },
+      success: function(data) {
+        if (data.success) {
+          // On successful event creation, send the user to the intake form
+          var oldQueryParams = $.getQueryParameters() || {};
+          var newQueryParams = {
+            'id': data.event.id
+          };
+          if (oldQueryParams.hasOwnProperty('animal')) {
+            newQueryParams.animal = oldQueryParams.animal;
+          }
+          window.location = '/intake?' + $.param(newQueryParams);
+        }
+      },
       error: function() {
         console.log('error');
         console.log(arguments);
