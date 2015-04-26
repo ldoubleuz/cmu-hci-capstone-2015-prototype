@@ -157,8 +157,8 @@ app.get('/scheduler/get-blocked-times', function(req, res) {
           var eventStart = item.start && item.start.dateTime;
           var eventEnd = item.end && item.end.dateTime;
           return {
-            'start': Date.parse(eventStart),
-            'end': Date.parse(eventEnd)
+            start: new Date(eventStart),
+            end: new Date(eventEnd)
           };
         });
 
