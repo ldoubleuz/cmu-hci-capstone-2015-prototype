@@ -15,14 +15,15 @@ $(function() {
 
 
   // Unselect previously selected time. Disables blocked times on the selected date.
-  function _dateSelected(dateText, context) {
+  function _dateSelected() {
     var time = $calendar.datepicker('getDate'),
         year = time.getFullYear(),
         month = time.getMonth(),
         date = time.getDate(),
-        blockedTimesForDate = blocked[year]
-          && blocked[year][month]
-          && blocked[year][month][date];
+        blockedTimesForDate =
+          blocked[year] &&
+          blocked[year][month] &&
+          blocked[year][month][date];
 
     $timesOfDay.removeClass('selected').removeClass(BLOCKED_CLASS);
     $confirmation.addClass('hidden');
@@ -72,6 +73,13 @@ $(function() {
    * Parses times into half hour segments in which appointments can't be made.
    **/
   function _initCalendar(blockedTimes) {
+    var startOfDay = new Date();
+    startOfDay.setHours(0);
+    var now = new Date();
+    blockedTimes.push({
+      start: { dateTime: startOfDay.toJSON()},
+      end: { dateTime: now.toJSON()},
+    });
     blockedTimes.forEach(function(blockedTime) {
       var start = new Date(blockedTime.start.dateTime),
           end = new Date(blockedTime.end.dateTime),
@@ -82,9 +90,10 @@ $(function() {
 
       while (current < end) {
         _setBlockedHalfHour(current);
-        // Increase current by a half an hour (3000000 millesconds)
-        current = new Date(current.getTime() + 3000000);
+        // Increase current by a half an hour
+        current = new Date(current.getTime() + 30*60000);
       }
+
     });
 
     $calendar.datepicker({
@@ -94,6 +103,8 @@ $(function() {
       minDate: 0,
       maxDate: '+' + maxMonthsAhead + 'm'
     });
+
+    _dateSelected();
   }
 
 
@@ -134,13 +145,23 @@ $(function() {
 
   // Create an appointment time and move onto intake form
   $continueButton.click(function() {
-    var appointmentTime = new Date($selectedTimeAndDate.text());
+    var time = $('#time-of-day li.selected div').text(),
+        hours = Number(time.slice(0, time.indexOf(':'))),
+        minutes = time.indexOf('30') === -1 ? 0 : 30,
+        appointment = $calendar.datepicker('getDate');
+
+    if (time.indexOf('PM') !== -1) {
+       hours += 12;
+    }
+    appointment.setHours(hours);
+    appointment.setMinutes(minutes);
+
     $.ajax({
       type: "POST",
       url: '/scheduler/add-event',
       data: {
-        start: appointmentTime.toISOString(),
-        duration: 30
+        start: appointment.toISOString(),
+        minutes: 30
       },
       error: function() {
         console.log('error');
