@@ -12,46 +12,9 @@ var fs = require('fs'),
 var mongooseUrl = 'mongodb://localhost/test';
 var serverPort = 3000;
 
-
 // Google calendar authentication info
-var googleCalendar = google.calendar('v3'),
-    oAuthClient = null, // To be setup by _initGoogleClient
-    calendarIsAuthed = false,
-    // what path the oauth request will automatically redirect to
-    // (should match url set up in the Google API client)
-    OAUTH_REDIRECT_PATH = '/admin/auth-calendar',
-    // what path we should redirect to after a successful admin calendar oatuh
-    OAUTH_SUCCESS_PATH = '/';
-
-// TODO: setup sessions for a site admin, then call this before anything that
-// should require an admin login
-function shouldTriggerAuthAdmin(req, res) {
-  return !(req.session && req.session.adminAuthed);
-}
-
-function doAuthAdmin(req, res) {
-  if (shouldTriggerAuthAdmin(req, res)) {
-    // TODO: do stuff to login a user
-    throw new Exception("site admin auth not yet implemented");
-  }
-}
-
-function shouldTriggerAuthCalendar(req, res) {
-  return !calendarIsAuthed;
-}
-
-function doAuthCalendar(req, res) {
-  if (shouldTriggerAuthCalendar(req, res)) {
-    // trigger oauth flow
-    // Generate an OAuth URL and redirect there
-    var url = oAuthClient.generateAuthUrl({
-      access_type: 'offline', // allows us to get a refresh token
-      scope: 'https://www.googleapis.com/auth/calendar' // use write scope
-    });
-    res.redirect(url);
-  }
-}
-
+var googleCalendar = google.calendar('v3');
+var googleAuthClient = null; // To be setup by _initGoogleClient
 
 var app = express();
 app.use(bodyParser.urlencoded({extended: true}));
@@ -59,33 +22,28 @@ app.use(bodyParser.json());
 app.use(express.static('./www'));
 
 app.get('/calendar-hello-world', function(req, res) {
-  if (shouldTriggerAuthCalendar(req, res)) {
-    // trigger oauth flow
-    doAuthCalendar(req, res);
-  } else {
-    // Stolen from http://www.matt-toigo.com/dev/pulling_google_calendar_events_with_node
-    // Format today's date
-    var today = moment().format('YYYY-MM-DD') + 'T';
+  // Stolen from http://www.matt-toigo.com/dev/pulling_google_calendar_events_with_node
+  // Format today's date
+  var today = moment().format('YYYY-MM-DD') + 'T';
 
-    // Call google to fetch events for today on our calendar
-    googleCalendar.events.list({
-      calendarId: googleAPIKeys.calendarID,
-      maxResults: 20,
-      timeMin: today + '00:00:00.000Z',
-      timeMax: today + '23:59:59.000Z',
-      auth: oAuthClient
-    }, function(err, events) {
-      if(err) {
-        console.log('Error fetching events');
-        console.log(err);
-      } else {
+  // Call google to fetch events for today on our calendar
+  googleCalendar.events.list({
+    calendarId: googleAPIKeys.calendarID,
+    maxResults: 20,
+    timeMin: today + '00:00:00.000Z',
+    timeMax: today + '23:59:59.000Z',
+    auth: googleAuthClient
+  }, function(err, events) {
+    if(err) {
+      console.log('Error fetching events');
+      console.log(err);
+    } else {
 
-        // Send our JSON response back to the browser
-        console.log('Successfully fetched events');
-        res.send(events);
-      }
-    });
-  }
+      // Send our JSON response back to the browser
+      console.log('Successfully fetched events');
+      res.send(events);
+    }
+  });
 });
 
 app.get('/scheduler', function(req, res) {
@@ -100,6 +58,8 @@ app.get('/scheduler', function(req, res) {
  * Expects the followings params in GET:
  *  - month: a number between 0 and 11 representing which month to retrieve
  *  - year: a number representing the year to retrieve, defaults to current year
+ *  - numMonths: The number of months to retrieve, starting at the specified
+ *      date. Must be strictly positive, defaults to 1
  * Returns list of events during the given month in the following format:
  *  - [
  *      {
@@ -108,41 +68,45 @@ app.get('/scheduler', function(req, res) {
  *      }
  *    ]
  */
-app.get('/scheduler/get-timeslots', function(req, res) {
-  if (shouldTriggerAuthCalendar(req, res)) {
-    res.status(403).send('Error: calendar not authorized; contact admin');
-    return;
-  } else {
-    var now = moment();
-    var month = req.query.month && parseInt(req.query.month);
-    if (!month || isNaN(month)) {
-      month = now.month();
-    }
+app.get('/scheduler/get-blocked-times', function(req, res) {
+  var now = moment();
+  var month = req.query.month && parseInt(req.query.month);
+  if (!month || isNaN(month) || month < 0 || month > 11) {
+    month = now.month();
+  }
 
-    var year = req.query.year && parseInt(req.query.year);
-    if (!year || isNaN(year)) {
-      year = now.year();
-    }
+  var numMonths = req.query.numMonths && parseInt(req.query.numMonths);
+  if (!numMonths || isNaN(numMonths)) {
+    numMonths = 1;
+  }
 
-    var startTime = moment.utc([year, month]);
-    var endTime = moment.utc(startTime).endOf('month');
+  var year = req.query.year && parseInt(req.query.year);
+  if (!year || isNaN(year)) {
+    year = now.year();
+  }
 
-    var startStr = startTime.toISOString();
-    var endStr = endTime.toISOString();
+  var startTime = moment.utc([year, month]);
+  if (!startTime.isValid()) {
+    startTime = moment.utc([now.year(), now.month()]);
+  }
+  var endTime = moment.utc(startTime).add(numMonths, 'months').startOf('month');
 
-    // Call google to fetch events on calendar within month
-    googleCalendar.events.list({
-      calendarId: googleAPIKeys.calendarID,
-      timeMin: startStr,
-      timeMax: endStr,
-      singleEvents: true, // split recurring events into single events
-      auth: oAuthClient
-    }, function(err, data) {
-      if(err) {
-        console.log('Error fetching events');
-        console.log(err);
-        res.status(500).send('Server error while fetching calendar');
-      } else {
+  var startStr = startTime.toISOString();
+  var endStr = endTime.toISOString();
+
+  // Call google to fetch events on calendar within time period
+  googleCalendar.events.list({
+    calendarId: googleAPIKeys.calendarID,
+    timeMin: startStr,
+    timeMax: endStr,
+    singleEvents: true, // split recurring events into single events
+    auth: googleAuthClient
+  }, function(err, data) {
+    if(err) {
+      console.log('Error fetching events');
+      console.log(err);
+      res.status(500).send('Server error while fetching calendar');
+    } else {
         // Retrieve calendar events and convert to output format
         if (data.items.length === 0) {
           return res.send([]);
@@ -164,9 +128,7 @@ app.get('/scheduler/get-timeslots', function(req, res) {
         for (var i=1; i < eventItems.length; i++) {
           var item = eventItems[i];
           if (item.start < currentEnd) {
-            if (currentEnd < item.end) {
-              currentEnd = item.end;
-            }
+            currentEnd = Math.max(currentEnd, item.end);
           }
           else {
             outputItems.push({start: currentStart, end: currentEnd});
@@ -178,9 +140,8 @@ app.get('/scheduler/get-timeslots', function(req, res) {
 
         res.send(outputItems);
       }
-    });
-    return;
-  }
+  });
+  return;
 });
 
 
@@ -209,98 +170,71 @@ app.get('/scheduler/get-timeslots', function(req, res) {
  * }
  */
 app.post('/scheduler/add-event', function(req, res) {
-  if (shouldTriggerAuthCalendar(req, res)) {
-    res.status(403).send('Error: calendar not authorized; contact admin');
+  // TODO: only send unconfirmed event to calendar and wait for user to finish
+  // intake form before confirming event
+  var startTime = req.body.start;
+  startTime = startTime && moment(startTime);
+  if (!startTime || !startTime.isValid()) {
+    res.status(403).send('Bad request');
+    return;
   } else {
-    var startTime = req.body.start;
-    startTime = startTime && moment(startTime);
-    if (!startTime || !startTime.isValid()) {
-      req.status(403).send('Bad request');
-      return;
-    } else {
-      startTime = startTime.toISOString();
-    }
+    startTime = startTime.toISOString();
+  }
 
-    var duration = parseInt(req.body.duration);
-    if (!duration || isNaN(duration) || duration <= 0) {
-      req.status(403).send('Bad request');
-      return;
-    }
+  var minutes = parseInt(req.body.minutes);
+  if (!minutes || isNaN(minutes) || minutes <= 0) {
+    res.status(403).send('Bad request');
+    return;
+  }
 
-    var endTime = moment(startTime).add(duration, 'minutes').toISOString();
+  var endTime = moment(startTime).add(minutes, 'minutes').toISOString();
 
-    var userData = req.body.userData || {};
-    var description = util.format(
-      'Auto-generated at %s\n\nExtra data: %s',
-      moment().format('h:mm:ssa on MM-DD-YYYY'),
-      JSON.stringify(userData)
-    );
+  var userId = req.body.userId || '';
+  var description = util.format(
+    'Auto-generated at %s\n\nUser ID: %s',
+    moment().format('h:mm:ssa on MM-DD-YYYY'),
+    userId
+  );
 
-    // Call Google API to insert an event
-    googleCalendar.events.insert({
-      'calendarId': googleAPIKeys.calendarID,
-      // Make sure to wrap Event objects in a 'resource' dictionary
-      // Holy shit, that was annoying to figure out from the documentation
-      'resource': {
-        'end': {
-          'dateTime': endTime
-        },
-        'start': {
-          'dateTime': startTime
-        },
-        'summary': util.format('Intake appointment (%d minutes)', minutes),
-        'description': description
+  var title = util.format('Intake appointment (%d minutes)', minutes);
+
+  // Call Google API to insert an event
+  googleCalendar.events.insert({
+    'calendarId': googleAPIKeys.calendarID,
+    // Make sure to wrap Event objects in a 'resource' dictionary
+    // Holy shit, that was annoying to figure out from the documentation
+    'resource': {
+      'end': {
+        'dateTime': endTime
       },
-      // What fields to return from the created event
-      'fields': 'description,summary,start,end,id',
-      'auth': oAuthClient
-    }, function(err, data) {
-      var success = false;
-      var outputEvent = null;
-      if (err) {
-        console.log('Create event error:', err);
-      } else {
-        console.log(util.format(
-          '%d-minute appointment added (starting at %s)',
-          duration,
-          moment(startTime).format('h:mm:ssa, MM-DD-YYYY')
-        ));
-        success = true;
-        outputEvent = data;
-      }
-      res.send({
-        'success': success,
-        'event': outputEvent
-      });
+      'start': {
+        'dateTime': startTime
+      },
+      'summary': title,
+      'description': description
+    },
+    // What fields to return from the created event
+    'fields': 'description,summary,start,end,id',
+    'auth': googleAuthClient
+  }, function(err, data) {
+    var success = false;
+    var outputEvent = null;
+    if (err) {
+      console.log('Create event error:', err);
+    } else {
+      console.log(util.format(
+        '%d-minute appointment added (starting at %s)',
+        minutes,
+        moment(startTime).format('h:mm:ssa, MM-DD-YYYY')
+      ));
+      success = true;
+      outputEvent = data;
+    }
+    res.send({
+      'success': success,
+      'event': outputEvent
     });
-  }
-});
-
-app.get(OAUTH_REDIRECT_PATH, function(req, res) {
-  var oAuthCode = req.query.code; // Present if redirected from oauth
-  if (oAuthCode) {
-    // handle oauth response flow
-    // Get an access token based on our OAuth code
-    oAuthClient.getToken(oAuthCode, function(err, tokens) {
-      if (err) {
-        console.log('Error authenticating');
-        console.log(err);
-      } else {
-        console.log('Successfully authenticated');
-        console.log(tokens);
-
-        // Store our credentials and redirect back to some page
-        oAuthClient.setCredentials(tokens);
-        calendarIsAuthed = true;
-        res.redirect(OAUTH_SUCCESS_PATH);
-      }
-    });
-  } else if (shouldTriggerAuthCalendar(req, res)) {
-    doAuthCalendar(req, res);
-  } else {
-    // if already authenticated, skip oauth workflow
-    res.redirect(OAUTH_SUCCESS_PATH);
-  }
+  });
 });
 
 app.get('/intake', function(req, res) {
@@ -319,41 +253,49 @@ app.post('/intake/:animalType', function(req, res) {
       intakeQuestionsPath = 'intake_questions/' + animalType + '.json';
 
   var answers = answerParser.parse(formBody);
-  /*fs.readFile(intakeQuestionsPath, 'utf8', function(err, data) {
-    if (err) throw err;
-    var output = [];
-    var pages = JSON.parse(data).pages;
-    pages.forEach(function(page) {
-      var title = page.title,
-          questions = page.questions;
-
-      questions.map(function(questionObj) {
-        var type = questionObj.type,
-            question = questionObj.question,
-            id = questionObj.id;
-
-        return {
-          question: question,
-          answer: answer
-        };
-      });
-    });
-    // TODO: Use these questions to parse the form data into a formatted json
-  });*/
 });
 
 app.get('/interview/:id', function(req, res) {
   res.send('TODO: send the actual interview guide');
 });
 
-var server = app.listen(serverPort, 'localhost', 511, function () {
 
-  var host = server.address().address;
-  var port = server.address().port;
+function _initGoogleClient(onSuccess, onError) {
+  console.log('authorizing Google service account...');
+  googleAuthClient = new google.auth.JWT(
+    googleAPIKeys.serviceAccountEmail,
+    googleAPIKeys.serviceKeyPath,
+    null,
+    ['https://www.googleapis.com/auth/calendar'] // calendar write scope
+  );
 
-  console.log('Example app listening at http://%s:%s', host, port);
-  _initGoogleClient();
-});
+  googleAuthClient.authorize(function(err, tokens) {
+    if (err) {
+      onError && onError(err);
+      return;
+    } else {
+      onSuccess && onSuccess();
+    }
+  });
+}
+
+var server = null;
+function startServer() {
+  // wait for Google client to authorize service account before starting server
+  _initGoogleClient(function() {
+    server = app.listen(serverPort, 'localhost', 511, function() {
+      var host = server.address().address;
+      var port = server.address().port;
+
+      console.log('Example app listening at http://%s:%s', host, port);
+    });
+  }, function(err) {
+      console.log("failed to authorize Google service account");
+      console.log(err);
+  });
+}
+
+startServer();
 
 // Set up DB connections
 mongoose.connect(mongooseUrl);
@@ -363,20 +305,6 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function (callback) {
   console.log('MongoDB connection open at ' + mongooseUrl);
 });
-
-function _initGoogleClient() {
-  var host = server.address().address;
-  var port = server.address().port;
-  var redirectURL = util.format('http://%s:%s%s', host, port, OAUTH_REDIRECT_PATH);
-  // Update global variable
-  oAuthClient = new google.auth.OAuth2(
-    googleAPIKeys.clientID,
-    googleAPIKeys.clientSecret,
-    redirectURL
-  );
-  console.log("google client initialized pointing at %s", redirectURL);
-}
-
 
 // How we plan to store info from the intake form
 var intake = mongoose.model('intake', {
