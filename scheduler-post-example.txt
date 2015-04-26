@@ -6,12 +6,28 @@ $.ajax({
     type: 'POST',
     data: {
         start: time.toISOString(),
-        minutes: 30,
-        userId: string
+        minutes: 30
     },
     success: function(data){
-        console.log('success?');
+        console.log('success?', data.success);
         console.log(data);
+
+        // Toggle event from tentative to confirmed
+        $.ajax({
+            url: '/scheduler/confirm-event',
+            type: 'POST',
+            data: {
+                id: data.event.id
+            },
+            success: function(data) {
+                console.log('confirm success', data.success),
+                console.log(data);
+            },
+            error: function() {
+                console.log('confirm error');
+                console.log(arguments);
+            }
+        });
     },
     error: function() {
         console.log('error');

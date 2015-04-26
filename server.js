@@ -15,6 +15,11 @@ var serverPort = 3000;
 // Google calendar authentication info
 var googleCalendar = google.calendar('v3');
 var googleAuthClient = null; // To be setup by _initGoogleClient
+// What fields google calendar event resources returned by api calls should have
+var RETURNED_EVENT_FIELDS = 'description,summary,start,end,id,status,created';
+// How long to block off an unconfirmed intake appointment event timeslot before
+// freeing it back up for other users
+var TENTATIVE_EVENT_TIMEOUT = moment.duration(1, 'day');
 
 var app = express();
 app.use(bodyParser.urlencoded({extended: true}));
@@ -54,21 +59,34 @@ app.get('/scheduler', function(req, res) {
   res.sendFile(file, options);
 });
 
+function deleteEvent(eventID, onSuccess, onError) {
+  googleCalendar.events.delete({
+    'calendarId': googleAPIKeys.calendarID,
+    'eventId': eventID,
+    'auth': googleAuthClient
+  }, function(err) {
+    if (err) {
+      console.log('error while deleting event', eventID, err);
+      onError && onError();
+    } else {
+      console.log('deleted event', eventID);
+      onSuccess && onSuccess();
+    }
+  })
+}
+
 /* Retrieve available timeslots for intake scheduler
  * Expects the followings params in GET:
- *  - month: a number between 0 and 11 representing which month to retrieve
-<<<<<<< HEAD
+ *  - month: a number between 0 and 11 representing the month that starts the
+ *            the timeperiod of events we are retrieving
  *  - year: a number representing the year to retrieve, defaults to current year
-=======
- *  - year: a number representing the year to retrieve, defaults to current year
->>>>>>> origin/master
  *  - numMonths: The number of months to retrieve, starting at the specified
  *      date. Must be strictly positive, defaults to 1
- * Returns list of events during the given month in the following format:
+ * Returns list of blocked timeslots during the given period in the format:
  *  - [
  *      {
- *         start: an ISO string of the start time of the event,
- *         end: an ISO string of the end time of the event
+ *         start: an ISO string of the start time of the blocked slot,
+ *         end: an ISO string of the end time of the blocked slot
  *      }
  *    ]
  */
@@ -117,6 +135,24 @@ app.get('/scheduler/get-blocked-times', function(req, res) {
         }
 
         var eventItems = data.items;
+        // Delete any events that are still tentative and should be timed out,
+        // and just don't bother reporting them back to the user
+        var i = 0;
+        while (i < eventItems.length) {
+          var item = eventItems[i];
+          var created = item.created;
+          var status = item.status;
+          if (
+            status === 'tentative' && 
+            moment(moment(created) + TENTATIVE_EVENT_TIMEOUT) < now
+          ) {
+            deleteEvent(item.id);
+            eventItems.splice(i, 1);
+          } else {
+            i++;
+          }
+        }
+
         eventItems.map(function(item) {
           var eventStart = item.start && item.start.dateTime;
           var eventEnd = item.end && item.end.dateTime;
@@ -149,12 +185,16 @@ app.get('/scheduler/get-blocked-times', function(req, res) {
 });
 
 
-/* Send request to add a new event to the google calendar
+/* Send request to add a new tentative event to the google calendar
+ * Events created by this API call are only tentative, and should be later 
+ * confirmed once the user submits the finished intake form
+ *
  * Expects the following params in POST:
  * - start: an ISO timestamp of the start time
  * - minutes: the number of minutes the appointment should last for
  *             (we will use this to autogenerate an end time)
- * - userData: any additional user info to store in the description
+ *             (defaults to 30)
+ * - userData: (optional) any additional user info to store in the description
  * Returns a JSON object with the following format:
  * {
  *   'success': true iff event was created,
@@ -187,8 +227,7 @@ app.post('/scheduler/add-event', function(req, res) {
 
   var minutes = parseInt(req.body.minutes);
   if (!minutes || isNaN(minutes) || minutes <= 0) {
-    res.status(403).send('Bad request');
-    return;
+    minutes = 30; // default to half hour appointments
   }
 
   var endTime = moment(startTime).add(minutes, 'minutes').toISOString();
@@ -200,7 +239,7 @@ app.post('/scheduler/add-event', function(req, res) {
     userId
   );
 
-  var title = util.format('Intake appointment (%d minutes)', minutes);
+  var title = '[Tentative] Intake appointment';
 
   // Call Google API to insert an event
   googleCalendar.events.insert({
@@ -214,26 +253,72 @@ app.post('/scheduler/add-event', function(req, res) {
       'start': {
         'dateTime': startTime
       },
+      'status': 'tentative',
       'summary': title,
       'description': description
     },
     // What fields to return from the created event
-    'fields': 'description,summary,start,end,id',
+    'fields': RETURNED_EVENT_FIELDS,
     'auth': googleAuthClient
-  }, function(err, data) {
+  }, function(err, insertedEvent) {
     var success = false;
     var outputEvent = null;
     if (err) {
       console.log('Create event error:', err);
     } else {
       console.log(util.format(
-        '%d-minute appointment added (starting at %s)',
+        'Tentative %d-minute appointment added (starting at %s)',
         minutes,
         moment(startTime).format('h:mm:ssa, MM-DD-YYYY')
       ));
       success = true;
-      outputEvent = data;
+      outputEvent = insertedEvent;
     }
+    res.send({
+      'success': success,
+      'event': outputEvent
+    });
+  });
+});
+
+/* Confirms event by toggling event status from tentative to 'confirmed'
+ *
+ * Takes a single parameter:
+ *   - id: The id of the Google Calendar Event to confirm (should have been 
+ *         generated by a prior insert API call)
+ *
+ * Returns in the same format as the insert API, with a status flag and 
+ * a Google Calendar event resource
+ */
+app.post('/scheduler/confirm-event', function(req, res) {
+  var eventID = req.body.id;
+  if (!eventID) {
+    res.status(403).send('Bad request ID');
+    return;
+  }
+
+  googleCalendar.events.patch({
+    'calendarId': googleAPIKeys.calendarID,
+    'eventId': eventID,
+    'resource': {
+      'status': 'confirmed',
+      'summary': '[Confirmed] Intake appointment'
+    },
+    'fields': RETURNED_EVENT_FIELDS,
+    'auth': googleAuthClient
+  }, function(err, patchedEvent) {
+    var success = false;
+    var outputEvent = null;
+    if(err) {
+      console.log(
+        util.format('Error while patching event %s:', eventID), 
+        err
+      );
+    } else {
+      success = true;
+      outputEvent = patchedEvent;
+    }
+
     res.send({
       'success': success,
       'event': outputEvent
@@ -291,7 +376,7 @@ function startServer() {
       var host = server.address().address;
       var port = server.address().port;
 
-      console.log('Example app listening at http://%s:%s', host, port);
+      console.log('App server listening at http://%s:%s', host, port);
     });
   }, function(err) {
       console.log("failed to authorize Google service account");
