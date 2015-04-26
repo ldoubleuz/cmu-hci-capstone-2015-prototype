@@ -57,7 +57,11 @@ app.get('/scheduler', function(req, res) {
 /* Retrieve available timeslots for intake scheduler
  * Expects the followings params in GET:
  *  - month: a number between 0 and 11 representing which month to retrieve
+<<<<<<< HEAD
  *  - year: a number representing the year to retrieve, defaults to current year
+=======
+ *  - year: a number representing the year to retrieve, defaults to current year
+>>>>>>> origin/master
  *  - numMonths: The number of months to retrieve, starting at the specified
  *      date. Must be strictly positive, defaults to 1
  * Returns list of events during the given month in the following format:
