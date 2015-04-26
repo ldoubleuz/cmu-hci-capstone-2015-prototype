@@ -8,25 +8,119 @@ $(function() {
       $selectedDate = $('#selected-date'),
       $selectedTimeAndDate = $('#selected-time-and-date');
 
-  var selectedTime;
+  var blocked = {},
+      maxMonthsAhead = 3;
 
-  $calendar.datepicker({
-    altField: "#selected-date",
-    onSelect: dateSelected,
-    dateFormat: "MM d, yy",
-    minDate: 0
-  });
+  var BLOCKED_CLASS = 'disabled';
 
+
+  // Unselect previously selected time. Disables blocked times on the selected date.
+  function _dateSelected(dateText, context) {
+    var time = $calendar.datepicker('getDate'),
+        year = time.getFullYear(),
+        month = time.getMonth(),
+        date = time.getDate(),
+        blockedTimesForDate = blocked[year]
+          && blocked[year][month]
+          && blocked[year][month][date];
+
+    $timesOfDay.removeClass('selected').removeClass(BLOCKED_CLASS);
+    $confirmation.addClass('hidden');
+
+    if (blockedTimesForDate) {
+      for (var hour = 9; hour < 16; hour++) {
+        var blockedTimesForHour = blockedTimesForDate[hour] || {};
+        if (blockedTimesForHour[0]) {
+          $('#time-of-day-' + hour + '00').addClass(BLOCKED_CLASS);
+        }
+        if (blockedTimesForHour[30]) {
+          $('#time-of-day-' + hour + '30').addClass(BLOCKED_CLASS);
+        }
+      }
+    }
+  }
+
+
+  // Block the half hour begining at the given time.
+  function _setBlockedHalfHour(time) {
+    var year = time.getFullYear(),
+        month = time.getMonth(),
+        date = time.getDate(),
+        hours = time.getHours(),
+        minutes = time.getMinutes();
+
+    if (blocked[year] === undefined) {
+      blocked[year] = {};
+    }
+    if (blocked[year][month] === undefined) {
+      blocked[year][month] = {};
+    }
+    if (blocked[year][month][date] === undefined) {
+      blocked[year][month][date] = {};
+    }
+    if (blocked[year][month][date][hours] === undefined) {
+      blocked[year][month][date][hours] = {};
+    }
+
+    blocked[year][month][date][hours][minutes] = true;
+  }
+
+
+  /**
+   * Takes an array of blocked times of form:
+   *  {start: milleseconds, end: milleseconds}
+   * Parses times into half hour segments in which appointments can't be made.
+   **/
+  function _initCalendar(blockedTimes) {
+    blockedTimes.forEach(function(blockedTime) {
+      var start = new Date(blockedTime.start.dateTime),
+          end = new Date(blockedTime.end.dateTime),
+          current = new Date(blockedTime.start.dateTime);
+
+      // Make current begin at the half hour before start.
+      current.setMinutes(start.getMinutes() < 30 ? 0 : 30);
+
+      while (current < end) {
+        _setBlockedHalfHour(current);
+        // Increase current by a half an hour (3000000 millesconds)
+        current = new Date(current.getTime() + 3000000);
+      }
+    });
+
+    $calendar.datepicker({
+      altField: "#selected-date",
+      onSelect: _dateSelected,
+      dateFormat: "MM d, yy",
+      minDate: 0,
+      maxDate: '+' + maxMonthsAhead + 'm'
+    });
+  }
+
+
+  // Update the UI with the selected time of day.
   $timesOfDay.click(function() {
-    selectedTime = this.children[0].innerText;
+    // Do nothing if clicked time was blocked
+    if (this.classList.contains(BLOCKED_CLASS)) {
+      return;
+    }
+
+    // Update text for selected time and date.
+    var timeText = this.children[0].innerText,
+        timeAndDateText = timeText + ' ' + $selectedDate.val();
+    $selectedTimeAndDate.text(timeAndDateText);
+
+    // Select the clicked time and unselect the previously selected time.
     $timesOfDay.removeClass('selected');
     this.classList.add('selected');
-    $selectedTimeAndDate.text(selectedTime + ' on ' + $selectedDate.val());
+
+    // Hide the contineu button until the confirmation checkbox is clicked.
+    $confirmation.removeClass('hidden');
     $confirmationCheckmark.addClass('hidden');
     $continueButton.addClass('hidden');
-    $confirmation.removeClass('hidden');
   });
 
+
+  // Toggle whether the confirmation checkmark and continue button are hidden.
   $confirmationCheckbox.click(function() {
     $confirmationCheckmark.toggleClass('hidden');
     if (!$confirmationCheckmark.hasClass('hidden')) {
@@ -37,25 +131,16 @@ $(function() {
     }
   });
 
+
+  // Create an appointment time and move onto intake form
   $continueButton.click(function() {
-    var date = $calendar.datepicker('getDate');
-    var hours = Number(selectedTime.slice(0, selectedTime.indexOf(':')));
-    if (selectedTime.indexOf('PM') !== -1) {
-      hours += 12;
-    }
-    var minutes = selectedTime.indexOf('30') === -1 ? 0 : 30;
-    date.setHours(hours);
-    date.setMinutes(minutes);
+    var appointmentTime = new Date($selectedTimeAndDate.text());
     $.ajax({
+      type: "POST",
       url: '/scheduler/add-event',
-      type: 'POST',
       data: {
-        start: date.toISOString(),
+        start: appointmentTime.toISOString(),
         duration: 30
-      },
-      success: function(data){
-        console.log('success?');
-        console.log(data);
       },
       error: function() {
         console.log('error');
@@ -64,30 +149,16 @@ $(function() {
     });
   });
 
-  function dateSelected(dateText, context) {
-    $timesOfDay.removeClass('selected');
-    $confirmation.addClass('hidden');
-  }
 
-  function initCalendar() {
-
-  }
-
-  function init() {
+  (function init() {
     var today = new Date();
     $.ajax({
-      url: '/scheduler/get-timeslots',
-      method: 'GET',
+      url: '/scheduler/get-blocked-times',
       data: {
         month: today.getMonth(),
-        year: today.getFullYear()
+        year: today.getFullYear(),
+        numMonths: maxMonthsAhead
       }
-    })
-    .success(function(response) {
-      console.log(response);
-      initCalendar();
-    });
-  }
-
-  init();
+    }).success(_initCalendar);
+  })();
 });

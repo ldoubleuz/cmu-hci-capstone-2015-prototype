@@ -33,14 +33,12 @@
 }
 
 #calendar {
-  width: auto;
   text-transform: uppercase;
 }
 
 /* Calendar header */
 #calendar .ui-datepicker-header {
   position: relative;
-  width: 100%;
   padding: 15px 0;
   background-color: #0D4380;
   color: white;
@@ -185,8 +183,21 @@
   margin: 1px;
 }
 
+#time-of-day li.disabled div {
+  color: #A6A6A6;
+  background-color: #C9C9C9;
+  border: 1px solid #DEDEDE;
+}
+
+#time-of-day li.disabled:hover div {
+  color: #A6A6A6;
+  background-color: #C9C9C9;
+  cursor: not-allowed;
+}
+
 #time-of-day li:hover div {
   background-color: #DCF8FF;
+  cursor: pointer;
 }
 
 #time-of-day li.selected div {

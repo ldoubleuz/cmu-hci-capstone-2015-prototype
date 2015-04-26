@@ -5,10 +5,11 @@ $.ajax({
     url: '/scheduler/add-event',
     type: 'POST',
     data: {
-        start: time.toISOString(), 
-        minutes: 30
+        start: time.toISOString(),
+        minutes: 30,
+        userId: string
     },
-    success: function(data){ 
+    success: function(data){
         console.log('success?');
         console.log(data);
     },
