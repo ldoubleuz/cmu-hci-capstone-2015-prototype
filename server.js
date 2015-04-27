@@ -105,8 +105,7 @@ app.get('/scheduler/get-blocked-times', function(req, res) {
   // Retrieve calendar events and convert to output format
   function(err, data) {
     if (err) {
-      console.log('Error fetching events');
-      console.log(err);
+      console.log('Error fetching events', err);
       return res.status(500).send('Server error while fetching calendar');
     }
 
@@ -123,9 +122,7 @@ app.get('/scheduler/get-blocked-times', function(req, res) {
         return false;
       }
       return true;
-    });
-
-    eventItems.map(function(item) {
+    }).map(function(item) {
       return {
         start: new Date(item.start),
         end: new Date(item.end)
@@ -207,27 +204,20 @@ app.post('/scheduler/add-event', function(req, res) {
       userId
       );
 
-  var title = '[Tentative] Intake appointment';
-
   // Call Google API to insert an event
   googleCalendar.events.insert({
-    'calendarId': googleAPIKeys.calendarID,
+    calendarId: googleAPIKeys.calendarID,
     // Make sure to wrap Event objects in a 'resource' dictionary
-    // Holy shit, that was annoying to figure out from the documentation
-    'resource': {
-      'end': {
-        'dateTime': endTime
-      },
-      'start': {
-        'dateTime': startTime
-      },
-      'status': 'tentative',
-      'summary': title,
-      'description': description
+    resource: {
+      end: { dateTime: endTime },
+      start: { dateTime: startTime },
+      status: 'tentative',
+      summary: '[Tentative] Intake appointment',
+      description: description
     },
     // What fields to return from the created event
-    'fields': RETURNED_EVENT_FIELDS,
-    'auth': googleAuthClient
+    fields: RETURNED_EVENT_FIELDS,
+    auth: googleAuthClient
   }, function(err, insertedEvent) {
     var success = false;
     var outputEvent = null;
@@ -263,7 +253,6 @@ app.post('/scheduler/confirm-event', function(req, res) {
   if (!eventID) {
     return res.status(403).send('Bad request ID');
   }
-
   googleCalendar.events.patch({
     'calendarId': googleAPIKeys.calendarID,
     'eventId': eventID,
@@ -274,21 +263,12 @@ app.post('/scheduler/confirm-event', function(req, res) {
     'fields': RETURNED_EVENT_FIELDS,
     'auth': googleAuthClient
   }, function(err, patchedEvent) {
-    var success = false;
-    var outputEvent = null;
     if (err) {
-      console.log(
-          util.format('Error while patching event %s:', eventID),
-          err
-      );
-    } else {
-      success = true;
-      outputEvent = patchedEvent;
+      console.log('Error while patching event: ' + eventID, err);
     }
-
-    res.send({
-      'success': success,
-      'event': outputEvent
+    return res.send({
+      success: !err,
+      event: outputEvent || null
     });
   });
 });

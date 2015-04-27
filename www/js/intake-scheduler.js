@@ -80,11 +80,11 @@ $(function() {
    **/
   function _initCalendar(blockedTimes) {
     var startOfDay = new Date();
-    startOfDay.setHours(0);
+    startOfDay.setHours(OPENING_HOUR);
     var now = new Date();
     blockedTimes.push({
-      start: { dateTime: startOfDay.toJSON()},
-      end: { dateTime: now.toJSON()}
+      start: { dateTime: startOfDay.toISOString()},
+      end: { dateTime: now.toISOString()}
     });
     blockedTimes.forEach(function(blockedTime) {
       var start = new Date(blockedTime.start.dateTime),
