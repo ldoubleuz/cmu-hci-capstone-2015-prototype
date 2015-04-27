@@ -23,12 +23,13 @@ var generateFormContent = (function(){
     var INLINE_OPTIONS_PER_ROW = 4;
     var ID_SEPARATOR = '__';
 
-    function _makeEmptyQuestion(type) {
-        type = 'questiontype_'+type;
+    function _makeEmptyQuestion(type, isOptional) {
+        var type = 'questiontype_'+type;
 
-        return $('<div>')
+        questionDiv = $('<div>')
             .addClass('question form-group')
             .addClass(type);
+        return isOptional ? questionDiv.addClass('is-optional') : questionDiv;
     }
 
     function _makeQuestionTitleHeader(text) {
@@ -126,7 +127,7 @@ var generateFormContent = (function(){
         return $col;
     }
 
-    function _generateDynamicRow(parentId, colDataList, rowIndex) {
+    function _generateDynamicRow(parentId, colDataList, rowId) {
         var $row = $("<li>").addClass('dynamic-row');
 
         for (var colIndex=0; colIndex < colDataList.length; colIndex++) {
@@ -134,7 +135,7 @@ var generateFormContent = (function(){
             var colType = colData.type;
             var colText = colData.text || '';
             var colId = colData.id || '';
-            var uniqueId = [parentId, colId, ''+rowIndex].join("__");
+            var uniqueId = [parentId, colId, ''+rowId].join("__");
 
             var generatorFn = null;
             if (colType == 'text') {
@@ -152,6 +153,14 @@ var generateFormContent = (function(){
             }
         }
 
+        var $deleteButton = $("<button>")
+            .text('Remove row')
+            .addClass('dynamic-row-delete-button');
+        $deleteButton.click(function(e) {
+            e.preventDefault();
+            $row.remove();
+        });
+        $row.append($deleteButton);
         return $row;
     }
 
@@ -161,12 +170,13 @@ var generateFormContent = (function(){
         var $container = $("<ol>").addClass('dynamic-row-container');
 
         var colDataList = data.columns || [];
-        var numRows = 0;
+        var idNum = 0;
+
         var _addRowFn = function() {
             $container.append(
-                _generateDynamicRow(id, colDataList, numRows)
+                _generateDynamicRow(id, colDataList, idNum)
             );
-            numRows++;
+            idNum++;
         };
 
         var $addButton = $("<button>")
@@ -293,6 +303,8 @@ var generateFormContent = (function(){
 
                 var hasTextField = !!optionData.text_input;
                 if (hasTextField) {
+                    $option.addClass('has-text');
+
                     var textFieldId = optionData.text_input_id || optValueId;
                     textFieldId = [
                         "TEXTOPTION",
@@ -476,8 +488,8 @@ var generateFormContent = (function(){
 
     function _generateQuestionContent(text, idName, questionData) {
         var type = questionData.type || 'short-text';
-
-        var $question = _makeEmptyQuestion(type);
+        var isOptional = questionData.optional ? true : false;
+        var $question = _makeEmptyQuestion(type, isOptional);
 
         if (type in _QUESTION_TYPE_GEN_MAP) {
             var generatorFn = _QUESTION_TYPE_GEN_MAP[type];

@@ -7,91 +7,91 @@
  * }
  */
 var Pagination = function($pages, $crumbs, $prevButton, $nextButton, onPageChangeFn) {
-    this.$pages = $pages;
-    this.$crumbs = $crumbs;
-    this.$prevButton = $prevButton;
-    this.$nextButton = $nextButton;
-    this._onPageChangeFn = onPageChangeFn;
+  this.$pages = $pages;
+  this.$crumbs = $crumbs;
+  this.$prevButton = $prevButton;
+  this.$nextButton = $nextButton;
+  this._onPageChangeFn = onPageChangeFn;
 
-    this._currCrumbClass = 'crumb-cur';
-    this._prevCrumbClass = 'crumb-prev';
-    this._nextCrumbClass = 'crumb-next';
+  this._currCrumbClass = 'crumb-cur';
+  this._prevCrumbClass = 'crumb-prev';
+  this._nextCrumbClass = 'crumb-next';
 
-    // setup breadcrumb click listeners
-    for (var i=0; i < this.$crumbs.length; i++) {
-        var $crumb = $(this.$crumbs[i]);
+  // setup breadcrumb click listeners
+  for (var i = 0; i < this.$crumbs.length; i++) {
+    var $crumb = $(this.$crumbs[i]);
 
-        var $page = $(this.$pages[i]);
-        var pageTitle = $page.find('.form-title').text();
+    var $page = $(this.$pages[i]);
+    var pageTitle = $page.find('.form-title').text();
 
-        $crumb.attr('title', pageTitle);
+    $crumb.attr('title', pageTitle);
 
-        $crumb.click(function(index, showPageFn) {
-            return function() {
-                showPageFn(index);
-            };
-        }(i, this.showPage.bind(this)));
-    }
+    $crumb.click(function(index, showPageFn) {
+      return function() {
+        showPageFn(index);
+      };
+    }(i, this.showPage.bind(this)));
+  }
 
-    this._currIndex = 0;
-    this.showPage(this._currIndex);
+  this._currIndex = 0;
+  this.showPage(this._currIndex);
 
-    var scrollToTop = function() {
-        $('body').animate({
-            scrollTop: 0
-        });
-    };
+  var scrollToTop = function() {
+    $('body').animate({
+      scrollTop: 0
+    });
+  };
 
-    // add listeners to prev/next buttons
-    $prevButton.click(function(){
-        this.showPage(this._currIndex-1);
-        scrollToTop();
-    }.bind(this));
+  // add listeners to prev/next buttons
+  $prevButton.click(function() {
+    this.showPage(this._currIndex - 1);
+    scrollToTop();
+  }.bind(this));
 
-    $nextButton.click(function(){
-        this.showPage(this._currIndex+1);
-        scrollToTop();
-    }.bind(this));
+  $nextButton.click(function() {
+    this.showPage(this._currIndex + 1);
+    scrollToTop();
+  }.bind(this));
 
 };
 
 Pagination.prototype.showPage = function(showIndex) {
-    if (!(0 <= showIndex && showIndex < this.$pages.length)) {
-        return;
+  if (!(0 <= showIndex && showIndex < this.$pages.length)) {
+    return;
+  }
+
+  for (var i = 0; i < this.$pages.length; i++) {
+    var $page = $(this.$pages[i]);
+    var $crumb = $(this.$crumbs[i]);
+
+    $crumb.removeClass([
+      this._prevCrumbClass, this._nextCrumbClass, this._currCrumbClass
+    ].join(' '));
+
+    var newCrumbClass = '';
+    if (i === showIndex) {
+      $page.show();
+      newCrumbClass = this._currCrumbClass;
+    } else {
+      $page.hide();
+      if (i < showIndex) {
+        newCrumbClass = this._prevCrumbClass;
+      } else {
+        newCrumbClass = this._nextCrumbClass;
+      }
     }
+    $crumb.addClass(newCrumbClass);
+  }
+  var prevIndex = this._currIndex;
+  this._currIndex = showIndex;
 
-    for (var i=0; i < this.$pages.length; i++) {
-        var $page = $(this.$pages[i]);
-        var $crumb = $(this.$crumbs[i]);
+  if (this._onPageChangeFn) {
+    this._onPageChangeFn({
+      'newIndex': showIndex,
+      'oldIndex': prevIndex,
+      'totalPages': this.$pages.length
+    });
+  }
 
-        $crumb.removeClass([
-            this._prevCrumbClass, this._nextCrumbClass, this._currCrumbClass
-        ].join(' '));
-
-        var newCrumbClass = '';
-        if (i === showIndex) {
-            $page.show();
-            newCrumbClass = this._currCrumbClass;
-        } else {
-            $page.hide();
-            if (i < showIndex) {
-                newCrumbClass = this._prevCrumbClass;
-            } else {
-                newCrumbClass = this._nextCrumbClass;
-            }
-        }
-        $crumb.addClass(newCrumbClass)
-    }
-    var prevIndex = this._currIndex;
-    this._currIndex = showIndex;
-
-    if (this._onPageChangeFn) {
-        this._onPageChangeFn({
-            'newIndex': showIndex,
-            'oldIndex': prevIndex,
-            'totalPages': this.$pages.length
-        });
-    }
-
-    // TODO: enable/disable prev/next buttons accordingly to new index
+  // TODO: enable/disable prev/next buttons accordingly to new index
 };

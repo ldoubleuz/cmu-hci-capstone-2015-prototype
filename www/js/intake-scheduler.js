@@ -11,8 +11,11 @@ $(function() {
   var blocked = {},
       maxMonthsAhead = 3;
 
-  var BLOCKED_CLASS = 'disabled';
-
+  var BLOCKED_CLASS = 'disabled',
+      SELECTED_CLASS = 'selected',
+      HIDDEN_CLASS = 'hidden',
+      OPENING_HOUR = 10,
+      CLOSING_HOUR = 15;
 
   // Unselect previously selected time. Disables blocked times on the selected date.
   function _dateSelected() {
@@ -21,15 +24,18 @@ $(function() {
         month = time.getMonth(),
         date = time.getDate(),
         blockedTimesForDate =
-          blocked[year] &&
-          blocked[year][month] &&
-          blocked[year][month][date];
+            blocked[year] &&
+            blocked[year][month] &&
+            blocked[year][month][date];
 
-    $timesOfDay.removeClass('selected').removeClass(BLOCKED_CLASS);
-    $confirmation.addClass('hidden');
+    $timesOfDay
+      .removeClass(SELECTED_CLASS)
+      .removeClass(BLOCKED_CLASS);
+    $confirmation
+      .addClass(HIDDEN_CLASS);
 
     if (blockedTimesForDate) {
-      for (var hour = 9; hour < 16; hour++) {
+      for (var hour = OPENING_HOUR; hour < CLOSING_HOUR; hour++) {
         var blockedTimesForHour = blockedTimesForDate[hour] || {};
         if (blockedTimesForHour[0]) {
           $('#time-of-day-' + hour + '00').addClass(BLOCKED_CLASS);
@@ -74,33 +80,32 @@ $(function() {
    **/
   function _initCalendar(blockedTimes) {
     var startOfDay = new Date();
-    startOfDay.setHours(0);
+    startOfDay.setHours(OPENING_HOUR);
     var now = new Date();
     blockedTimes.push({
-      start: { dateTime: startOfDay.toJSON()},
-      end: { dateTime: now.toJSON()},
+      start: { dateTime: startOfDay.toISOString()},
+      end: { dateTime: now.toISOString()}
     });
     blockedTimes.forEach(function(blockedTime) {
       var start = new Date(blockedTime.start.dateTime),
           end = new Date(blockedTime.end.dateTime),
           current = new Date(blockedTime.start.dateTime);
-
       // Make current begin at the half hour before start.
       current.setMinutes(start.getMinutes() < 30 ? 0 : 30);
 
       while (current < end) {
         _setBlockedHalfHour(current);
         // Increase current by a half an hour
-        current = new Date(current.getTime() + 30*60000);
+        current = new Date(current.getTime() + 30 * 60000);
       }
-
     });
 
     $calendar.datepicker({
-      altField: "#selected-date",
+      altField: '#selected-date',
       onSelect: _dateSelected,
-      dateFormat: "MM d, yy",
-      minDate: 0,
+      dateFormat: 'MM d, yy',
+      // If its past closing time, scheduling starts tomorrow
+      minDate: now.getHours() < CLOSING_HOUR ? 0 : 1,
       maxDate: '+' + maxMonthsAhead + 'm'
     });
 
@@ -121,24 +126,24 @@ $(function() {
     $selectedTimeAndDate.text(timeAndDateText);
 
     // Select the clicked time and unselect the previously selected time.
-    $timesOfDay.removeClass('selected');
-    this.classList.add('selected');
+    $timesOfDay.removeClass(SELECTED_CLASS);
+    this.classList.add(SELECTED_CLASS);
 
     // Hide the contineu button until the confirmation checkbox is clicked.
-    $confirmation.removeClass('hidden');
-    $confirmationCheckmark.addClass('hidden');
-    $continueButton.addClass('hidden');
+    $confirmation.removeClass(HIDDEN_CLASS);
+    $confirmationCheckmark.addClass(HIDDEN_CLASS);
+    $continueButton.addClass(HIDDEN_CLASS);
   });
 
 
   // Toggle whether the confirmation checkmark and continue button are hidden.
   $confirmationCheckbox.click(function() {
-    $confirmationCheckmark.toggleClass('hidden');
-    if (!$confirmationCheckmark.hasClass('hidden')) {
-      $continueButton.removeClass('hidden');
+    $confirmationCheckmark.toggleClass(HIDDEN_CLASS);
+    if (!$confirmationCheckmark.hasClass(HIDDEN_CLASS)) {
+      $continueButton.removeClass(HIDDEN_CLASS);
     }
     else {
-      $continueButton.addClass('hidden');
+      $continueButton.addClass(HIDDEN_CLASS);
     }
   });
 
@@ -151,13 +156,13 @@ $(function() {
         appointment = $calendar.datepicker('getDate');
 
     if (time.indexOf('PM') !== -1) {
-       hours += 12;
+      hours += 12;
     }
     appointment.setHours(hours);
     appointment.setMinutes(minutes);
 
     $.ajax({
-      type: "POST",
+      type: 'POST',
       url: '/scheduler/add-event',
       data: {
         start: appointment.toISOString(),

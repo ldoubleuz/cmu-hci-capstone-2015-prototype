@@ -7,14 +7,27 @@
   }
 
   function cssPercent(fraction) {
-    return (fraction * 100).toFixed(2) + "%";
+    return (fraction * 100).toFixed(2) + '%';
   }
+
+  function updateProgressIndicator(currPageIndex, totalPages) {
+    var $progress = $('#progress-indicator');
+    var $currIndex = $progress.find('.curr-index');
+    $currIndex.text(currPageIndex);
+
+    var $totalPages = $progress.find('.total-pages');
+    $totalPages.text(totalPages);
+  }
+
   window.onload = function() {
-    var $form = $("#form");
+    var $form = $('#form');
     var $pages = $('.page');
+    var numPages = $pages.length;
+    updateProgressIndicator(1, numPages);
+
     var $prevButton = $('#prev-button');
     var $nextButton = $('#next-button');
-    var $submitButton = $("#submit-button");
+    var $submitButton = $('#submit-button');
 
     // generate appropriate number of breadcrumbs based on JSON
     var $crumbs = [];
@@ -38,8 +51,8 @@
       var leftCss;
       if ($pages.length === 1) {
         leftCss = cssPercent(
-          (wrapperWidth / 2 - crumbWidth / 2) / wrapperWidth
-        );
+            (wrapperWidth / 2 - crumbWidth / 2) / wrapperWidth
+            );
       } else {
         // Distribute the crumbs along a line such that they are
         // evenly spaced, with the first crumb touching the left of
@@ -74,28 +87,28 @@
     });
 
     var pagination = new Pagination(
-      $pages, $crumbs, $prevButton, $nextButton,
-      // On page switch, enable/disable the submit button
-      // accordingly
-      function(pageSwitchData) {
-        var newIndex = pageSwitchData.newIndex;
-        var totalPages = pageSwitchData.totalPages;
+        $pages, $crumbs, $prevButton, $nextButton,
+        // On page switch, enable/disable the submit button
+        // accordingly
+        function(pageSwitchData) {
+          var newIndex = pageSwitchData.newIndex;
+          var totalPages = pageSwitchData.totalPages;
+          updateProgressIndicator(newIndex + 1, totalPages);
+          if (newIndex === totalPages - 1) {
+            $submitButton.show();
+            $nextButton.hide();
+          } else {
+            $submitButton.hide();
+            $nextButton.show();
+          }
+        });
 
-        if (newIndex === totalPages - 1) {
-          $submitButton.show();
-          $nextButton.hide();
-        } else {
-          $submitButton.hide();
-          $nextButton.show();
-        }
-      });
-
-//    $form.on('submit', function(e) {
-//      e.preventDefault();
-//
-//      var $serialized = $form.serializeArray();
-//      console.log($serialized);
-//      alert(JSON.stringify($serialized));
-//    });
+    //    $form.on('submit', function(e) {
+    //      e.preventDefault();
+    //
+    //      var $serialized = $form.serializeArray();
+    //      console.log($serialized);
+    //      alert(JSON.stringify($serialized));
+    //    });
   };
 })();

@@ -125,9 +125,9 @@ app.get('/scheduler', function(req, res) {
 function deleteEvent(eventID, onSuccess, onError) {
   googleApiWithAuthRefresh(
     googleCalendar.events.delete, {
-      'calendarId': googleAPIKeys.calendarID,
-      'eventId': eventID,
-      'auth': googleAuthClient
+      calendarId: googleAPIKeys.calendarID,
+      eventId: eventID,
+      auth: googleAuthClient
     }, function(err) {
       if (err) {
         console.log('error while deleting event', eventID, err);
@@ -138,6 +138,44 @@ function deleteEvent(eventID, onSuccess, onError) {
       }
     }, onError
   );
+}
+
+function combineOverlappingItems(eventItems) {
+  var combinedItems = [];
+  eventItems = eventItems.map(function(item) {
+    return {
+      start: new Date(item.start.dateTime),
+      end: new Date(item.end.dateTime)
+    };
+  });
+  // Remember to sort by start date
+  eventItems.sort(function(itemA, itemB) {
+    return itemA.start - itemB.start;
+  });
+
+  if (eventItems.length > 0) {
+    var currentStart = eventItems[0].start,
+        currentEnd = eventItems[0].end;
+    for (i = 1; i < eventItems.length; i++) {
+      var item = eventItems[i];
+      if (item.start <= currentEnd) {
+        currentEnd = new Date(Math.max(currentEnd, item.end));
+      }
+      else {
+        combinedItems.push({start: currentStart, end: currentEnd});
+        currentStart = item.start;
+        currentEnd = item.end;
+      }
+    }
+    combinedItems.push({start: currentStart, end: currentEnd});
+  }
+
+  return combinedItems.map(function(item) {
+    return {
+      start: {dateTime: item.start},
+      end: {dateTime: item.end}
+    }
+  });
 }
 
 /* Retrieve available timeslots for intake scheduler
@@ -176,84 +214,45 @@ app.get('/scheduler/get-blocked-times', function(req, res) {
   if (!startTime.isValid()) {
     startTime = moment.utc([now.year(), now.month()]);
   }
-  var endTime = moment.utc(startTime).add(numMonths, 'months').startOf('month');
 
-  var startStr = startTime.toISOString();
-  var endStr = endTime.toISOString();
+  var endTime = moment.utc(startTime).add(numMonths, 'months').startOf('month');
 
   // Call google to fetch events on calendar within time period
   googleApiWithAuthRefresh(
     googleCalendar.events.list, {
       calendarId: googleAPIKeys.calendarID,
-      timeMin: startStr,
-      timeMax: endStr,
+      timeMin: startTime.toISOString(),
+      timeMax: endTime.toISOString(),
       singleEvents: true, // split recurring events into single events
       auth: googleAuthClient
-    }, function(err, data) {
-      if(err) {
-        console.log('Error fetching events');
-        console.log(err);
-        res.status(500).send('Server error while fetching calendar');
-      } else {
-          // Retrieve calendar events and convert to output format
-          if (data.items.length === 0) {
-            return res.send([]);
-          }
+    },
+    // Retrieve calendar events and convert to output format
+    function(err, data) {
+      if (err) {
+        console.log('Error fetching events', err);
+        return res.status(500).send('Server error while fetching calendar');
+      }
 
-          var eventItems = data.items;
-          // Delete any events that are still tentative and should be timed out,
-          // and just don't bother reporting them back to the user
-          var i = 0;
-          while (i < eventItems.length) {
-            var item = eventItems[i];
-            var created = item.created;
-            var status = item.status;
-            if (
-              status === 'tentative' && 
-              moment(moment(created) + TENTATIVE_EVENT_TIMEOUT) < now
-            ) {
-              deleteEvent(item.id);
-              eventItems.splice(i, 1);
-            } else {
-              i++;
-            }
-          }
-
-          eventItems.map(function(item) {
-            var eventStart = item.start && item.start.dateTime;
-            var eventEnd = item.end && item.end.dateTime;
-            return {
-              start: new Date(eventStart),
-              end: new Date(eventEnd)
-            };
-          });
-
-          var outputItems = [],
-              currentStart = eventItems[0].start,
-              currentEnd = eventItems[0].end;
-          for (var i=1; i < eventItems.length; i++) {
-            var item = eventItems[i];
-            if (item.start < currentEnd) {
-              currentEnd = Math.max(currentEnd, item.end);
-            }
-            else {
-              outputItems.push({start: currentStart, end: currentEnd});
-              currentStart = item.start;
-              currentEnd = item.end;
-            }
-          }
-          outputItems.push({start: currentStart, end: currentEnd});
-
-          res.send(outputItems);
+      // Delete any events that are still tentative and should be timed out.
+      var eventItems = data.items.filter(function(item) {
+        if (item.status === 'tentative' &&
+            moment(moment(item.created) + TENTATIVE_EVENT_TIMEOUT) < now) {
+          deleteEvent(item.id);
+          return false;
         }
+        return true;
+      });
+
+      var outputItems = combineOverlappingItems(eventItems);
+
+      return res.send(outputItems);
     }, function(){sendServerError(res);}
   );
-  return;
 });
 
 
 /* Send request to add a new tentative event to the google calendar
- * Events created by this API call are only tentative, and should be later 
+ * Events created by this API call are only tentative, and should be later
  * confirmed once the user submits the finished intake form
  *
  * Expects the following params in POST:
@@ -286,8 +285,7 @@ app.post('/scheduler/add-event', function(req, res) {
   var startTime = req.body.start;
   startTime = startTime && moment(startTime);
   if (!startTime || !startTime.isValid()) {
-    res.status(403).send('Bad request');
-    return;
+    return res.status(403).send('Bad request');
   } else {
     startTime = startTime.toISOString();
   }
@@ -301,50 +299,39 @@ app.post('/scheduler/add-event', function(req, res) {
 
   var userId = req.body.userId || '';
   var description = util.format(
-    'Auto-generated at %s\n\nUser ID: %s',
-    moment().format('h:mm:ssa on MM-DD-YYYY'),
-    userId
-  );
-
-  var title = '[Tentative] Intake appointment';
+      'Auto-generated at %s\n\nUser ID: %s',
+      moment().format('h:mm:ssa on MM-DD-YYYY'),
+      userId
+      );
 
   // Call Google API to insert an event
   googleApiWithAuthRefresh(
     googleCalendar.events.insert, {
-      'calendarId': googleAPIKeys.calendarID,
+      calendarId: googleAPIKeys.calendarID,
       // Make sure to wrap Event objects in a 'resource' dictionary
-      // Holy shit, that was annoying to figure out from the documentation
-      'resource': {
-        'end': {
-          'dateTime': endTime
-        },
-        'start': {
-          'dateTime': startTime
-        },
-        'status': 'tentative',
-        'summary': title,
-        'description': description
+      resource: {
+        end: { dateTime: endTime },
+        start: { dateTime: startTime },
+        status: 'tentative',
+        summary: '[Tentative] Intake appointment',
+        description: description
       },
       // What fields to return from the created event
-      'fields': RETURNED_EVENT_FIELDS,
-      'auth': googleAuthClient
+      fields: RETURNED_EVENT_FIELDS,
+      auth: googleAuthClient
     }, function(err, insertedEvent) {
-      var success = false;
-      var outputEvent = null;
       if (err) {
         console.log('Create event error:', err);
       } else {
-        console.log(util.format(
-          'Tentative %d-minute appointment added (starting at %s)',
-          minutes,
-          moment(startTime).format('h:mm:ssa, MM-DD-YYYY')
-        ));
-        success = true;
-        outputEvent = insertedEvent;
+        console.log(
+            util.format(
+                'Tentative %d-minute appointment added (starting at %s)',
+                minutes,
+                moment(startTime).format('h:mm:ssa, MM-DD-YYYY')));
       }
       res.send({
-        'success': success,
-        'event': outputEvent
+        success: !err,
+        event: insertedEvent || null
       });
     }, function(){sendServerError(res);}
   );
@@ -353,17 +340,16 @@ app.post('/scheduler/add-event', function(req, res) {
 /* Confirms event by toggling event status from tentative to 'confirmed'
  *
  * Takes a single parameter:
- *   - id: The id of the Google Calendar Event to confirm (should have been 
+ *   - id: The id of the Google Calendar Event to confirm (should have been
  *         generated by a prior insert API call)
  *
- * Returns in the same format as the insert API, with a status flag and 
+ * Returns in the same format as the insert API, with a status flag and
  * a Google Calendar event resource
  */
 app.post('/scheduler/confirm-event', function(req, res) {
   var eventID = req.body.id;
   if (!eventID) {
-    res.status(403).send('Bad request ID');
-    return;
+    return res.status(403).send('Bad request ID');
   }
   googleApiWithAuthRefresh(
     googleCalendar.events.patch, {
@@ -376,34 +362,24 @@ app.post('/scheduler/confirm-event', function(req, res) {
       'fields': RETURNED_EVENT_FIELDS,
       'auth': googleAuthClient
     }, function(err, patchedEvent) {
-      var success = false;
-      var outputEvent = null;
-      if(err) {
-        console.log(
-          util.format('Error while patching event %s:', eventID), 
-          err
-        );
-      } else {
-        success = true;
-        outputEvent = patchedEvent;
+      if (err) {
+        console.log('Error while patching event: ' + eventID, err);
       }
-
-      res.send({
-        'success': success,
-        'event': outputEvent
+      return res.send({
+        success: !err,
+        event: patchedEvent || null
       });
     }, function(){sendServerError(res);}
   );
 });
 
 app.get('/intake', function(req, res) {
-  // TODO: send along the intake form that corresponds to the animal type
   var animal = req.query.animal;
   var file = 'intake-form-' + animal + '.html',
       options = {
         root: __dirname + '/www/'
       };
-  // First validate that tempplate file exists before sending it to client
+  // Validate that template file exists before sending it to client
   fs.stat(path.join(options.root, file), function(err, stats) {
     if (err || !stats.isFile()) {
       res.status(404).send(util.format('%s not found', file));
@@ -413,11 +389,12 @@ app.get('/intake', function(req, res) {
   });
 });
 
-app.post('/intake/:animalType', function(req, res) {
+app.post('/intake', function(req, res) {
   var animalType = req.query.animalType,
       formBody = req.body,
       intakeQuestionsPath = 'intake_questions/' + animalType + '.json';
 
+  // TODO: store answers with eventID in database.
   var answers = answerParser.parse(formBody);
 });
 
@@ -436,13 +413,16 @@ function authNewGoogleClient(onSuccess, onError) {
 
   newClient.authorize(function(err, tokens) {
     if (err) {
-      onError && onError(err);
-      return;
+      if (onError) {
+        onError(err);
+      }
     } else {
       // Save newly authed client to global variable
       googleAuthClient = newClient;
       console.log('new client authorized:', tokens.access_token);
-      onSuccess && onSuccess();
+      if (onSuccess) {
+        onSuccess();
+      }
     }
   });
 }
@@ -458,8 +438,8 @@ function startServer() {
       console.log('App server listening at http://%s:%s', host, port);
     });
   }, function(err) {
-      console.log("failed to authorize Google service account");
-      console.log(err);
+    console.log('failed to authorize Google service account');
+    console.log(err);
   });
 }
 
@@ -470,7 +450,7 @@ mongoose.connect(mongooseUrl);
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function (callback) {
+db.once('open', function(callback) {
   console.log('MongoDB connection open at ' + mongooseUrl);
 });
 
