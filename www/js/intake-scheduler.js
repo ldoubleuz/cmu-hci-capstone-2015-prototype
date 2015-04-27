@@ -121,8 +121,9 @@ $(function() {
     }
 
     // Update text for selected time and date.
-    var timeText = this.children[0].innerText,
+    var timeText = $(this.children[0]).text(),
         timeAndDateText = timeText + ' ' + $selectedDate.val();
+    console.log(this.children);
     $selectedTimeAndDate.text(timeAndDateText);
 
     // Select the clicked time and unselect the previously selected time.
