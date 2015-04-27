@@ -11,21 +11,72 @@ body {
   min-width: 1024px;
 }
 
+#header {
+  text-align: center;
+  position: relative;
+  margin-top: 24px;
+  margin-bottom: 24px;
+  height: 64px;
+}
+
+#title {
+  font-size: 28px;
+  color: #00477B;
+}
+
+#logo {
+  width: 67px;
+  height: 67px;
+  position: absolute;
+  left: 0;
+}
+
+#animal-type {
+  position: absolute;
+  right: 0;
+}
+
+#animal-type.dog {
+  height: 67px;
+}
+
+#animal-type.small-animal {
+  height: 40px;
+  top: 15px;
+}
+
+#content {
+  min-width: 1024px;
+  margin: auto;
+}
+
+/* Continue Button styles */
+#continue-button {
+  margin-top: 60px;
+  width: 100%;
+  font-size: 24px;
+  background-color: #0E4D72;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: 100;
+}
+
 /* Fonts */
 @font-face {
   font-family: "OpenSans";
-  font-weight: normal;
-  src: url("../fonts/OpenSans-Regular.ttf") format("truetype");
+  font-weight: 500;
+  src: url("/fonts/OpenSans-Regular.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "OpenSans";
-  font-weight: bold;
-  src: url("../fonts/OpenSans-Bold.ttf") format("truetype");
+  font-weight: 700;
+  src: url("/fonts/OpenSans-Bold.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "OpenSans";
-  font-weight: lighter;
-  src: url("../fonts/OpenSans-Light.ttf") format("truetype");
+  font-weight: 300;
+  src: url("/fonts/OpenSans-Light.ttf") format("truetype");
 }

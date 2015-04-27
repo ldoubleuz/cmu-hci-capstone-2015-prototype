@@ -15,32 +15,7 @@ html, body {
 }
 
 body {
-  min-width: 1000px;
-}
-
-#header {
-  text-align: center;
-  position: relative;
-  margin-top: 25px;
-}
-
-#title {
-  font-size: 28px;
-  color: #00477B;
-}
-
-#logo {
-  width: 67px;
-  height: 67px;
-  position: absolute;
-  left: 0;
-}
-
-#dog {
-  width: 85px;
-  height: 67px;
-  position: absolute;
-  right: 0;
+  padding-top: 20px;
 }
 
 #content {
@@ -59,7 +34,7 @@ body {
   z-index: 1;
 }
 
-#form-info {
+#form-container {
   width: 1000px;
   border-style: solid;
   border-width: 1px;
@@ -67,12 +42,6 @@ body {
   padding-top: 15px;
   padding-left: 75px;
   padding-right: 75px;
-}
-
-#buttons {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  position: relative;
 }
 
 .crumb {
@@ -127,16 +96,34 @@ body {
   line-height: 0
 }
 
+#controls {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+#prev-button, #progress-indicator, #next-button, #submit-button {
+  display: inline-block;
+  height: 40px;
+  line-height: 40px;
+}
+
 #prev-button {
   width: 200px;
-  height: 40px;
   background-color: #ffffff;
-  line-height: 40px;
   font-size: 30px;
   color: #32b27c;
   border-style: solid;
   border-width: 1px;
   border-color: #32b27c;
+}
+
+#progress-indicator {
+  left: 200px;
+  position: absolute;
+  right: 200px;
+  text-align: center;
+  top: 0;
 }
 
 #next-button, #submit-button {
@@ -219,6 +206,7 @@ body {
   margin-top: 8px;
 }
 
+<<<<<<< HEAD:intake-form/css/main.css
 .dynamic-row-container {
   padding-left: 15px;
   margin-top: 10px;
@@ -284,6 +272,9 @@ body {
 }
 
 /*Overwriting Bootstrap's rediculousness*/
+=======
+/* Bootstrap overrides */
+>>>>>>> db3d83dc53952a57756bc050cf1fd4aa530fb95b:www/css/intake-form.css
 
 .container {
   width: 1000px !important;

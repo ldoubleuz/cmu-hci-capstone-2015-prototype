@@ -1,0 +1,233 @@
+#header {
+  margin-bottom: 60px;
+}
+
+#header h1 {
+  line-height: 68px;
+}
+
+/* */
+#make-an-appointment {
+  color: #14477E;
+  font-weight: 300;
+  font-size: 32px;
+}
+
+/* */
+#selected-date {
+  color: #14477E;
+  font-weight: 300;
+  font-size: 28px;
+  line-height: 28px;
+  margin-bottom: 10px;
+  background: none;
+  border: none;
+  cursor: default;
+  margin-bottom: 2px;
+}
+
+/* Calendar Styles */
+
+#calendar {
+  text-transform: uppercase;
+}
+
+/* Calendar header */
+#calendar .ui-datepicker-header {
+  position: relative;
+  padding: 15px 0;
+  background-color: #0D4380;
+  color: white;
+  font-size: 18px;
+  text-align: center;
+}
+
+/* Calendar next/previous buttons */
+#calendar .ui-datepicker-prev,
+#calendar .ui-datepicker-next {
+  position: absolute;
+  top: 30px;
+  height: 30px;
+  margin-top: -12px;
+  color: white;
+}
+
+#calendar .ui-datepicker-prev {
+  left: 10px;
+}
+
+#calendar .ui-datepicker-next {
+  right: 10px;
+}
+
+#calendar .ui-datepicker-prev span,
+#calendar .ui-datepicker-next span {
+  width: 0px;
+  height: 0px;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  display: block;
+  text-indent: -99999px;
+}
+
+#calendar .ui-datepicker-prev span {
+  border-right: 10px solid white;
+}
+
+#calendar .ui-datepicker-next span {
+  border-left: 10px solid white;
+}
+
+#calendar .ui-datepicker-prev span:hover {
+  border-right-color: #EFEFEF;
+}
+
+#calendar .ui-datepicker-next span:hover {
+  border-left-color: #EFEFEF;
+}
+
+/* Calendar days/dates */
+#calendar table {
+  border: 2px solid #0D4380;
+  border-collapse: separate;
+  width: 100%;
+  text-align: center;
+  background-color: white;
+}
+
+#calendar thead {
+  background-color: #0D4380;
+}
+
+#calendar th {
+  text-align: center;
+  color: white;
+}
+
+#calendar td {
+  border: 1px solid #EFEFEF;
+}
+
+#calendar td.ui-datepicker-current-day {
+  background-color: #41DC58;
+  color: white;
+}
+
+#calendar td.ui-state-active {
+  background-color: #E0F7FE;
+}
+
+#calendar td:hover {
+  background-color: #E0F7FE;
+}
+
+#calendar td:hover.ui-datepicker-current-day {
+  background-color: #41DC58;
+}
+
+#calendar td.ui-datepicker-unselectable:hover {
+  background-color: white;
+  cursor: default !important;
+}
+
+#calendar td .ui-state-default {
+  text-align: center;
+  color: #79929D;
+  height: 100%;
+  width: 100%;
+  display: inline-block;
+  line-height: 50px;
+}
+
+#calendar td.ui-datepicker-unselectable .ui-state-default {
+  color: white;
+}
+
+#calendar td a:focus,
+#calendar td a:hover {
+  text-decoration: none;
+}
+
+#calendar td a.ui-state-active {
+  color: white;
+}
+
+
+/* time-of-day styles */
+#time-of-day {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+#time-of-day li {
+  display: inline-block;
+  width: 10%;
+  float: left;
+  background-color: white;
+  color: #79929D;
+  line-height: 85px;
+  font-size: 12px;
+}
+
+#time-of-day li div {
+  border: 1px solid #41DC58;
+  padding-left: 2px;
+  margin: 1px;
+}
+
+#time-of-day li.disabled div {
+  color: #A6A6A6;
+  background-color: #C9C9C9;
+  border: 1px solid #DEDEDE;
+}
+
+#time-of-day li.disabled:hover div {
+  color: #A6A6A6;
+  background-color: #C9C9C9;
+  cursor: not-allowed;
+}
+
+#time-of-day li:hover div {
+  background-color: #DCF8FF;
+  cursor: pointer;
+}
+
+#time-of-day li.selected div {
+  background-color: #41DC58;
+  color: white;
+}
+
+/* Confirmation checkbox */
+#confirmation-checkbox-container {
+  position: relative;
+  margin-top: 35px;
+}
+
+#confirmation-checkbox {
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  border: 1px solid #0D4380;
+}
+
+#confirmation-checkmark {
+  position: absolute;
+  top: 0px;
+  bottom: 0;
+  left: 20px;
+  right: -20px;
+}
+
+.hidden {
+  display: none;
+}
+
+#confirmation-checkbox-container:hover #confirmation-checkbox {
+  background-color: #DCF8FF;
+}
+
+

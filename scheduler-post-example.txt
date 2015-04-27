@@ -1,0 +1,36 @@
+// 12:30pm on April 23, 2015
+var time = new Date(2015, 3, 23, 12, 30);
+
+$.ajax({
+    url: '/scheduler/add-event',
+    type: 'POST',
+    data: {
+        start: time.toISOString(),
+        minutes: 30
+    },
+    success: function(data){
+        console.log('success?', data.success);
+        console.log(data);
+
+        // Toggle event from tentative to confirmed
+        $.ajax({
+            url: '/scheduler/confirm-event',
+            type: 'POST',
+            data: {
+                id: data.event.id
+            },
+            success: function(data) {
+                console.log('confirm success', data.success),
+                console.log(data);
+            },
+            error: function() {
+                console.log('confirm error');
+                console.log(arguments);
+            }
+        });
+    },
+    error: function() {
+        console.log('error');
+        console.log(arguments);
+    }
+});
