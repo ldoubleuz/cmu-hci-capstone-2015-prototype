@@ -127,7 +127,7 @@ var generateFormContent = (function(){
         return $col;
     }
 
-    function _generateDynamicRow(parentId, colDataList, rowIndex) {
+    function _generateDynamicRow(parentId, colDataList, rowId) {
         var $row = $("<li>").addClass('dynamic-row');
 
         for (var colIndex=0; colIndex < colDataList.length; colIndex++) {
@@ -135,7 +135,7 @@ var generateFormContent = (function(){
             var colType = colData.type;
             var colText = colData.text || '';
             var colId = colData.id || '';
-            var uniqueId = [parentId, colId, ''+rowIndex].join("__");
+            var uniqueId = [parentId, colId, ''+rowId].join("__");
 
             var generatorFn = null;
             if (colType == 'text') {
@@ -153,6 +153,14 @@ var generateFormContent = (function(){
             }
         }
 
+        var $deleteButton = $("<button>")
+            .text('Remove row')
+            .addClass('dynamic-row-delete-button');
+        $deleteButton.click(function(e) {
+            e.preventDefault();
+            $row.remove();
+        });
+        $row.append($deleteButton);
         return $row;
     }
 
@@ -162,12 +170,13 @@ var generateFormContent = (function(){
         var $container = $("<ol>").addClass('dynamic-row-container');
 
         var colDataList = data.columns || [];
-        var numRows = 0;
+        var idNum = 0;
+
         var _addRowFn = function() {
             $container.append(
-                _generateDynamicRow(id, colDataList, numRows)
+                _generateDynamicRow(id, colDataList, idNum)
             );
-            numRows++;
+            idNum++;
         };
 
         var $addButton = $("<button>")

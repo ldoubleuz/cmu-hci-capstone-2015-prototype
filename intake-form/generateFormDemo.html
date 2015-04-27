@@ -34,6 +34,10 @@
                 </form>
             </div>
         </div>
+        <div id="error-box">
+            Alert! You have not completed all the questions on this page.
+            Please fill out all highlighted questions to continue.
+        </div>
         <div id="buttons" class="container">
             <button id="prev-button">
                 Previous
@@ -48,6 +52,7 @@
         <script src="js/jquery.min.js"></script>
         <script src="js/generateFormContent.js"></script>
         <script src="js/pagination.js"></script>
+        <script src="js/validateForm.js"></script>
         <script>
         function loadFormJson(callbackFn) {
             var filePath = 'js/dog_form_questions.json';
@@ -141,10 +146,13 @@
                 var $prevButton = $('#prev-button');
                 var $nextButton = $('#next-button');
                 var $submitButton = $("#submit-button");
+                var $lastPage = $pages[$pages.length-1];
 
                 $submitButton.on('click', function(e) {
                     e.preventDefault();
-                    $form.submit();
+                    if (validateForm($lastPage)) {
+                        $form.submit();
+                    }
                 });
 
                 var pagination = new Pagination(
@@ -162,7 +170,8 @@
                             $submitButton.hide();
                             $nextButton.show();
                         }
-                    }
+                    },
+                    validateForm
                 );
 
                 // TODO: remove this once we no longer need to debug the form

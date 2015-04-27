@@ -42,7 +42,7 @@
                     {
                         "type": "radio",
                         "id": "gender",
-                        "text": "Gender",
+                        "text": "",
                         "options":[
                             {
                              "value":"Male",
