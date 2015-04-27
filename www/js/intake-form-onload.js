@@ -93,7 +93,7 @@
         function(pageSwitchData) {
           var newIndex = pageSwitchData.newIndex;
           var totalPages = pageSwitchData.totalPages;
-
+          updateProgressIndicator(newIndex+1, totalPages);
           if (newIndex === totalPages - 1) {
             $submitButton.show();
             $nextButton.hide();
