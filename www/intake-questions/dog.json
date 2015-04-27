@@ -34,45 +34,57 @@
                "id":"zip_code"
             },
             {
-               "type":"multi-text",
+               "type":"dynamic-row",
                "question":"Including yourself, how many people of the following ages live in your home?",
                "id":"ages_in_household",
-               "columns":[
+                "columns": [
                   {
-                     "value":"0-3 yrs",
-                     "id":"0-3"
+                      "type": "radio",
+                      "id": "gender",
+                      "text": "",
+                      "options": [
+                          {
+                           "value":"Male",
+                           "id":"male"
+                          },
+                          {
+                           "value":"Female",
+                           "id":"female"
+                          }
+                      ]
                   },
-                  {
-                     "value":"4-9 yrs",
-                     "id":"4-9"
-                  },
-                  {
-                     "value":"10-17 yrs",
-                     "id":"10-17"
-                  },
-                  {
-                     "value":"18-29 yrs",
-                     "id":"18-29"
-                  },
-                  {
-                     "value":"30-59 yrs",
-                     "id":"30-59"
-                  },
-                  {
-                     "value":"60+",
-                     "id":"60+"
-                  }
-               ],
-               "rows":[
-                  {
-                     "value":"Male",
-                     "id":"male"
-                  },
-                  {
-                     "value":"Female",
-                     "id":"female"
-                  }
-               ]
+                    {
+                        "type": "dropdown",
+                        "text": "Age",
+                        "id": "age",
+                        "options": [
+                            {
+                             "value":"0-3 yrs",
+                             "id":"0-3"
+                            },
+                            {
+                             "value":"4-9 yrs",
+                             "id":"4-9"
+                            },
+                            {
+                             "value":"10-17 yrs",
+                             "id":"10-17"
+                            },
+                            {
+                             "value":"18-29 yrs",
+                             "id":"18-29"
+                            },
+                            {
+                             "value":"30-59 yrs",
+                             "id":"30-59"
+                            },
+                            {
+                             "value":"60+",
+                             "id":"60+"
+                            }
+                        ]
+                    }
+                  ]
             }
          ]
       },

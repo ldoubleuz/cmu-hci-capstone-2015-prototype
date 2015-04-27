@@ -206,7 +206,6 @@ body {
   margin-top: 8px;
 }
 
-<<<<<<< HEAD:intake-form/css/main.css
 .dynamic-row-container {
   padding-left: 15px;
   margin-top: 10px;
@@ -242,7 +241,7 @@ body {
   color: #ffffff;
   border-style: solid;
   border-width: 1px;
-  border-color: #32b27c;  
+  border-color: #32b27c;
 }
 
 .dynamic-row-delete-button {
@@ -251,8 +250,8 @@ body {
   color: #ffffff;
   border-style: solid;
   border-width: 1px;
-  border-color: #32b27c;  
- 
+  border-color: #32b27c;
+
 }
 
 .unanswered-question {
@@ -271,11 +270,7 @@ body {
   display: none;
 }
 
-/*Overwriting Bootstrap's rediculousness*/
-=======
 /* Bootstrap overrides */
->>>>>>> db3d83dc53952a57756bc050cf1fd4aa530fb95b:www/css/intake-form.css
-
 .container {
   width: 1000px !important;
   max-width: none !important;

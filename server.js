@@ -375,7 +375,16 @@ app.post('/scheduler/confirm-event', function(req, res) {
 
 app.get('/intake', function(req, res) {
   var animal = req.query.animal;
-  var file = 'intake-form-' + animal + '.html',
+  var file = 'intake-form-base.html',
+      options = {
+        root: __dirname + '/www/'
+      };
+  res.sendFile(file, options);
+});
+
+app.get('/get-intake-questions', function(req, res) {
+  var animal = req.query.animal;
+  var file = 'intake-questions/' + animal + '.json',
       options = {
         root: __dirname + '/www/'
       };
@@ -390,6 +399,7 @@ app.get('/intake', function(req, res) {
 });
 
 app.post('/intake', function(req, res) {
+  console.log('TODO: handle submit', req.body);
   var animalType = req.query.animalType,
       formBody = req.body,
       intakeQuestionsPath = 'intake_questions/' + animalType + '.json';
