@@ -7,7 +7,8 @@ How to install dependencies:
 How to run:
 - From the top-level project directory, run "mongod --dbpath=db"
 - From the top-level project directory, run "node server.js" in another terminal
-- In a browser, visit http://localhost:3000
+- In a browser, visit http://localhost:3000/your-url-here. For example, 
+   http://localhost:3000/scheduler
 - good job you did it
 
 If you get an error about not being to find the googleAPIKeys modules, make sure
