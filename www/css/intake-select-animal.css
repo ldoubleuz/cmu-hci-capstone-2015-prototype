@@ -14,7 +14,7 @@
   color: #0E4D72;
 }
 
-.animal {
+.animal-wrapper .animal {
   height: 128px;
   border: 1px solid #00AE61;
   border-radius: 5px;
@@ -26,27 +26,23 @@
   border: 1px solid #0E4D72;
 }
 
-.animal-wrapper.selected h4 {
-  color: #0E4D72;
-}
-
-.animal#dog {
+.animal-wrapper .animal#dog {
   background-image: url('/img/dog.png');
 }
 
-.animal#cat {
+.animal-wrapper .animal#cat {
   background-image: url('/img/cat.png');
 }
 
-.animal#rabbit {
+.animal-wrapper .animal#rabbit {
   background-image: url('/img/rabbit.png');
 }
 
-.animal#reptile {
+.animal-wrapper .animal#reptile {
   background-image: url('/img/reptile.png');
 }
 
-.animal#small-animal {
+.animal-wrapper .animal#small-animal {
   background-image: url('/img/small_animal.png');
 }
 
@@ -55,4 +51,8 @@
   color: #00AE61;
   font-size: 28px;
   text-align: center;
+}
+
+.animal-wrapper.selected h4 {
+  color: #0E4D72;
 }
