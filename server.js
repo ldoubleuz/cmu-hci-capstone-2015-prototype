@@ -15,17 +15,77 @@ var serverPort = 3000;
 
 // Google calendar authentication info
 var googleCalendar = google.calendar('v3');
-var googleAuthClient = null; // To be setup by _initGoogleClient
+var googleAuthClient = null; // To be setup by authNewGoogleClient
 // What fields google calendar event resources returned by api calls should have
 var RETURNED_EVENT_FIELDS = 'description,summary,start,end,id,status,created';
 // How long to block off an unconfirmed intake appointment event timeslot before
 // freeing it back up for other users
-var TENTATIVE_EVENT_TIMEOUT = moment.duration(1, 'day');
+var TENTATIVE_EVENT_TIMEOUT = moment.duration(12, 'hours');
 
 var app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(express.static('./www'));
+
+// Wrapper function for any google API call, in order to automatically refresh
+// the authclient when the accesstoken expires. Takes the api function to call,
+// the input data that would have been passed to the api call, and the callback
+// function that would be handled during the api response.
+function googleApiWithAuthRefresh(apiFn, inputData, callbackFn, onFailedAuth) {
+  var apiAttempts = 0;
+  var maxAttempts = 4;
+
+  function _attemptReauth() {
+    authNewGoogleClient(
+      function(){_attemptApiCall(false)}, 
+      function(){_attemptApiCall(true)}
+    );
+  }
+
+  function _attemptApiCall(justFailedAuthAttempt) {
+    if (apiAttempts >= maxAttempts) {
+      console.log("unable to reauthorize client, giving up...");
+      onFailedAuth && onFailedAuth();
+      return;
+    }
+
+    apiAttempts++;
+    if (justFailedAuthAttempt || (!googleAuthClient)) {
+      // Skip straight to auth attempt to get a working client before moving 
+      // to original api call
+      _attemptReauth();
+    } else {
+      // Rebuild input, since the googleAuthClient variable may have been
+      // changed by a reauth attempt
+      var localInput = {};
+      for (key in inputData)  {
+        if (key === 'auth') {
+          localInput.auth = googleAuthClient;
+        } else {
+          localInput[key] = inputData[key];
+        }
+      }
+
+      apiFn(localInput, function(err, response) {
+        // Automatically refresh auth client and retry original api call
+        // if auth client is unauthorized
+        if (err && err.code === 401) {
+          _attemptReauth();
+        } else {
+          // If authclient didn't fail due to authorization error, 
+          // proceed with api call as normal (note that we may still have 
+          // failed for non-auth reasons)
+          callbackFn && callbackFn(err, response);
+        }
+      });
+    }
+  }
+  _attemptApiCall(false);
+}
+
+function sendServerError(res) {
+  res.status(500).send('Server error');
+}
 
 app.get('/calendar-hello-world', function(req, res) {
   // Stolen from http://www.matt-toigo.com/dev/pulling_google_calendar_events_with_node
@@ -33,23 +93,25 @@ app.get('/calendar-hello-world', function(req, res) {
   var today = moment().format('YYYY-MM-DD') + 'T';
 
   // Call google to fetch events for today on our calendar
-  googleCalendar.events.list({
-    calendarId: googleAPIKeys.calendarID,
-    maxResults: 20,
-    timeMin: today + '00:00:00.000Z',
-    timeMax: today + '23:59:59.000Z',
-    auth: googleAuthClient
-  }, function(err, events) {
-    if(err) {
-      console.log('Error fetching events');
-      console.log(err);
-    } else {
+  googleApiWithAuthRefresh(
+    googleCalendar.events.list, {
+      calendarId: googleAPIKeys.calendarID,
+      maxResults: 20,
+      timeMin: today + '00:00:00.000Z',
+      timeMax: today + '23:59:59.000Z',
+      auth: googleAuthClient
+    }, function(err, events) {
+      if(err) {
+        console.log('Error fetching events');
+        console.log(err);
+      } else {
 
-      // Send our JSON response back to the browser
-      console.log('Successfully fetched events');
-      res.send(events);
-    }
-  });
+        // Send our JSON response back to the browser
+        console.log('Successfully fetched events');
+        res.send(events);
+      }
+    }, function(){sendServerError(res);}
+  );
 });
 
 app.get('/scheduler', function(req, res) {
@@ -61,19 +123,21 @@ app.get('/scheduler', function(req, res) {
 });
 
 function deleteEvent(eventID, onSuccess, onError) {
-  googleCalendar.events.delete({
-    'calendarId': googleAPIKeys.calendarID,
-    'eventId': eventID,
-    'auth': googleAuthClient
-  }, function(err) {
-    if (err) {
-      console.log('error while deleting event', eventID, err);
-      onError && onError();
-    } else {
-      console.log('deleted event', eventID);
-      onSuccess && onSuccess();
-    }
-  })
+  googleApiWithAuthRefresh(
+    googleCalendar.events.delete, {
+      'calendarId': googleAPIKeys.calendarID,
+      'eventId': eventID,
+      'auth': googleAuthClient
+    }, function(err) {
+      if (err) {
+        console.log('error while deleting event', eventID, err);
+        onError && onError();
+      } else {
+        console.log('deleted event', eventID);
+        onSuccess && onSuccess();
+      }
+    }, onError
+  );
 }
 
 /* Retrieve available timeslots for intake scheduler
@@ -118,70 +182,72 @@ app.get('/scheduler/get-blocked-times', function(req, res) {
   var endStr = endTime.toISOString();
 
   // Call google to fetch events on calendar within time period
-  googleCalendar.events.list({
-    calendarId: googleAPIKeys.calendarID,
-    timeMin: startStr,
-    timeMax: endStr,
-    singleEvents: true, // split recurring events into single events
-    auth: googleAuthClient
-  }, function(err, data) {
-    if(err) {
-      console.log('Error fetching events');
-      console.log(err);
-      res.status(500).send('Server error while fetching calendar');
-    } else {
-        // Retrieve calendar events and convert to output format
-        if (data.items.length === 0) {
-          return res.send([]);
-        }
-
-        var eventItems = data.items;
-        // Delete any events that are still tentative and should be timed out,
-        // and just don't bother reporting them back to the user
-        var i = 0;
-        while (i < eventItems.length) {
-          var item = eventItems[i];
-          var created = item.created;
-          var status = item.status;
-          if (
-            status === 'tentative' && 
-            moment(moment(created) + TENTATIVE_EVENT_TIMEOUT) < now
-          ) {
-            deleteEvent(item.id);
-            eventItems.splice(i, 1);
-          } else {
-            i++;
+  googleApiWithAuthRefresh(
+    googleCalendar.events.list, {
+      calendarId: googleAPIKeys.calendarID,
+      timeMin: startStr,
+      timeMax: endStr,
+      singleEvents: true, // split recurring events into single events
+      auth: googleAuthClient
+    }, function(err, data) {
+      if(err) {
+        console.log('Error fetching events');
+        console.log(err);
+        res.status(500).send('Server error while fetching calendar');
+      } else {
+          // Retrieve calendar events and convert to output format
+          if (data.items.length === 0) {
+            return res.send([]);
           }
-        }
 
-        eventItems.map(function(item) {
-          var eventStart = item.start && item.start.dateTime;
-          var eventEnd = item.end && item.end.dateTime;
-          return {
-            start: new Date(eventStart),
-            end: new Date(eventEnd)
-          };
-        });
-
-        var outputItems = [],
-            currentStart = eventItems[0].start,
-            currentEnd = eventItems[0].end;
-        for (var i=1; i < eventItems.length; i++) {
-          var item = eventItems[i];
-          if (item.start < currentEnd) {
-            currentEnd = Math.max(currentEnd, item.end);
+          var eventItems = data.items;
+          // Delete any events that are still tentative and should be timed out,
+          // and just don't bother reporting them back to the user
+          var i = 0;
+          while (i < eventItems.length) {
+            var item = eventItems[i];
+            var created = item.created;
+            var status = item.status;
+            if (
+              status === 'tentative' && 
+              moment(moment(created) + TENTATIVE_EVENT_TIMEOUT) < now
+            ) {
+              deleteEvent(item.id);
+              eventItems.splice(i, 1);
+            } else {
+              i++;
+            }
           }
-          else {
-            outputItems.push({start: currentStart, end: currentEnd});
-            currentStart = item.start;
-            currentEnd = item.end;
-          }
-        }
-        outputItems.push({start: currentStart, end: currentEnd});
 
-        res.send(outputItems);
-      }
-  });
+          eventItems.map(function(item) {
+            var eventStart = item.start && item.start.dateTime;
+            var eventEnd = item.end && item.end.dateTime;
+            return {
+              start: new Date(eventStart),
+              end: new Date(eventEnd)
+            };
+          });
+
+          var outputItems = [],
+              currentStart = eventItems[0].start,
+              currentEnd = eventItems[0].end;
+          for (var i=1; i < eventItems.length; i++) {
+            var item = eventItems[i];
+            if (item.start < currentEnd) {
+              currentEnd = Math.max(currentEnd, item.end);
+            }
+            else {
+              outputItems.push({start: currentStart, end: currentEnd});
+              currentStart = item.start;
+              currentEnd = item.end;
+            }
+          }
+          outputItems.push({start: currentStart, end: currentEnd});
+
+          res.send(outputItems);
+        }
+    }, function(){sendServerError(res);}
+  );
   return;
 });
 
@@ -243,43 +309,45 @@ app.post('/scheduler/add-event', function(req, res) {
   var title = '[Tentative] Intake appointment';
 
   // Call Google API to insert an event
-  googleCalendar.events.insert({
-    'calendarId': googleAPIKeys.calendarID,
-    // Make sure to wrap Event objects in a 'resource' dictionary
-    // Holy shit, that was annoying to figure out from the documentation
-    'resource': {
-      'end': {
-        'dateTime': endTime
+  googleApiWithAuthRefresh(
+    googleCalendar.events.insert, {
+      'calendarId': googleAPIKeys.calendarID,
+      // Make sure to wrap Event objects in a 'resource' dictionary
+      // Holy shit, that was annoying to figure out from the documentation
+      'resource': {
+        'end': {
+          'dateTime': endTime
+        },
+        'start': {
+          'dateTime': startTime
+        },
+        'status': 'tentative',
+        'summary': title,
+        'description': description
       },
-      'start': {
-        'dateTime': startTime
-      },
-      'status': 'tentative',
-      'summary': title,
-      'description': description
-    },
-    // What fields to return from the created event
-    'fields': RETURNED_EVENT_FIELDS,
-    'auth': googleAuthClient
-  }, function(err, insertedEvent) {
-    var success = false;
-    var outputEvent = null;
-    if (err) {
-      console.log('Create event error:', err);
-    } else {
-      console.log(util.format(
-        'Tentative %d-minute appointment added (starting at %s)',
-        minutes,
-        moment(startTime).format('h:mm:ssa, MM-DD-YYYY')
-      ));
-      success = true;
-      outputEvent = insertedEvent;
-    }
-    res.send({
-      'success': success,
-      'event': outputEvent
-    });
-  });
+      // What fields to return from the created event
+      'fields': RETURNED_EVENT_FIELDS,
+      'auth': googleAuthClient
+    }, function(err, insertedEvent) {
+      var success = false;
+      var outputEvent = null;
+      if (err) {
+        console.log('Create event error:', err);
+      } else {
+        console.log(util.format(
+          'Tentative %d-minute appointment added (starting at %s)',
+          minutes,
+          moment(startTime).format('h:mm:ssa, MM-DD-YYYY')
+        ));
+        success = true;
+        outputEvent = insertedEvent;
+      }
+      res.send({
+        'success': success,
+        'event': outputEvent
+      });
+    }, function(){sendServerError(res);}
+  );
 });
 
 /* Confirms event by toggling event status from tentative to 'confirmed'
@@ -297,34 +365,35 @@ app.post('/scheduler/confirm-event', function(req, res) {
     res.status(403).send('Bad request ID');
     return;
   }
+  googleApiWithAuthRefresh(
+    googleCalendar.events.patch, {
+      'calendarId': googleAPIKeys.calendarID,
+      'eventId': eventID,
+      'resource': {
+        'status': 'confirmed',
+        'summary': '[Confirmed] Intake appointment'
+      },
+      'fields': RETURNED_EVENT_FIELDS,
+      'auth': googleAuthClient
+    }, function(err, patchedEvent) {
+      var success = false;
+      var outputEvent = null;
+      if(err) {
+        console.log(
+          util.format('Error while patching event %s:', eventID), 
+          err
+        );
+      } else {
+        success = true;
+        outputEvent = patchedEvent;
+      }
 
-  googleCalendar.events.patch({
-    'calendarId': googleAPIKeys.calendarID,
-    'eventId': eventID,
-    'resource': {
-      'status': 'confirmed',
-      'summary': '[Confirmed] Intake appointment'
-    },
-    'fields': RETURNED_EVENT_FIELDS,
-    'auth': googleAuthClient
-  }, function(err, patchedEvent) {
-    var success = false;
-    var outputEvent = null;
-    if(err) {
-      console.log(
-        util.format('Error while patching event %s:', eventID), 
-        err
-      );
-    } else {
-      success = true;
-      outputEvent = patchedEvent;
-    }
-
-    res.send({
-      'success': success,
-      'event': outputEvent
-    });
-  });
+      res.send({
+        'success': success,
+        'event': outputEvent
+      });
+    }, function(){sendServerError(res);}
+  );
 });
 
 app.get('/intake', function(req, res) {
@@ -356,21 +425,23 @@ app.get('/interview/:id', function(req, res) {
   res.send('TODO: send the actual interview guide');
 });
 
-
-function _initGoogleClient(onSuccess, onError) {
-  console.log('authorizing Google service account...');
-  googleAuthClient = new google.auth.JWT(
+function authNewGoogleClient(onSuccess, onError) {
+  console.log('authorizing new Google service account...');
+  var newClient = new google.auth.JWT(
     googleAPIKeys.serviceAccountEmail,
     googleAPIKeys.serviceKeyPath,
     null,
     ['https://www.googleapis.com/auth/calendar'] // calendar write scope
   );
 
-  googleAuthClient.authorize(function(err, tokens) {
+  newClient.authorize(function(err, tokens) {
     if (err) {
       onError && onError(err);
       return;
     } else {
+      // Save newly authed client to global variable
+      googleAuthClient = newClient;
+      console.log('new client authorized:', tokens.access_token);
       onSuccess && onSuccess();
     }
   });
@@ -379,7 +450,7 @@ function _initGoogleClient(onSuccess, onError) {
 var server = null;
 function startServer() {
   // wait for Google client to authorize service account before starting server
-  _initGoogleClient(function() {
+  authNewGoogleClient(function() {
     server = app.listen(serverPort, 'localhost', 511, function() {
       var host = server.address().address;
       var port = server.address().port;

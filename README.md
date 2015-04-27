@@ -8,3 +8,4 @@ How to run:
 - From the top-level project directory, run "mongod --dbpath=db"
 - From the top-level project directory, run "node app.js" in another terminal
 - In a browser, visit http://localhost:3000
+- good job you did it
