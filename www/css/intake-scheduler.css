@@ -1,10 +1,9 @@
-#header h1 {
-  line-height: 68px;
+#header {
+  margin-bottom: 60px;
 }
 
-#scheduler-container {
-  min-width: 1000px;
-  margin: auto;
+#header h1 {
+  line-height: 68px;
 }
 
 /* */
@@ -28,9 +27,6 @@
 }
 
 /* Calendar Styles */
-#content {
-  margin-top: 60px;
-}
 
 #calendar {
   text-transform: uppercase;
@@ -232,17 +228,6 @@
 
 #confirmation-checkbox-container:hover #confirmation-checkbox {
   background-color: #DCF8FF;
-}
-
-/* Continue Button styles */
-#continue-button {
-  margin-top: 60px;
-  width: auto;
-  font-size: 24px;
-  background-color: #00BD7D;
-  color: white;
-  border: none;
-  font-weight: 100;
 }
 
 
