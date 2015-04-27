@@ -187,8 +187,7 @@ app.post('/scheduler/add-event', function(req, res) {
   var startTime = req.body.start;
   startTime = startTime && moment(startTime);
   if (!startTime || !startTime.isValid()) {
-    res.status(403).send('Bad request');
-    return;
+    return res.status(403).send('Bad request');
   } else {
     startTime = startTime.toISOString();
   }
@@ -222,22 +221,18 @@ app.post('/scheduler/add-event', function(req, res) {
     fields: RETURNED_EVENT_FIELDS,
     auth: googleAuthClient
   }, function(err, insertedEvent) {
-    var success = false;
-    var outputEvent = null;
     if (err) {
       console.log('Create event error:', err);
     } else {
-      console.log(util.format(
-          'Tentative %d-minute appointment added (starting at %s)',
-          minutes,
-          moment(startTime).format('h:mm:ssa, MM-DD-YYYY')
-          ));
-      success = true;
-      outputEvent = insertedEvent;
+      console.log(
+          util.format(
+              'Tentative %d-minute appointment added (starting at %s)',
+              minutes,
+              moment(startTime).format('h:mm:ssa, MM-DD-YYYY')));
     }
     res.send({
-      'success': success,
-      'event': outputEvent
+      success: !err,
+      event: outputEvent || null
     });
   });
 });
