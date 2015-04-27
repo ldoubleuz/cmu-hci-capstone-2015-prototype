@@ -55,6 +55,27 @@ function deleteEvent(eventID, onSuccess, onError) {
   });
 }
 
+function combineOverlappingItems(eventItems) {
+  var combinedItems = [];
+  if (eventItems.length > 0) {
+    var currentStart = eventItems[0].start,
+        currentEnd = eventItems[0].end;
+    for (i = 1; i < eventItems.length; i++) {
+      var item = eventItems[i];
+      if (item.start < currentEnd) {
+        currentEnd = Math.max(currentEnd, item.end);
+      }
+      else {
+        combinedItems.push({start: currentStart, end: currentEnd});
+        currentStart = item.start;
+        currentEnd = item.end;
+      }
+    }
+    combinedItems.push({start: currentStart, end: currentEnd});
+  }
+  return combinedItems;
+}
+
 /* Retrieve available timeslots for intake scheduler
  * Expects the followings params in GET:
  *  - month: a number between 0 and 11 representing the month that starts the
@@ -110,10 +131,6 @@ app.get('/scheduler/get-blocked-times', function(req, res) {
     }
 
     var eventItems = data.items;
-    if (eventItems.length === 0) {
-      return res.send([]);
-    }
-
     // Delete any events that are still tentative and should be timed out.
     eventItems.filter(function(item) {
       if (item.status === 'tentative' &&
@@ -129,21 +146,7 @@ app.get('/scheduler/get-blocked-times', function(req, res) {
       };
     });
 
-    var outputItems = [],
-        currentStart = eventItems[0].start,
-        currentEnd = eventItems[0].end;
-    for (i = 1; i < eventItems.length; i++) {
-      var item = eventItems[i];
-      if (item.start < currentEnd) {
-        currentEnd = Math.max(currentEnd, item.end);
-      }
-      else {
-        outputItems.push({start: currentStart, end: currentEnd});
-        currentStart = item.start;
-        currentEnd = item.end;
-      }
-    }
-    outputItems.push({start: currentStart, end: currentEnd});
+    var outputItems = combineOverlappingItems(eventItems);
 
     return res.send(outputItems);
   });
