@@ -37,28 +37,28 @@ function googleApiWithAuthRefresh(apiFn, inputData, callbackFn, onFailedAuth) {
 
   function _attemptReauth() {
     authNewGoogleClient(
-      function(){_attemptApiCall(false)}, 
-      function(){_attemptApiCall(true)}
+        function() {_attemptApiCall(false);},
+        function() {_attemptApiCall(true);}
     );
   }
 
   function _attemptApiCall(justFailedAuthAttempt) {
     if (apiAttempts >= maxAttempts) {
-      console.log("unable to reauthorize client, giving up...");
+      console.log('unable to reauthorize client, giving up...');
       onFailedAuth && onFailedAuth();
       return;
     }
 
     apiAttempts++;
     if (justFailedAuthAttempt || (!googleAuthClient)) {
-      // Skip straight to auth attempt to get a working client before moving 
+      // Skip straight to auth attempt to get a working client before moving
       // to original api call
       _attemptReauth();
     } else {
       // Rebuild input, since the googleAuthClient variable may have been
       // changed by a reauth attempt
       var localInput = {};
-      for (key in inputData)  {
+      for (var key in inputData) {
         if (key === 'auth') {
           localInput.auth = googleAuthClient;
         } else {
@@ -72,8 +72,8 @@ function googleApiWithAuthRefresh(apiFn, inputData, callbackFn, onFailedAuth) {
         if (err && err.code === 401) {
           _attemptReauth();
         } else {
-          // If authclient didn't fail due to authorization error, 
-          // proceed with api call as normal (note that we may still have 
+          // If authclient didn't fail due to authorization error,
+          // proceed with api call as normal (note that we may still have
           // failed for non-auth reasons)
           callbackFn && callbackFn(err, response);
         }
@@ -94,23 +94,23 @@ app.get('/calendar-hello-world', function(req, res) {
 
   // Call google to fetch events for today on our calendar
   googleApiWithAuthRefresh(
-    googleCalendar.events.list, {
-      calendarId: googleAPIKeys.calendarID,
-      maxResults: 20,
-      timeMin: today + '00:00:00.000Z',
-      timeMax: today + '23:59:59.000Z',
-      auth: googleAuthClient
-    }, function(err, events) {
-      if(err) {
-        console.log('Error fetching events');
-        console.log(err);
-      } else {
+      googleCalendar.events.list, {
+        calendarId: googleAPIKeys.calendarID,
+        maxResults: 20,
+        timeMin: today + '00:00:00.000Z',
+        timeMax: today + '23:59:59.000Z',
+        auth: googleAuthClient
+      }, function(err, events) {
+        if (err) {
+          console.log('Error fetching events');
+          console.log(err);
+        } else {
 
-        // Send our JSON response back to the browser
-        console.log('Successfully fetched events');
-        res.send(events);
-      }
-    }, function(){sendServerError(res);}
+          // Send our JSON response back to the browser
+          console.log('Successfully fetched events');
+          res.send(events);
+        }
+      }, function() {sendServerError(res);}
   );
 });
 
@@ -124,19 +124,19 @@ app.get('/scheduler', function(req, res) {
 
 function deleteEvent(eventID, onSuccess, onError) {
   googleApiWithAuthRefresh(
-    googleCalendar.events.delete, {
-      calendarId: googleAPIKeys.calendarID,
-      eventId: eventID,
-      auth: googleAuthClient
-    }, function(err) {
-      if (err) {
-        console.log('error while deleting event', eventID, err);
-        onError && onError();
-      } else {
-        console.log('deleted event', eventID);
-        onSuccess && onSuccess();
-      }
-    }, onError
+      googleCalendar.events.delete, {
+        calendarId: googleAPIKeys.calendarID,
+        eventId: eventID,
+        auth: googleAuthClient
+      }, function(err) {
+        if (err) {
+          console.log('error while deleting event', eventID, err);
+          onError && onError();
+        } else {
+          console.log('deleted event', eventID);
+          onSuccess && onSuccess();
+        }
+      }, onError
   );
 }
 
@@ -174,7 +174,7 @@ function combineOverlappingItems(eventItems) {
     return {
       start: {dateTime: item.start},
       end: {dateTime: item.end}
-    }
+    };
   });
 }
 
@@ -219,34 +219,34 @@ app.get('/scheduler/get-blocked-times', function(req, res) {
 
   // Call google to fetch events on calendar within time period
   googleApiWithAuthRefresh(
-    googleCalendar.events.list, {
-      calendarId: googleAPIKeys.calendarID,
-      timeMin: startTime.toISOString(),
-      timeMax: endTime.toISOString(),
-      singleEvents: true, // split recurring events into single events
-      auth: googleAuthClient
-    },
-    // Retrieve calendar events and convert to output format
-    function(err, data) {
-      if (err) {
-        console.log('Error fetching events', err);
-        return res.status(500).send('Server error while fetching calendar');
-      }
-
-      // Delete any events that are still tentative and should be timed out.
-      var eventItems = data.items.filter(function(item) {
-        if (item.status === 'tentative' &&
-            moment(moment(item.created) + TENTATIVE_EVENT_TIMEOUT) < now) {
-          deleteEvent(item.id);
-          return false;
+      googleCalendar.events.list, {
+        calendarId: googleAPIKeys.calendarID,
+        timeMin: startTime.toISOString(),
+        timeMax: endTime.toISOString(),
+        singleEvents: true, // split recurring events into single events
+        auth: googleAuthClient
+      },
+      // Retrieve calendar events and convert to output format
+      function(err, data) {
+        if (err) {
+          console.log('Error fetching events', err);
+          return res.status(500).send('Server error while fetching calendar');
         }
-        return true;
-      });
 
-      var outputItems = combineOverlappingItems(eventItems);
+        // Delete any events that are still tentative and should be timed out.
+        var eventItems = data.items.filter(function(item) {
+          if (item.status === 'tentative' &&
+              moment(moment(item.created) + TENTATIVE_EVENT_TIMEOUT) < now) {
+            deleteEvent(item.id);
+            return false;
+          }
+          return true;
+        });
 
-      return res.send(outputItems);
-    }, function(){sendServerError(res);}
+        var outputItems = combineOverlappingItems(eventItems);
+
+        return res.send(outputItems);
+      }, function() {sendServerError(res);}
   );
 });
 
@@ -306,34 +306,34 @@ app.post('/scheduler/add-event', function(req, res) {
 
   // Call Google API to insert an event
   googleApiWithAuthRefresh(
-    googleCalendar.events.insert, {
-      calendarId: googleAPIKeys.calendarID,
-      // Make sure to wrap Event objects in a 'resource' dictionary
-      resource: {
-        end: { dateTime: endTime },
-        start: { dateTime: startTime },
-        status: 'tentative',
-        summary: '[Tentative] Intake appointment',
-        description: description
-      },
-      // What fields to return from the created event
-      fields: RETURNED_EVENT_FIELDS,
-      auth: googleAuthClient
-    }, function(err, insertedEvent) {
-      if (err) {
-        console.log('Create event error:', err);
-      } else {
-        console.log(
-            util.format(
-                'Tentative %d-minute appointment added (starting at %s)',
-                minutes,
-                moment(startTime).format('h:mm:ssa, MM-DD-YYYY')));
-      }
-      res.send({
-        success: !err,
-        event: insertedEvent || null
-      });
-    }, function(){sendServerError(res);}
+      googleCalendar.events.insert, {
+        calendarId: googleAPIKeys.calendarID,
+        // Make sure to wrap Event objects in a 'resource' dictionary
+        resource: {
+          end: { dateTime: endTime },
+          start: { dateTime: startTime },
+          status: 'tentative',
+          summary: '[Tentative] Intake appointment',
+          description: description
+        },
+        // What fields to return from the created event
+        fields: RETURNED_EVENT_FIELDS,
+        auth: googleAuthClient
+      }, function(err, insertedEvent) {
+        if (err) {
+          console.log('Create event error:', err);
+        } else {
+          console.log(
+              util.format(
+              'Tentative %d-minute appointment added (starting at %s)',
+              minutes,
+              moment(startTime).format('h:mm:ssa, MM-DD-YYYY')));
+        }
+        res.send({
+          success: !err,
+          event: insertedEvent || null
+        });
+      }, function() {sendServerError(res);}
   );
 });
 
@@ -352,24 +352,24 @@ app.post('/scheduler/confirm-event', function(req, res) {
     return res.status(403).send('Bad request ID');
   }
   googleApiWithAuthRefresh(
-    googleCalendar.events.patch, {
-      'calendarId': googleAPIKeys.calendarID,
-      'eventId': eventID,
-      'resource': {
-        'status': 'confirmed',
-        'summary': '[Confirmed] Intake appointment'
-      },
-      'fields': RETURNED_EVENT_FIELDS,
-      'auth': googleAuthClient
-    }, function(err, patchedEvent) {
-      if (err) {
-        console.log('Error while patching event: ' + eventID, err);
-      }
-      return res.send({
-        success: !err,
-        event: patchedEvent || null
-      });
-    }, function(){sendServerError(res);}
+      googleCalendar.events.patch, {
+        'calendarId': googleAPIKeys.calendarID,
+        'eventId': eventID,
+        'resource': {
+          'status': 'confirmed',
+          'summary': '[Confirmed] Intake appointment'
+        },
+        'fields': RETURNED_EVENT_FIELDS,
+        'auth': googleAuthClient
+      }, function(err, patchedEvent) {
+        if (err) {
+          console.log('Error while patching event: ' + eventID, err);
+        }
+        return res.send({
+          success: !err,
+          event: patchedEvent || null
+        });
+      }, function() {sendServerError(res);}
   );
 });
 
@@ -405,11 +405,11 @@ app.get('/interview/:id', function(req, res) {
 function authNewGoogleClient(onSuccess, onError) {
   console.log('authorizing new Google service account...');
   var newClient = new google.auth.JWT(
-    googleAPIKeys.serviceAccountEmail,
-    googleAPIKeys.serviceKeyPath,
-    null,
-    ['https://www.googleapis.com/auth/calendar'] // calendar write scope
-  );
+      googleAPIKeys.serviceAccountEmail,
+      googleAPIKeys.serviceKeyPath,
+      null,
+      ['https://www.googleapis.com/auth/calendar'] // calendar write scope
+      );
 
   newClient.authorize(function(err, tokens) {
     if (err) {
