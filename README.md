@@ -9,3 +9,8 @@ How to run:
 - From the top-level project directory, run "node server.js" in another terminal
 - In a browser, visit http://localhost:3000
 - good job you did it
+
+If you get an error about not being to find the googleAPIKeys modules, make sure
+you have both the .js file and the .pem key files downloaded from the project
+Google Drive under 'Higher Fi Prototype > server keys'. (We don't commit these to
+the Github repo in order to avoid committing passwords to a public repo.)
