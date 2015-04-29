@@ -20,6 +20,10 @@
     var title = field.title || '';
     var value = field.value || '';
 
+    if (value instanceof Array) {
+      value = value.join(', ');
+    }
+
     var $field = $('<div>').addClass('intake-field');
     $field.append(
         $('<span>').addClass('name').text(title)
