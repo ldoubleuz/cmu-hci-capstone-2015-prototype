@@ -506,6 +506,7 @@
             {
                "type":"checkbox",
                "question":"Is your pet accustomed to: (select all that apply)",
+               "id": "pet_accustomed",
                "options":[
                   {
                      "value":"Brushing",
@@ -592,7 +593,7 @@
             {
                "type":"radio",
                "question":"Did your pet have a cage mate? If yes, did they fight?",
-               "id":"bitten",
+               "id":"fight",
                "options":[
                   {
                      "value":"No",
@@ -624,7 +625,7 @@
             {
                "type":"radio",
                "question":"Has your pet lived with children? If yes, what ages?",
-               "id":"bitten",
+               "id":"lived_with_children",
                "options":[
                   {
                      "value":"No",
