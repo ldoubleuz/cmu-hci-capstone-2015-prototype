@@ -86,7 +86,23 @@ window.onload = function() {
         $submitButton.on('click', function(e) {
             e.preventDefault();
             if (validateForm($lastPage)) {
-              $form.submit();
+                var query = $.getQueryParameters();
+                var formFields = $form.serializeArray();
+                $.ajax({
+                    url: '/intake',
+                    method: 'POST',
+                    data: {
+                        id: query.id,
+                        animalType: query.animal,
+                        formFields: formFields
+                    },
+                    success: function(data) {
+                        console.log('submit success', data);
+                    },
+                    error: function() {
+                        console.log('submit error', arguments);
+                    }
+                });
             }
         });
         var pagination = new Pagination(

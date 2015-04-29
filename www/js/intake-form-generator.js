@@ -22,6 +22,8 @@ var generateFormContent = (function(){
     var PAGE_CLASS = 'page';
     var INLINE_OPTIONS_PER_ROW = 4;
     var ID_SEPARATOR = '__';
+    var TEXTOPTION_ID_PREFIX = 'TEXTOPTION';
+    var DYNAMIC_ID_PREFIX = 'DYNAMIC';
 
     function _makeEmptyQuestion(type, isOptional) {
         var type = 'questiontype_'+type;
@@ -135,7 +137,13 @@ var generateFormContent = (function(){
             var colType = colData.type;
             var colText = colData.text || '';
             var colId = colData.id || '';
-            var uniqueId = [parentId, colId, ''+rowId].join("__");
+            var uniqueId = [
+                DYNAMIC_ID_PREFIX, 
+                parentId, 
+                colId, 
+                ''+rowId,
+                ''+colIndex
+            ].join("__");
 
             var generatorFn = null;
             if (colType == 'text') {
@@ -307,7 +315,7 @@ var generateFormContent = (function(){
 
                     var textFieldId = optionData.text_input_id || optValueId;
                     textFieldId = [
-                        "TEXTOPTION",
+                        TEXTOPTION_ID_PREFIX,
                         questionId,
                         textFieldId
                     ].join(ID_SEPARATOR);

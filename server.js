@@ -387,16 +387,16 @@ app.get('/get-intake-questions', function(req, res) {
 });
 
 app.post('/intake', function(req, res) {
-  console.log('TODO: handle submit', req.body);
+  console.log('TODO: handle submit');
   // The google calendar id of the associated event
   var eventID = req.body.id;
 
-  var animalType = req.query.animalType,
-      formBody = req.body,
+  var animalType = req.body.animalType,
+      formFields = req.body.formFields || [],
       intakeQuestionsPath = 'intake_questions/' + animalType + '.json';
 
   // TODO: store answers with eventID in database.
-  var answers = answerParser.parse(formBody);
+  var answers = answerParser.parse(formFields);
 
   // TODO: redirect to selecting a different appointment if they've timed out
   confirmTentativeEvent(eventID, 
