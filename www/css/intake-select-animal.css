@@ -6,14 +6,6 @@
   margin-bottom: 60px;
 }
 
-.animal-wrapper:hover .animal {
-  border: 1px solid #0E4D72;
-}
-
-.animal-wrapper:hover h4 {
-  color: #0E4D72;
-}
-
 .animal-wrapper .animal {
   height: 128px;
   border: 1px solid #00AE61;
@@ -22,7 +14,8 @@
   background-position: center;
 }
 
-.animal-wrapper.selected .animal {
+.animal-wrapper.selected .animal,
+.animal-wrapper:hover .animal {
   border: 1px solid #0E4D72;
 }
 
@@ -78,6 +71,7 @@
   text-align: center;
 }
 
-.animal-wrapper.selected h4 {
+.animal-wrapper.selected h4,
+.animal-wrapper:hover h4 {
   color: #0E4D72;
 }

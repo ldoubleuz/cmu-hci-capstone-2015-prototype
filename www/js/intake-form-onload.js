@@ -1,18 +1,23 @@
 function loadFormJson(callbackFn) {
-    var query = $.getQueryParameters();
-    $.ajax({
-        url: '/get-intake-questions',
-        dataType: 'json',
-        method: 'GET',
-        data: {
-          animal: query.animal
-        },
-        success: callbackFn,
-        error: function() {
-            console.log(arguments);
-            console.log('error, not loaded');
-        }
-    });
+  var animal = $.getQueryParameters().animal,
+      title = animal.replace('-', ' ') + ' Surrender Form';
+
+  $('#animal-type').attr('src', '/img/' + animal + '.png');
+  $('#title').text(title);
+
+  $.ajax({
+      url: '/get-intake-questions',
+      dataType: 'json',
+      method: 'GET',
+      data: {
+        animal: animal
+      },
+      success: callbackFn,
+      error: function() {
+          console.log(arguments);
+          console.log('error, not loaded');
+      }
+  });
 }
 
 function cssPercent(fraction) {

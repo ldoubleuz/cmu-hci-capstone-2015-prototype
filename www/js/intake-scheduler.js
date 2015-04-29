@@ -189,7 +189,7 @@ $(function() {
   (function init() {
     var today = new Date(),
         startTime = today.toUTCString();
-    today.setMonth(today.getMonth() + maxMonthsAhead)
+    today.setMonth(today.getMonth() + maxMonthsAhead);
     var endTime = today.toUTCString();
     $.ajax({
       url: '/scheduler/get-blocked-times',
@@ -198,6 +198,8 @@ $(function() {
         endTime: endTime
       }
     }).success(_initCalendar);
-    console.log(today);
+
+    var animal = $.getQueryParameters().animal;
+    $('#animal-type').attr('src', '/img/' + animal + '.png');
   })();
 });
