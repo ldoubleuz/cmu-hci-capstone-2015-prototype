@@ -522,7 +522,7 @@
             {
                "type":"radio",
                "question":"If you have other cats, how many shared a litter box?",
-               "id":"litter_box_cleaned",
+               "id":"share_litter_box",
                "options":[
                   {
                      "value":"One",
@@ -915,7 +915,7 @@
             {
                "type":"short-text",
                "question":"What is your cat’s favourite game or toy? ",
-               "id":"favourite_treat"
+               "id":"favourite_toy"
             },
             {
                "type":"long-text",
