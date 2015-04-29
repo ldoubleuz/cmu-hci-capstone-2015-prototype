@@ -7,11 +7,16 @@ function parseIntakeFormAnswers(formBody) {
   for (var key in formBody) {
     var parts = key.split('__'),
         questionId,
-        textOptionId;
+        textOptionId,
+        questionAnswer;
 
     if (parts.length === 1) {
       questionId = key;
-      answers[questionId] = formBody[key];
+      questionAnswer = formBody[key];
+      if (questionAnswer instanceof Array) {
+        questionAnswer = questionAnswer.join(', ');
+      }
+      answers[questionId] = questionAnswer;
     }
 
     else if (parts[0] === 'TEXTOPTION') {
