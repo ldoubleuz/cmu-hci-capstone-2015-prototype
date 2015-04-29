@@ -33,12 +33,14 @@
     color: #fff;
     height: 60px;
     padding: 5px;
+    margin-top: 0;
 }
 
 #header #title {
-    text-align: center;
-    margin-top: 7px;
-    font-style: lighter;
+  text-align: center;
+  margin-top: 7px;
+  font-style: lighter;
+  color: white;
 }
 
 #header #back-button {

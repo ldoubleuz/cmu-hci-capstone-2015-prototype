@@ -23,10 +23,11 @@ db.once('open', function(callback) {
 });
 
 // How we plan to store info from the intake form
-var Intake = mongoose.model('intake', {
-  id: String,
+var intakeSchema = new mongoose.Schema({
+  _id: String,
   information: Object
 });
+var Intake = mongoose.model('intake', intakeSchema);
 
 // Google calendar authentication info
 var googleCalendar = google.calendar('v3');
@@ -413,7 +414,7 @@ app.post('/intake', function(req, res) {
   // TODO: store answers with eventID in database.
   var answers = answerParser.parse(formFields),
       intake = new Intake({
-        id: eventID,
+        _id: eventID,
         information: answers
       });
 
@@ -434,8 +435,28 @@ app.post('/intake', function(req, res) {
   );
 });
 
-app.get('/interview/:id', function(req, res) {
-  res.send('TODO: send the actual interview guide');
+app.get('/interview', function(req, res) {
+  var file = 'interview-guide.html',
+      options = {
+        root: __dirname + '/www/'
+      };
+  res.sendFile(file, options);
+});
+
+app.get('/get-interview-information', function(req, res) {
+  var id = req.query.id;
+  console.log(id);
+  if (!id) {
+    console.log('No id supplied when getting interview information');
+    return res.status(400).send('No id supplied');
+  }
+  Intake.findById(id, function(err, found) {
+    if (err) {
+      console.log('No interview information found with id:', id);
+      return res.status(404).send('No information found');
+    }
+    return res.send(found.information);
+  });
 });
 
 function authNewGoogleClient(onSuccess, onError) {
