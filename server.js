@@ -87,33 +87,6 @@ function sendServerError(res) {
   res.status(500).send('Server error');
 }
 
-app.get('/calendar-hello-world', function(req, res) {
-  // Stolen from http://www.matt-toigo.com/dev/pulling_google_calendar_events_with_node
-  // Format today's date
-  var today = moment().format('YYYY-MM-DD') + 'T';
-
-  // Call google to fetch events for today on our calendar
-  googleApiWithAuthRefresh(
-      googleCalendar.events.list, {
-        calendarId: googleAPIKeys.calendarID,
-        maxResults: 20,
-        timeMin: today + '00:00:00.000Z',
-        timeMax: today + '23:59:59.000Z',
-        auth: googleAuthClient
-      }, function(err, events) {
-        if (err) {
-          console.log('Error fetching events');
-          console.log(err);
-        } else {
-
-          // Send our JSON response back to the browser
-          console.log('Successfully fetched events');
-          res.send(events);
-        }
-      }, function() {sendServerError(res);}
-  );
-});
-
 app.get('/scheduler', function(req, res) {
   var file = 'intake-scheduler.html',
       options = {
@@ -170,21 +143,15 @@ function combineOverlappingItems(eventItems) {
     combinedItems.push({start: currentStart, end: currentEnd});
   }
 
-  return combinedItems.map(function(item) {
-    return {
-      start: {dateTime: item.start},
-      end: {dateTime: item.end}
-    };
-  });
+  return combinedItems
 }
 
-/* Retrieve available timeslots for intake scheduler
+/* Retrieve blocked timeslots for intake scheduler
  * Expects the followings params in GET:
- *  - month: a number between 0 and 11 representing the month that starts the
- *            the timeperiod of events we are retrieving
- *  - year: a number representing the year to retrieve, defaults to current year
- *  - numMonths: The number of months to retrieve, starting at the specified
- *      date. Must be strictly positive, defaults to 1
+ *  - startTime: a UTC string of when to start getting timeslots. Defaults to
+ *      the UTC string of when the request is recieved.
+ *  - endTime: a utc string of when to end getting timeslots. Defaults to
+ *      the UTC string of 3 months after the request is recieved.
  * Returns list of blocked timeslots during the given period in the format:
  *  - [
  *      {
@@ -195,27 +162,15 @@ function combineOverlappingItems(eventItems) {
  */
 app.get('/scheduler/get-blocked-times', function(req, res) {
   var now = moment();
-  var month = req.query.month && parseInt(req.query.month);
-  if (!month || isNaN(month) || month < 0 || month > 11) {
-    month = now.month();
-  }
-
-  var numMonths = req.query.numMonths && parseInt(req.query.numMonths);
-  if (!numMonths || isNaN(numMonths)) {
-    numMonths = 1;
-  }
-
-  var year = req.query.year && parseInt(req.query.year);
-  if (!year || isNaN(year)) {
-    year = now.year();
-  }
-
-  var startTime = moment.utc([year, month]);
+  var startTime = moment.utc(req.query.startTime);
   if (!startTime.isValid()) {
-    startTime = moment.utc([now.year(), now.month()]);
+    startTime = moment.utc()
   }
 
-  var endTime = moment.utc(startTime).add(numMonths, 'months').startOf('month');
+  var endTime = moment.utc(req.query.endTime);
+  if (!endTime.isValid()) {
+    endTime = moment.utc(startTime).add(3, 'months')
+  }
 
   // Call google to fetch events on calendar within time period
   googleApiWithAuthRefresh(
@@ -243,7 +198,13 @@ app.get('/scheduler/get-blocked-times', function(req, res) {
           return true;
         });
 
-        var outputItems = combineOverlappingItems(eventItems);
+        var outputItems = combineOverlappingItems(eventItems).map(
+          function(item) {
+            return {
+              start: item.start.toISOString(),
+              end: item.end.toISOString()
+            };
+          });
 
         return res.send(outputItems);
       }, function() {sendServerError(res);}
@@ -375,7 +336,16 @@ app.post('/scheduler/confirm-event', function(req, res) {
 
 app.get('/intake', function(req, res) {
   var animal = req.query.animal;
-  var file = 'intake-form-' + animal + '.html',
+  var file = 'intake-form-base.html',
+      options = {
+        root: __dirname + '/www/'
+      };
+  res.sendFile(file, options);
+});
+
+app.get('/get-intake-questions', function(req, res) {
+  var animal = req.query.animal;
+  var file = 'intake-questions/' + animal + '.json',
       options = {
         root: __dirname + '/www/'
       };
@@ -390,6 +360,7 @@ app.get('/intake', function(req, res) {
 });
 
 app.post('/intake', function(req, res) {
+  console.log('TODO: handle submit', req.body);
   var animalType = req.query.animalType,
       formBody = req.body,
       intakeQuestionsPath = 'intake_questions/' + animalType + '.json';

@@ -6,12 +6,14 @@
  *    'totalPages': The total number of pages we are handling
  * }
  */
-var Pagination = function($pages, $crumbs, $prevButton, $nextButton, onPageChangeFn) {
+var Pagination = function($pages, $crumbs, $prevButton, $nextButton,
+                          onPageChangeFn, validateFormFn ) {
   this.$pages = $pages;
   this.$crumbs = $crumbs;
   this.$prevButton = $prevButton;
   this.$nextButton = $nextButton;
   this._onPageChangeFn = onPageChangeFn;
+  this._validateFormFn = validateFormFn;
 
   this._currCrumbClass = 'crumb-cur';
   this._prevCrumbClass = 'crumb-prev';
@@ -58,6 +60,14 @@ var Pagination = function($pages, $crumbs, $prevButton, $nextButton, onPageChang
 Pagination.prototype.showPage = function(showIndex) {
   if (!(0 <= showIndex && showIndex < this.$pages.length)) {
     return;
+  }
+
+  var validateRes = this._validateFormFn(
+                    this.$pages[this._currIndex],
+                    this._currIndex,
+                    showIndex);
+  if ((!validateRes) && showIndex > this._currIndex) {
+      return;
   }
 
   for (var i = 0; i < this.$pages.length; i++) {
