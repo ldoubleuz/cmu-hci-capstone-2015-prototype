@@ -86,19 +86,7 @@ window.onload = function() {
         $submitButton.on('click', function(e) {
             e.preventDefault();
             if (validateForm($lastPage)) {
-              $.ajax({
-                url: '/intake',
-                method: 'POST',
-                data: {
-                  fields: $form.serializeArray()
-                },
-                success: function(data) {
-                  console.log('submit success', data);
-                },
-                error: function() {
-                  console.log('submit error', arguments);
-                }
-              })
+              $form.submit();
             }
         });
         var pagination = new Pagination(
@@ -119,4 +107,4 @@ window.onload = function() {
             validateForm
         );
     });
-}
+};
