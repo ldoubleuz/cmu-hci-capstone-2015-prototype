@@ -13,6 +13,21 @@ var fs = require('fs'),
 var mongooseUrl = 'mongodb://localhost/test';
 var serverPort = 3000;
 
+// Set up DB connections
+mongoose.connect(mongooseUrl);
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function(callback) {
+  console.log('MongoDB connection open at ' + mongooseUrl);
+});
+
+// How we plan to store info from the intake form
+var Intake = mongoose.model('intake', {
+  id: String,
+  information: Object
+});
+
 // Google calendar authentication info
 var googleCalendar = google.calendar('v3');
 var googleAuthClient = null; // To be setup by authNewGoogleClient
@@ -93,7 +108,7 @@ app.get('/select-an-animal', function(req, res) {
         root: __dirname + '/www/'
       };
   res.sendFile(file, options);
-})
+});
 
 app.get('/scheduler', function(req, res) {
   var file = 'intake-scheduler.html',
@@ -151,7 +166,7 @@ function combineOverlappingItems(eventItems) {
     combinedItems.push({start: currentStart, end: currentEnd});
   }
 
-  return combinedItems
+  return combinedItems;
 }
 
 /* Retrieve blocked timeslots for intake scheduler
@@ -172,12 +187,12 @@ app.get('/scheduler/get-blocked-times', function(req, res) {
   var now = moment();
   var startTime = moment.utc(req.query.startTime);
   if (!startTime.isValid()) {
-    startTime = moment.utc()
+    startTime = moment.utc();
   }
 
   var endTime = moment.utc(req.query.endTime);
   if (!endTime.isValid()) {
-    endTime = moment.utc(startTime).add(3, 'months')
+    endTime = moment.utc(startTime).add(3, 'months');
   }
 
   // Call google to fetch events on calendar within time period
@@ -344,13 +359,13 @@ app.post('/scheduler/confirm-event', function(req, res) {
   if (!eventID) {
     return res.status(403).send('Bad request ID');
   }
-  confirmTentativeEvent(eventID, 
+  confirmTentativeEvent(eventID,
     function(patchedEvent) {
       res.send({
         success: true,
         event: patchedEvent || null
       });
-    }, 
+    },
     function(err) {
       res.send({
         success: false,
@@ -391,22 +406,31 @@ app.post('/intake', function(req, res) {
   // The google calendar id of the associated event
   var eventID = req.body.id;
 
-  var animalType = req.query.animalType,
-      formBody = req.body,
+  var animalType = req.body.animalType,
+      formFields = req.body.formFields,
       intakeQuestionsPath = 'intake_questions/' + animalType + '.json';
 
   // TODO: store answers with eventID in database.
-  var answers = answerParser.parse(formBody);
+  var answers = answerParser.parse(formFields),
+      intake = new Intake({
+        id: eventID,
+        information: answers
+      });
+
+  var errorHandler = function(err) {
+    res.status(500).send('Unable to confirm event');
+  };
 
   // TODO: redirect to selecting a different appointment if they've timed out
-  confirmTentativeEvent(eventID, 
+  confirmTentativeEvent(eventID,
     function(confirmedEvent) {
-      res.send('Confirmed event');
-    }, 
-    function(err) {
-      res.status(500).send('Unable to confirm event');
-    }, 
-    function(){sendServerError(res)}
+      intake.save(function(err) {
+        if (err) return errorHandler(err);
+        res.send('Confirmed event');
+      });
+    },
+    errorHandler,
+    function(){sendServerError(res);}
   );
 });
 
@@ -456,17 +480,3 @@ function startServer() {
 }
 
 startServer();
-
-// Set up DB connections
-mongoose.connect(mongooseUrl);
-
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function(callback) {
-  console.log('MongoDB connection open at ' + mongooseUrl);
-});
-
-// How we plan to store info from the intake form
-var intake = mongoose.model('intake', {
-
-});
