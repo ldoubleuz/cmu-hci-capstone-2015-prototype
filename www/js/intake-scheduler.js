@@ -1,12 +1,12 @@
 $(function() {
   var $calendar = $('#calendar'),
       $timesOfDay = $('#time-of-day li'),
+      $selectedDate = $('#selected-date'),
+      $selectedTimeAndDate = $('#selected-time-and-date'),
+      $confirmation = $('#confirmation'),
       $confirmationCheckbox = $('#confirmation-checkbox-container'),
       $confirmationCheckmark = $('#confirmation-checkmark'),
-      $continueButton = $('#continue-button'),
-      $confirmation = $('#confirmation'),
-      $selectedDate = $('#selected-date'),
-      $selectedTimeAndDate = $('#selected-time-and-date');
+      $continueButton = $('#continue-button');
 
   var blocked = {},
       maxMonthsAhead = 3;
@@ -48,55 +48,55 @@ $(function() {
   }
 
 
-  // Block the half hour begining at the given time.
-  function _setBlockedHalfHour(time) {
-    var year = time.getFullYear(),
-        month = time.getMonth(),
-        date = time.getDate(),
-        hours = time.getHours(),
-        minutes = time.getMinutes();
+  // Block the appointment slot begining at the given time.
+  function _blockAppointmentTime(appointmentTime) {
+    var year = appointmentTime.getFullYear(),
+        month = appointmentTime.getMonth(),
+        date = appointmentTime.getDate(),
+        hours = appointmentTime.getHours(),
+        minutes = appointmentTime.getMinutes();
 
-    if (blocked[year] === undefined) {
-      blocked[year] = {};
-    }
-    if (blocked[year][month] === undefined) {
-      blocked[year][month] = {};
-    }
-    if (blocked[year][month][date] === undefined) {
-      blocked[year][month][date] = {};
-    }
-    if (blocked[year][month][date][hours] === undefined) {
-      blocked[year][month][date][hours] = {};
-    }
+    blocked[year] = blocked[year] || {};
+    blocked[year][month] = blocked[year][month] || {};
+    blocked[year][month][date] = blocked[year][month][date] || {};
+    blocked[year][month][date][hours] = blocked[year][month][date][hours] || {};
 
     blocked[year][month][date][hours][minutes] = true;
   }
 
 
   /**
-   * Takes an array of blocked times of form:
-   *  {start: milleseconds, end: milleseconds}
-   * Parses times into half hour segments in which appointments can't be made.
+   * Takes an array of blocked times of form: {
+   *   start: { dateTime: milleseconds },
+   *   end: { dateTime: milleseconds }
+   * }
+   * And blocks appointments slots that occur during those times.
    **/
   function _initCalendar(blockedTimes) {
-    var startOfDay = new Date();
-    startOfDay.setHours(OPENING_HOUR);
+    var todaysOpening = new Date();
+    todaysOpening.setHours(OPENING_HOUR);
     var now = new Date();
-    blockedTimes.push({
-      start: { dateTime: startOfDay.toISOString()},
-      end: { dateTime: now.toISOString()}
-    });
-    blockedTimes.forEach(function(blockedTime) {
-      var start = new Date(blockedTime.start.dateTime),
-          end = new Date(blockedTime.end.dateTime),
-          current = new Date(blockedTime.start.dateTime);
-      // Make current begin at the half hour before start.
-      current.setMinutes(start.getMinutes() < 30 ? 0 : 30);
 
-      while (current < end) {
-        _setBlockedHalfHour(current);
+    // Block off appointment slots that have already passed today.
+    if (todaysOpening < now) {
+      blockedTimes.push({
+        start: { dateTime: todaysOpening.toISOString()},
+        end: { dateTime: now.toISOString()}
+      });
+    }
+
+    blockedTimes.forEach(function(blockedTime) {
+      var endBlockedTime = new Date(blockedTime.end.dateTime),
+          appointmentTime = new Date(blockedTime.start.dateTime);
+
+      appointmentTime.setMinutes(
+        appointmentTime.getMinutes() < 30 ? 0 : 30
+      );
+
+      while (appointmentTime < endBlockedTime) {
+        _blockAppointmentTime(appointmentTime);
         // Increase current by a half an hour
-        current = new Date(current.getTime() + 30 * 60000);
+        appointmentTime = new Date(appointmentTime.getTime() + 30 * 60000);
       }
     });
 
@@ -123,7 +123,6 @@ $(function() {
     // Update text for selected time and date.
     var timeText = $(this.children[0]).text(),
         timeAndDateText = timeText + ' ' + $selectedDate.val();
-    console.log(this.children);
     $selectedTimeAndDate.text(timeAndDateText);
 
     // Select the clicked time and unselect the previously selected time.
@@ -183,8 +182,7 @@ $(function() {
         }
       },
       error: function() {
-        console.log('error');
-        console.log(arguments);
+        console.log('error', arguments);
       }
     });
   });
