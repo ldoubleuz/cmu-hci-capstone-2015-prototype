@@ -14,7 +14,6 @@ var serverPort = 3000;
 
 // Set up DB connections
 mongoose.connect(mongooseUrl);
-
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function(callback) {
@@ -28,10 +27,26 @@ var intakeSchema = new mongoose.Schema({
 });
 var Intake = mongoose.model('intake', intakeSchema);
 
+// Set up Express Server
 var app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(express.static('./www'));
+var server = null;
+(function startServer() {
+  // wait for Google client to authorize service account before starting server
+  googleCalendarApiCalls.authNewGoogleClient(function() {
+    server = app.listen(serverPort, 'localhost', 511, function() {
+      var host = server.address().address;
+      var port = server.address().port;
+
+      console.log('App server listening at http://%s:%s', host, port);
+    });
+  }, function(err) {
+    console.log('failed to authorize Google service account');
+    console.log(err);
+  });
+})();
 
 
 function sendServerError(res) {
@@ -84,12 +99,12 @@ app.get('/scheduler/get-blocked-times', function(req, res) {
 
   // Call google to fetch events on calendar within time period
   googleCalendarApiCalls.getBlockedTimes(startTime, endTime,
-    function(blockedTimes) {
-      return res.send(blockedTimes);
-    },
-    function() {
-      sendServerError(res);
-    }
+      function(blockedTimes) {
+        return res.send(blockedTimes);
+      },
+      function() {
+        sendServerError(res);
+      }
   );
 });
 
@@ -149,7 +164,7 @@ app.post('/scheduler/add-event', function(req, res) {
 
   // Call Google API to insert an event
   googleCalendarApiCalls.addTentativeEvent(startTime, endTime, description,
-    function(err, insertedEvent) {
+      function(err, insertedEvent) {
         if (err) {
           console.log('Create event error:', err);
         } else {
@@ -164,9 +179,9 @@ app.post('/scheduler/add-event', function(req, res) {
           event: insertedEvent || null
         });
       },
-    function() {
-      sendServerError(res);
-    }
+      function() {
+        sendServerError(res);
+      }
   );
 });
 
@@ -185,20 +200,23 @@ app.post('/scheduler/confirm-event', function(req, res) {
   if (!eventID) {
     return res.status(403).send('Bad request ID');
   }
-  googleCalendarApiCalls.confirmTentativeEvent(eventID,
-    function(patchedEvent) {
-      res.send({
-        success: true,
-        event: patchedEvent || null
-      });
-    },
-    function(err) {
-      res.send({
-        success: false,
-        event: null
-      });
-    },
-    function() {sendServerError(res);}
+  googleCalendarApiCalls.confirmTentativeEvent(
+      eventID,
+      function(patchedEvent) {
+        res.send({
+          success: true,
+          event: patchedEvent || null
+        });
+      },
+      function(err) {
+        res.send({
+          success: false,
+          event: null
+        });
+      },
+      function() {
+        sendServerError(res);
+      }
   );
 });
 
@@ -239,7 +257,6 @@ app.post('/intake', function(req, res) {
       formFields = req.body.formFields || [],
       intakeQuestionsPath = 'intake_questions/' + animalType + '.json';
 
-  // TODO: store answers with eventID in database.
   var answers = answerParser.parse(formFields),
       intake = new Intake({
         _id: eventID,
@@ -247,17 +264,18 @@ app.post('/intake', function(req, res) {
       });
 
   var errorHandler = function(err) {
+    console.log('Unable to confirm event', err);
     res.status(500).send('Unable to confirm event');
   };
 
   // TODO: redirect to selecting a different appointment if they've timed out
   googleCalendarApiCalls.confirmTentativeEvent(eventID,
-    function(confirmedEvent) {
-      intake.save(function(err) {
-        if (err) return errorHandler(err);
-        res.status(200).send('Confirmed');
-      });
-    }, errorHandler
+      function(confirmedEvent) {
+        intake.save(function(err) {
+          if (err) return errorHandler(err);
+          res.status(200).send('Confirmed');
+        });
+      }, errorHandler
   );
 });
 
@@ -286,21 +304,3 @@ app.get('/get-interview-information', function(req, res) {
     return res.send(found.information);
   });
 });
-
-var server = null;
-function startServer() {
-  // wait for Google client to authorize service account before starting server
-  googleCalendarApiCalls.authNewGoogleClient(function() {
-    server = app.listen(serverPort, 'localhost', 511, function() {
-      var host = server.address().address;
-      var port = server.address().port;
-
-      console.log('App server listening at http://%s:%s', host, port);
-    });
-  }, function(err) {
-    console.log('failed to authorize Google service account');
-    console.log(err);
-  });
-}
-
-startServer();
