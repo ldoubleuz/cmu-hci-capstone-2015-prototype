@@ -339,7 +339,7 @@
             {
                "type":"radio",
                "question":"Was it treated by a vet?",
-               "id": "medical_issues",
+               "id": "treated_by_vet",
                "options":[
                   {
                      "value":"Yes",

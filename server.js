@@ -87,6 +87,14 @@ function sendServerError(res) {
   res.status(500).send('Server error');
 }
 
+app.get('/select-an-animal', function(req, res) {
+  var file = 'intake-select-animal.html',
+      options = {
+        root: __dirname + '/www/'
+      };
+  res.sendFile(file, options);
+})
+
 app.get('/scheduler', function(req, res) {
   var file = 'intake-scheduler.html',
       options = {
