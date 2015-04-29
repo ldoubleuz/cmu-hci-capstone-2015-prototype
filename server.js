@@ -306,6 +306,30 @@ app.post('/scheduler/add-event', function(req, res) {
   );
 });
 
+function confirmTentativeEvent(eventID, onSuccess, onError, onAuthFail) {
+  onAuthFail = onAuthFail || function(){};
+
+  googleApiWithAuthRefresh(
+      googleCalendar.events.patch, {
+        'calendarId': googleAPIKeys.calendarID,
+        'eventId': eventID || '',
+        'resource': {
+          'status': 'confirmed',
+          'summary': '[Confirmed] Intake appointment'
+        },
+        'fields': RETURNED_EVENT_FIELDS,
+        'auth': googleAuthClient
+      }, function(err, patchedEvent) {
+        if (err) {
+          console.log('Error while patching event: ' + eventID, err);
+          onError && onError(err);
+        } else {
+          onSuccess && onSuccess(patchedEvent);
+        }
+      }, onAuthFail
+  );
+}
+
 /* Confirms event by toggling event status from tentative to 'confirmed'
  *
  * Takes a single parameter:
@@ -320,25 +344,20 @@ app.post('/scheduler/confirm-event', function(req, res) {
   if (!eventID) {
     return res.status(403).send('Bad request ID');
   }
-  googleApiWithAuthRefresh(
-      googleCalendar.events.patch, {
-        'calendarId': googleAPIKeys.calendarID,
-        'eventId': eventID,
-        'resource': {
-          'status': 'confirmed',
-          'summary': '[Confirmed] Intake appointment'
-        },
-        'fields': RETURNED_EVENT_FIELDS,
-        'auth': googleAuthClient
-      }, function(err, patchedEvent) {
-        if (err) {
-          console.log('Error while patching event: ' + eventID, err);
-        }
-        return res.send({
-          success: !err,
-          event: patchedEvent || null
-        });
-      }, function() {sendServerError(res);}
+  confirmTentativeEvent(eventID, 
+    function(patchedEvent) {
+      res.send({
+        success: true,
+        event: patchedEvent || null
+      });
+    }, 
+    function(err) {
+      res.send({
+        success: false,
+        event: null
+      });
+    },
+    function() {sendServerError(res);}
   );
 });
 
@@ -369,12 +388,26 @@ app.get('/get-intake-questions', function(req, res) {
 
 app.post('/intake', function(req, res) {
   console.log('TODO: handle submit', req.body);
+  // The google calendar id of the associated event
+  var eventID = req.body.id;
+
   var animalType = req.query.animalType,
       formBody = req.body,
       intakeQuestionsPath = 'intake_questions/' + animalType + '.json';
 
   // TODO: store answers with eventID in database.
   var answers = answerParser.parse(formBody);
+
+  // TODO: redirect to selecting a different appointment if they've timed out
+  confirmTentativeEvent(eventID, 
+    function(confirmedEvent) {
+      res.send('Confirmed event');
+    }, 
+    function(err) {
+      res.status(500).send('Unable to confirm event');
+    }, 
+    function(){sendServerError(res)}
+  );
 });
 
 app.get('/interview/:id', function(req, res) {
