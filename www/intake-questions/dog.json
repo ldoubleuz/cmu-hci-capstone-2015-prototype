@@ -378,6 +378,7 @@
             {
                "type":"checkbox",
                "question":"What types of food does your dog eat? (select all that apply)",
+               "id":"food_type",
                "options":[
                   {
                      "value":"Dry",
@@ -407,6 +408,7 @@
             {
                "type":"radio",
                "question":"Where does your dog spend most of its time?",
+               "id":"spends_time",
                "options":[
                   {
                      "value":"Runs Free in House",
@@ -429,6 +431,7 @@
             {
                "type":"checkbox",
                "question":"Where does your dog sleep?",
+               "id":"sleep",
                "options":[
                   {
                      "value":"Cage",
@@ -470,6 +473,7 @@
             {
                "type":"multi-select",
                "question":"How does your dog behave...",
+               "id":"behavior",
                "columns":[
                   {
                      "value":"Unknown",
@@ -514,6 +518,7 @@
             {
                "type":"checkbox",
                "question":"How does your dog act when someone enters the house?",
+               "id":"enters_house",
                "options":[
                   {
                      "value":"Friendly",

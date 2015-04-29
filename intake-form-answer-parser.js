@@ -28,7 +28,8 @@ function parseIntakeFormAnswers(formFields) {
 
     var parts = key.split('__'),
         questionId,
-        textOptionId;
+        textOptionId,
+        questionAnswer;
 
     if (parts.length === 1) {
       questionId = key;

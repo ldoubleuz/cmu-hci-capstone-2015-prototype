@@ -109,12 +109,15 @@
 
   function loadIntakeInfo() {
     // TODO: replace this path with dynamic loading
-    var filePath = '/js/interview-dummy.json';
-
+    var filePath = '/get-interview-information',
+        id = $.getQueryParameters().id;
     $.ajax({
       url: filePath,
       dataType: 'json',
       method: 'GET',
+      data: {
+        id: id
+      },
       success: buildInfoHtml,
       error: function() {
         console.log('error, intake info not built');

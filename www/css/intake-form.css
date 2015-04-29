@@ -18,6 +18,25 @@ body {
   padding-top: 20px;
 }
 
+#header {
+  text-align: center;
+  position: relative;
+  margin-top: 25px;
+}
+
+#title {
+  text-transform:capitalize;
+
+}
+
+#animal-type {
+  height: 67px;
+}
+
+#logo {
+  height: 67px;
+}
+
 #content {
   position: relative;
 }

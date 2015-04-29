@@ -1,18 +1,23 @@
 function loadFormJson(callbackFn) {
-    var query = $.getQueryParameters();
-    $.ajax({
-        url: '/get-intake-questions',
-        dataType: 'json',
-        method: 'GET',
-        data: {
-          animal: query.animal
-        },
-        success: callbackFn,
-        error: function() {
-            console.log(arguments);
-            console.log('error, not loaded');
-        }
-    });
+  var animal = $.getQueryParameters().animal,
+      title = animal.replace('-', ' ') + ' Surrender Form';
+
+  $('#animal-type').attr('src', '/img/' + animal + '.png');
+  $('#title').text(title);
+
+  $.ajax({
+      url: '/get-intake-questions',
+      dataType: 'json',
+      method: 'GET',
+      data: {
+        animal: animal
+      },
+      success: callbackFn,
+      error: function() {
+          console.log(arguments);
+          console.log('error, not loaded');
+      }
+  });
 }
 
 function cssPercent(fraction) {
@@ -68,13 +73,35 @@ function generateCrumbs(numPages, $crumbWrapper) {
     }
     return $crumbs;
 }
+
+function updateProgressIndicator(currPageIndex, totalPages) {
+    var $progress = $('#progress-indicator');
+    var $currIndex = $progress.find('.curr-index');
+    $currIndex.text(currPageIndex);
+
+    var $totalPages = $progress.find('.total-pages');
+    $totalPages.text(totalPages);
+}
+
 window.onload = function() {
     var $form = $("#form-container form");
     var $dynamicContainer = $form.find("#dynamic-content");
+
+    //Makes the header
+    var $query = $.getQueryParameters();
+    var animal = $query.animal;
+    var headerTitle = animal.replace("-", " ") + " Surrender Form";
+    var imgSrc = '/img/' + animal + '.png';
+    $("#animal-type").addClass(animal);
+    $("#animal-type").attr("src", imgSrc);
+    $("#title").text(headerTitle);
+
     loadFormJson(function(json) {
         var $formContent = generateFormContent(json);
         $dynamicContainer.append($formContent);
         var $pages = $dynamicContainer.find('.page');
+        var numPages = $pages.length;
+        updateProgressIndicator(1, numPages);
         // generate appropriate number of breadcrumbs based on
         var $crumbWrapper = $('#breadcrumbs');
         var $crumbs = generateCrumbs($pages.length, $crumbWrapper);
@@ -119,6 +146,7 @@ window.onload = function() {
                     $submitButton.hide();
                     $nextButton.show();
                 }
+                updateProgressIndicator(newIndex+1, totalPages);
             },
             validateForm
         );
