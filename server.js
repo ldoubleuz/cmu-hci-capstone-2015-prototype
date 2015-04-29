@@ -312,7 +312,7 @@ function confirmTentativeEvent(eventID, onSuccess, onError, onAuthFail) {
   googleApiWithAuthRefresh(
       googleCalendar.events.patch, {
         'calendarId': googleAPIKeys.calendarID,
-        'eventId': eventID,
+        'eventId': eventID || '',
         'resource': {
           'status': 'confirmed',
           'summary': '[Confirmed] Intake appointment'
