@@ -146,13 +146,12 @@ function combineOverlappingItems(eventItems) {
   return combinedItems
 }
 
-/* Retrieve available timeslots for intake scheduler
+/* Retrieve blocked timeslots for intake scheduler
  * Expects the followings params in GET:
- *  - month: a number between 0 and 11 representing the month that starts the
- *            the timeperiod of events we are retrieving
- *  - year: a number representing the year to retrieve, defaults to current year
- *  - numMonths: The number of months to retrieve, starting at the specified
- *      date. Must be strictly positive, defaults to 1
+ *  - startTime: a UTC string of when to start getting timeslots. Defaults to
+ *      the UTC string of when the request is recieved.
+ *  - endTime: a utc string of when to end getting timeslots. Defaults to
+ *      the UTC string of 3 months after the request is recieved.
  * Returns list of blocked timeslots during the given period in the format:
  *  - [
  *      {
@@ -163,27 +162,15 @@ function combineOverlappingItems(eventItems) {
  */
 app.get('/scheduler/get-blocked-times', function(req, res) {
   var now = moment();
-  var month = req.query.month && parseInt(req.query.month);
-  if (!month || isNaN(month) || month < 0 || month > 11) {
-    month = now.month();
-  }
-
-  var numMonths = req.query.numMonths && parseInt(req.query.numMonths);
-  if (!numMonths || isNaN(numMonths)) {
-    numMonths = 1;
-  }
-
-  var year = req.query.year && parseInt(req.query.year);
-  if (!year || isNaN(year)) {
-    year = now.year();
-  }
-
-  var startTime = moment.utc([year, month]);
+  var startTime = moment.utc(req.query.startTime);
   if (!startTime.isValid()) {
-    startTime = moment.utc([now.year(), now.month()]);
+    startTime = moment.utc()
   }
 
-  var endTime = moment.utc(startTime).add(numMonths, 'months').startOf('month');
+  var endTime = moment.utc(req.query.endTime);
+  if (!endTime.isValid()) {
+    endTime = moment.utc(startTime).add(3, 'months')
+  }
 
   // Call google to fetch events on calendar within time period
   googleApiWithAuthRefresh(
@@ -214,8 +201,8 @@ app.get('/scheduler/get-blocked-times', function(req, res) {
         var outputItems = combineOverlappingItems(eventItems).map(
           function(item) {
             return {
-              start: item.start.getTime(),
-              end: item.end.getTime()
+              start: item.start.toISOString(),
+              end: item.end.toISOString()
             };
           });
 

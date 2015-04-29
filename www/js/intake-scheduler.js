@@ -104,7 +104,7 @@ $(function() {
       dateFormat: 'MM d, yy',
       // If its past closing time, scheduling starts tomorrow
       minDate: now.getHours() < CLOSING_HOUR ? 0 : 1,
-      maxDate: '+' + maxMonthsAhead + 'm'
+      maxDate: '+' + maxMonthsAhead + 'm -2d'
     });
 
     _dateSelected();
@@ -187,14 +187,17 @@ $(function() {
 
 
   (function init() {
-    var today = new Date();
+    var today = new Date(),
+        startTime = today.toUTCString();
+    today.setMonth(today.getMonth() + maxMonthsAhead)
+    var endTime = today.toUTCString();
     $.ajax({
       url: '/scheduler/get-blocked-times',
       data: {
-        month: today.getMonth(),
-        year: today.getFullYear(),
-        numMonths: maxMonthsAhead
+        startTime: startTime,
+        endTime: endTime
       }
     }).success(_initCalendar);
+    console.log(today);
   })();
 });
