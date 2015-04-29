@@ -1,5 +1,4 @@
 module.exports = {
-    authNewGoogleClient: authNewGoogleClient,
     addTentativeEvent: addTentativeEvent,
     getBlockedTimes: getBlockedTimes,
     confirmTentativeEvent: confirmTentativeEvent,
@@ -10,16 +9,16 @@ var google = require('googleapis'),
     googleAPIKeys = require('./googleAPIKeys'),
     moment = require('moment');
 
-// Google calendar authentication info
-var googleCalendar = google.calendar('v3');
-var googleAuthClient = null; // To be setup by authNewGoogleClient
-// What fields google calendar event resources returned by api calls should have
-var RETURNED_EVENT_FIELDS = 'description,summary,start,end,id,status,created';
-// How long to block off an unconfirmed intake appointment event timeslot before
-// freeing it back up for other users
-var TENTATIVE_EVENT_TIMEOUT = moment.duration(12, 'hours');
+var googleCalendar = google.calendar('v3'), // Google calendar authentication info
+    googleAuthClient = null; // To be setup by _authNewGoogleClient
 
-function authNewGoogleClient(onSuccess, onError) {
+    // Fields google calendar event resources returned by api calls should have.
+var RETURNED_EVENT_FIELDS = 'description,summary,start,end,id,status,created',
+    // How long to block off a tentative appointment timeslot before freeing it
+    TENTATIVE_EVENT_TIMEOUT = moment.duration(12, 'hours');
+
+
+function _authNewGoogleClient(onSuccess, onError) {
   console.log('authorizing new Google service account...');
   var newClient = new google.auth.JWT(
       googleAPIKeys.serviceAccountEmail,
@@ -44,16 +43,17 @@ function authNewGoogleClient(onSuccess, onError) {
   });
 }
 
+
 // Wrapper function for any google API call, in order to automatically refresh
 // the authclient when the accesstoken expires. Takes the api function to call,
 // the input data that would have been passed to the api call, and the callback
 // function that would be handled during the api response.
-function googleApiWithAuthRefresh(apiFn, inputData, callbackFn, onFailedAuth) {
+function _googleApiWithAuthRefresh(apiFn, inputData, callbackFn, onFailedAuth) {
   var apiAttempts = 0;
   var maxAttempts = 4;
 
   function _attemptReauth() {
-    authNewGoogleClient(
+    _authNewGoogleClient(
         function() {_attemptApiCall(false);},
         function() {_attemptApiCall(true);}
     );
@@ -100,7 +100,8 @@ function googleApiWithAuthRefresh(apiFn, inputData, callbackFn, onFailedAuth) {
   _attemptApiCall(false);
 }
 
-function combineOverlappingItems(eventItems) {
+
+function _combineOverlappingItems(eventItems) {
   var combinedItems = [];
   eventItems = eventItems.map(function(item) {
     return {
@@ -133,8 +134,9 @@ function combineOverlappingItems(eventItems) {
   return combinedItems;
 }
 
+
 function getBlockedTimes(startTime, endTime, onSuccess, onError) {
-  googleApiWithAuthRefresh(
+  _googleApiWithAuthRefresh(
       googleCalendar.events.list, {
         calendarId: googleAPIKeys.calendarID,
         timeMin: startTime.toISOString(),
@@ -161,7 +163,7 @@ function getBlockedTimes(startTime, endTime, onSuccess, onError) {
           return true;
         });
 
-        var outputItems = combineOverlappingItems(eventItems).map(
+        var outputItems = _combineOverlappingItems(eventItems).map(
           function(item) {
             return {
               start: item.start.toISOString(),
@@ -172,9 +174,10 @@ function getBlockedTimes(startTime, endTime, onSuccess, onError) {
       }, onError);
 }
 
+
 function addTentativeEvent(startTime, endTime, description, onSuccess, onError) {
   // Call Google API to insert an event
-  googleApiWithAuthRefresh(
+  _googleApiWithAuthRefresh(
       googleCalendar.events.insert, {
         calendarId: googleAPIKeys.calendarID,
         // Make sure to wrap Event objects in a 'resource' dictionary
@@ -192,10 +195,10 @@ function addTentativeEvent(startTime, endTime, description, onSuccess, onError) 
   );
 }
 
+
 function confirmTentativeEvent(eventID, onSuccess, onError, onAuthFail) {
   onAuthFail = onAuthFail || function(){};
-
-  googleApiWithAuthRefresh(
+  _googleApiWithAuthRefresh(
       googleCalendar.events.patch, {
         'calendarId': googleAPIKeys.calendarID,
         'eventId': eventID || '',
@@ -216,8 +219,9 @@ function confirmTentativeEvent(eventID, onSuccess, onError, onAuthFail) {
   );
 }
 
+
 function deleteEvent(eventID, onSuccess, onError) {
-  googleApiWithAuthRefresh(
+  _googleApiWithAuthRefresh(
       googleCalendar.events.delete, {
         calendarId: googleAPIKeys.calendarID,
         eventId: eventID,

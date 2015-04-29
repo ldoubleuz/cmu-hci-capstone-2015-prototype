@@ -32,21 +32,11 @@ var app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(express.static('./www'));
-var server = null;
-(function startServer() {
-  // wait for Google client to authorize service account before starting server
-  googleCalendarApiCalls.authNewGoogleClient(function() {
-    server = app.listen(serverPort, 'localhost', 511, function() {
-      var host = server.address().address;
-      var port = server.address().port;
-
-      console.log('App server listening at http://%s:%s', host, port);
-    });
-  }, function(err) {
-    console.log('failed to authorize Google service account');
-    console.log(err);
-  });
-})();
+var server = app.listen(serverPort, 'localhost', 511, function() {
+  var host = server.address().address;
+  var port = server.address().port;
+  console.log('App server listening at http://%s:%s', host, port);
+});
 
 
 function sendServerError(res) {
