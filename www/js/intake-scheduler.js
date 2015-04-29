@@ -66,10 +66,8 @@ $(function() {
 
 
   /**
-   * Takes an array of blocked times of form: {
-   *   start: { dateTime: milleseconds },
-   *   end: { dateTime: milleseconds }
-   * }
+   * Takes an array of blocked times of form:
+   *   { start: milleseconds, end: milleseconds }
    * And blocks appointments slots that occur during those times.
    **/
   function _initCalendar(blockedTimes) {
@@ -80,14 +78,14 @@ $(function() {
     // Block off appointment slots that have already passed today.
     if (todaysOpening < now) {
       blockedTimes.push({
-        start: { dateTime: todaysOpening.toISOString()},
-        end: { dateTime: now.toISOString()}
+        start: todaysOpening.getTime(),
+        end: now.getTime()
       });
     }
 
     blockedTimes.forEach(function(blockedTime) {
-      var endBlockedTime = new Date(blockedTime.end.dateTime),
-          appointmentTime = new Date(blockedTime.start.dateTime);
+      var endBlockedTime = new Date(blockedTime.end),
+          appointmentTime = new Date(blockedTime.start);
 
       appointmentTime.setMinutes(
         appointmentTime.getMinutes() < 30 ? 0 : 30

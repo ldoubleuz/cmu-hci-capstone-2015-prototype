@@ -87,33 +87,6 @@ function sendServerError(res) {
   res.status(500).send('Server error');
 }
 
-app.get('/calendar-hello-world', function(req, res) {
-  // Stolen from http://www.matt-toigo.com/dev/pulling_google_calendar_events_with_node
-  // Format today's date
-  var today = moment().format('YYYY-MM-DD') + 'T';
-
-  // Call google to fetch events for today on our calendar
-  googleApiWithAuthRefresh(
-      googleCalendar.events.list, {
-        calendarId: googleAPIKeys.calendarID,
-        maxResults: 20,
-        timeMin: today + '00:00:00.000Z',
-        timeMax: today + '23:59:59.000Z',
-        auth: googleAuthClient
-      }, function(err, events) {
-        if (err) {
-          console.log('Error fetching events');
-          console.log(err);
-        } else {
-
-          // Send our JSON response back to the browser
-          console.log('Successfully fetched events');
-          res.send(events);
-        }
-      }, function() {sendServerError(res);}
-  );
-});
-
 app.get('/scheduler', function(req, res) {
   var file = 'intake-scheduler.html',
       options = {
@@ -170,12 +143,7 @@ function combineOverlappingItems(eventItems) {
     combinedItems.push({start: currentStart, end: currentEnd});
   }
 
-  return combinedItems.map(function(item) {
-    return {
-      start: {dateTime: item.start},
-      end: {dateTime: item.end}
-    };
-  });
+  return combinedItems
 }
 
 /* Retrieve available timeslots for intake scheduler
@@ -243,7 +211,13 @@ app.get('/scheduler/get-blocked-times', function(req, res) {
           return true;
         });
 
-        var outputItems = combineOverlappingItems(eventItems);
+        var outputItems = combineOverlappingItems(eventItems).map(
+          function(item) {
+            return {
+              start: item.start.getTime(),
+              end: item.end.getTime()
+            };
+          });
 
         return res.send(outputItems);
       }, function() {sendServerError(res);}
