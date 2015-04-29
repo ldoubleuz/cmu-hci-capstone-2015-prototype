@@ -71,6 +71,16 @@ function generateCrumbs(numPages, $crumbWrapper) {
 window.onload = function() {
     var $form = $("#form-container form");
     var $dynamicContainer = $form.find("#dynamic-content");
+
+    //Makes the header
+    var $query = $.getQueryParameters();
+    var animal = $query.animal;
+    var headerTitle = animal.replace("-", " ") + " Surrender Form";
+    var imgSrc = '/img/' + animal + '.png';
+    $("#animal-type").addClass(animal);
+    $("#animal-type").attr("src", imgSrc);
+    $("#title").text(headerTitle);
+
     loadFormJson(function(json) {
         var $formContent = generateFormContent(json);
         $dynamicContainer.append($formContent);
