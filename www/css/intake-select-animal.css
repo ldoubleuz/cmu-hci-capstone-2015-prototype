@@ -6,14 +6,6 @@
   margin-bottom: 60px;
 }
 
-.animal-wrapper:hover .animal {
-  border: 1px solid #0E4D72;
-}
-
-.animal-wrapper:hover h4 {
-  color: #0E4D72;
-}
-
 .animal-wrapper .animal {
   height: 128px;
   border: 1px solid #00AE61;
@@ -22,7 +14,8 @@
   background-position: center;
 }
 
-.animal-wrapper.selected .animal {
+.animal-wrapper.selected .animal,
+.animal-wrapper:hover .animal {
   border: 1px solid #0E4D72;
 }
 
@@ -30,20 +23,45 @@
   background-image: url('/img/dog.png');
 }
 
+.animal-wrapper.selected .animal#dog,
+.animal-wrapper:hover .animal#dog {
+  background-image: url('/img/dog-blue.png');
+}
+
 .animal-wrapper .animal#cat {
   background-image: url('/img/cat.png');
+}
+
+.animal-wrapper.selected .animal#cat,
+.animal-wrapper:hover .animal#cat {
+  background-image: url('/img/cat-blue.png');
 }
 
 .animal-wrapper .animal#rabbit {
   background-image: url('/img/rabbit.png');
 }
 
+.animal-wrapper.selected .animal#rabbit,
+.animal-wrapper:hover .animal#rabbit {
+  background-image: url('/img/rabbit-blue.png');
+}
+
 .animal-wrapper .animal#reptile {
   background-image: url('/img/reptile.png');
 }
 
+.animal-wrapper.selected .animal#reptile,
+.animal-wrapper:hover .animal#reptile {
+  background-image: url('/img/reptile-blue.png');
+}
+
 .animal-wrapper .animal#small-animal {
-  background-image: url('/img/small_animal.png');
+  background-image: url('/img/small-animal.png');
+}
+
+.animal-wrapper.selected .animal#small-animal,
+.animal-wrapper:hover .animal#small-animal {
+  background-image: url('/img/small-animal-blue.png');
 }
 
 .animal-wrapper h4 {
@@ -53,6 +71,7 @@
   text-align: center;
 }
 
-.animal-wrapper.selected h4 {
+.animal-wrapper.selected h4,
+.animal-wrapper:hover h4 {
   color: #0E4D72;
 }
