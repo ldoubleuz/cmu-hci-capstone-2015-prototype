@@ -73,6 +73,16 @@ function generateCrumbs(numPages, $crumbWrapper) {
     }
     return $crumbs;
 }
+
+function updateProgressIndicator(currPageIndex, totalPages) {
+    var $progress = $('#progress-indicator');
+    var $currIndex = $progress.find('.curr-index');
+    $currIndex.text(currPageIndex);
+
+    var $totalPages = $progress.find('.total-pages');
+    $totalPages.text(totalPages);
+}
+
 window.onload = function() {
     var $form = $("#form-container form");
     var $dynamicContainer = $form.find("#dynamic-content");
@@ -90,6 +100,8 @@ window.onload = function() {
         var $formContent = generateFormContent(json);
         $dynamicContainer.append($formContent);
         var $pages = $dynamicContainer.find('.page');
+        var numPages = $pages.length;
+        updateProgressIndicator(1, numPages);
         // generate appropriate number of breadcrumbs based on
         var $crumbWrapper = $('#breadcrumbs');
         var $crumbs = generateCrumbs($pages.length, $crumbWrapper);
@@ -118,6 +130,7 @@ window.onload = function() {
                     $submitButton.hide();
                     $nextButton.show();
                 }
+                updateProgressIndicator(newIndex+1, totalPages);
             },
             validateForm
         );
